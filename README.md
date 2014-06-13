@@ -15,10 +15,10 @@ Installation
 
 Installing and setting up Signature is as simple as possible.
 
-Step 1: Download and unpack
+Step 1: Clone
 ---------------------------
 
-Download current stable version and unpack the archive in your document root of your new application, for instance `/websites/signature/`. Your directory structure should like this now:
+Clone from `git://github.com/serens/Signature-Framework.git` into your document root of your new application, for instance `/websites/signature/`. Your directory structure should like this now:
 
     /websites/signature/
         /cache
@@ -40,7 +40,7 @@ Download current stable version and unpack the archive in your document root of 
 Step 2: Set up a virtual host
 -----------------------------
 
-Create an Apache virtual host so that `http://signature.local` will serve `index.php` from the document root `/websites/signature/` where you have unpacked the source files several minutes before.
+Create an Apache virtual host so that `http://signature.local` will serve `index.php` from the document root `/websites/signature/` where you have cloned the repository several minutes before.
 
 Now edit your hosts file so that the host `signature.local` points to `127.0.0.1`.
 
