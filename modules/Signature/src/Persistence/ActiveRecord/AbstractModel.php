@@ -1,0 +1,346 @@
+<?php
+/**
+ * This file is part of the Signature MVC-Framework.
+ * @copyright Sven Erens <sven@signature-framework.com>
+ */
+
+namespace Signature\Persistence\ActiveRecord;
+
+/**
+ * Class AbstractModel
+ * @package Signature\Persistence\ActiveRecord
+ */
+abstract class AbstractModel implements ModelInterface
+{
+    use \Signature\Persistence\PersistenceServiceTrait;
+
+    /**
+     * @var array
+     */
+    protected $fieldValues = [];
+
+    /**
+     * @var string
+     */
+    protected $tableName = '';
+
+    /**
+     * @var string
+     */
+    protected $primaryKeyName = 'ID';
+
+    /**
+     * Once the active record got initialized, no more fields can be added.
+     * @var boolean
+     */
+    protected $initialized = false;
+
+    /**
+     * Sets the fields of this record object.
+     * @param array $fieldValues
+     */
+    public function __construct(array $fieldValues = null)
+    {
+        if (null !== $fieldValues) {
+            $this->setFieldValues($fieldValues);
+        }
+
+        /*
+         * Initialize table name.
+         * Get rid of namespaces and underscores and just take the last part of the classname.
+         */
+        $classname  = str_replace('\\', '_', get_class($this));
+        $classParts = explode('_', $classname);
+        $classname  = array_pop($classParts);
+
+        $this->tableName = strtolower($classname);
+    }
+
+    /**
+     * Checks, if a given set of fields are available on this record model.
+     * @param array $fields
+     * @return boolean
+     */
+    public function hasFields(array $fields)
+    {
+        foreach ($fields as $field) {
+            if (!$this->hasField($field)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Checks, if a given field is available on this record model.
+     * @param string $field
+     * @return boolean
+     */
+    public function hasField($field)
+    {
+        return array_key_exists($field, $this->fieldValues);
+    }
+
+    /**
+     * Returns all values of this record model.
+     * @return array
+     */
+    public function getFieldValues()
+    {
+        return $this->toArray();
+    }
+
+    /**
+     * Sets multiple field values at once.
+     *
+     * After calling this method no more fields can be added to the model.
+     * @param array $fieldValues
+     * @throws \BadMethodCallException
+     * @return ModelInterface
+     */
+    public function setFieldValues(array $fieldValues)
+    {
+        if ($this->initialized) {
+            throw new \BadMethodCallException(sprintf(
+                'Multiple call to %s::setFieldValues(): All fields of this model are already set.',
+                get_class($this)
+            ));
+        }
+
+        foreach ($fieldValues as $field => $value) {
+            $this->setFieldValueInternal($field, $value);
+        }
+
+        $this->initialized = true;
+
+        return $this;
+    }
+
+    /**
+     * Returns all values of this record model.
+     * @return array
+     */
+    public function toArray()
+    {
+        return $this->fieldValues;
+    }
+
+    /**
+     * Sets the value of a field.
+     * @param string $field
+     * @param mixed  $value
+     * @throws Exception\InvalidFieldException
+     * @return ModelInterface
+     */
+    public function setFieldValue($field, $value)
+    {
+        if ($this->hasField($field)) {
+            $this->fieldValues[$field] = $value;
+
+            return $this;
+        }
+
+        throw new Exception\InvalidFieldException($field);
+    }
+
+    /**
+     * Deletes the row of this model.
+     * @throws Exception\InvalidRecordException If no primary key exists for this model.
+     * @return void
+     */
+    public function delete()
+    {
+        if (!$this->getID()) {
+            throw new Exception\InvalidRecordException();
+        }
+
+        $query = sprintf(
+            'DELETE FROM %s WHERE %s = %s LIMIT 1',
+            $this->persistenceService->backquote($this->getTableName()),
+            $this->persistenceService->backquote($this->getPrimaryKeyName()),
+            $this->persistenceService->quote($this->getID())
+        );
+
+        $this->persistenceService->query($query);
+    }
+
+    /**
+     * Returns the primary id of this record model.
+     * @return integer
+     */
+    public function getID()
+    {
+        return (int) $this->getFieldValue($this->getPrimaryKeyName());
+    }
+
+    /**
+     * Returns the value of the given field.
+     * @param string $field
+     * @throws Exception\InvalidFieldException
+     * @return string
+     */
+    public function getFieldValue($field)
+    {
+        if ($this->hasField($field)) {
+            return $this->fieldValues[$field];
+        }
+
+        throw new Exception\InvalidFieldException($field);
+    }
+
+    /**
+     * Returns the name of the field which represents the primary key of the record model.
+     *
+     * Override this method when the default value ("ID") is not wished.
+     * @return string
+     */
+    public function getPrimaryKeyName()
+    {
+        return $this->primaryKeyName;
+    }
+
+    /**
+     * Returns the table name to which this record model belongs to.
+     *
+     * By default the full qualified classname is seperated by underscores and the last part of this will be taken as
+     * the table name. This method must be overridden, when the standard-behavior is not wished.
+     * @return string
+     */
+    public function getTableName()
+    {
+        return $this->tableName;
+    }
+
+    /**
+     * Creates a new row of this model.
+     *
+     * A new row is only created, if this model does not have a primary key id set.
+     * @return ModelInterface
+     */
+    public function create()
+    {
+        if ($this->getID()) {
+            return $this;
+        }
+
+        $fields = [];
+        $values = [];
+
+        foreach ($this->getFieldValues() as $field => $value) {
+            if ($field == $this->getPrimaryKeyName()) {
+                continue;
+            }
+
+            $fields[] = $this->persistenceService->backquote($field);
+            $values[] = is_null($value) ? 'NULL' : $this->persistenceService->quote($value);
+        }
+
+        $this->persistenceService->query(sprintf(
+            'INSERT INTO %s (%s) VALUES (%s)',
+            $this->persistenceService->backquote($this->getTableName()),
+            implode(',', $fields),
+            implode(',', $values)
+        ));
+
+        $this->setFieldValueInternal($this->getPrimaryKeyName(), $this->persistenceService->getLastInsertId());
+
+        return $this;
+    }
+
+    /**
+     * Saves the current state of this model.
+     * @throws Exception\InvalidRecordException
+     * @return ModelInterface
+     */
+    public function save()
+    {
+        if (!$this->getID()) {
+            throw new Exception\InvalidRecordException();
+        }
+
+        $fieldValues = [];
+
+        foreach ($this->getFieldValues() as $field => $value) {
+            if ($field == $this->getPrimaryKeyName()) {
+                continue;
+            }
+
+            $value         = is_null($value) ? 'NULL' : $this->persistenceService->quote($value);
+            $fieldValues[] = sprintf('%s = %s', $this->persistenceService->backquote($field), $value);
+        }
+
+        $this->persistenceService->query(sprintf(
+            'UPDATE %s SET %s WHERE %s = %s LIMIT 1',
+            $this->persistenceService->backquote($this->getTableName()),
+            implode(',', $fieldValues),
+            $this->persistenceService->backquote($this->getPrimaryKeyName()),
+            $this->persistenceService->quote($this->getID())
+        ));
+
+        return $this;
+    }
+
+    /**
+     * Loads data into this model by fetching a row from the database using the primary key.
+     * @param integer $id
+     * @return boolean True, if the record could be loaded.
+     */
+    public function find($id)
+    {
+        if (($result = $this->findByField($this->getPrimaryKeyName(), $id)) && $result->count()) {
+            $this->setFieldValues($result->getFirst());
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Loads data into this model by fetching a row identified by $field.
+     * @param string $field
+     * @param string $value
+     * @return \Signature\Persistence\ResultCollectionInterface
+     */
+    public function findByField($field, $value)
+    {
+        $result = $this->persistenceService->query(sprintf(
+            'SELECT * FROM %s WHERE %s = %s',
+            $this->persistenceService->backquote($this->getTableName()),
+            $this->persistenceService->backquote($field),
+            $this->persistenceService->quote($value)
+        ));
+
+        return $result->convertToModels(get_class($this));
+    }
+
+    /**
+     * Loads all rows of the table.
+     * @return \Signature\Persistence\ResultCollectionInterface
+     */
+    public function findAll()
+    {
+        $result = $this->persistenceService->query(sprintf(
+            'SELECT * FROM %s',
+            $this->persistenceService->backquote($this->getTableName())
+        ));
+
+        return $result->convertToModels(get_class($this));
+    }
+
+    /**
+     * Sets the internal value of a field by calling magic setters if available.
+     * @param string $field
+     * @param string $value
+     * @return void
+     */
+    protected function setFieldValueInternal($field, $value)
+    {
+        if (method_exists($this, $setter = 'set' . ucfirst(strtolower($field)))) {
+            $this->$setter($value);
+        } else {
+            $this->fieldValues[$field] = $value;
+        }
+    }
+}
