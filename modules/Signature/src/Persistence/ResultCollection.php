@@ -192,6 +192,7 @@ class ResultCollection implements \Signature\Persistence\ResultCollectionInterfa
     /**
      * Converts the items in this collection to models.
      * @param $modelClassname
+     * @throws \InvalidArgumentException If argument $modelClassname does not implement ModelInterface.
      * @return ResultCollectionInterface
      */
     public function convertToModels($modelClassname)
@@ -205,6 +206,13 @@ class ResultCollection implements \Signature\Persistence\ResultCollectionInterfa
         foreach ($this->collection as $key => $item) {
             /** @var \Signature\Persistence\ActiveRecord\AbstractModel $model */
             $model = $objectProviderService->create($modelClassname);
+
+            if (!$model instanceof \Signature\Persistence\ActiveRecord\ModelInterface) {
+                throw new \InvalidArgumentException(sprintf(
+                    'Provided classname "%s" does not implement \Signature\Persistence\ActiveRecord\ModelInterface.',
+                    $modelClassname
+                ));
+            }
 
             $this->collection[$key] = $model->setFieldValues($item);
         }
