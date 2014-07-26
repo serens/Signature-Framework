@@ -134,6 +134,10 @@ class ActionController extends AbstractController
         // Get rid of module name
         array_shift($namespaceParts);
 
+        if (strtolower($namespaceParts[0]) == 'mvc') {
+            array_shift($namespaceParts);
+        }
+
         if (strtolower($namespaceParts[0]) == 'controller') {
             array_shift($namespaceParts);
         }
