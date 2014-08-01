@@ -305,11 +305,44 @@ abstract class AbstractModel implements ModelInterface
      */
     public function findByField($field, $value)
     {
-        $result = $this->persistenceService->query(sprintf(
-            'SELECT * FROM %s WHERE %s = %s',
-            $this->persistenceService->backquote($this->getTableName()),
+        $where = sprintf(
+            '%s = %s',
             $this->persistenceService->backquote($field),
             $this->persistenceService->quote($value)
+        );
+
+        return $this->findByQuery('*', $where);
+    }
+
+    /**
+     * Finds records by a given sql-statement.
+     * @param string $fields
+     * @param string $where
+     * @param string $orderBy
+     * @param string $limit
+     * @return \Signature\Persistence\ResultCollectionInterface
+     */
+    public function findByQuery($fields = '*', $where = '', $orderBy = '', $limit = '')
+    {
+        if ('' !== $where) {
+            $where = 'WHERE ' . $where;
+        }
+
+        if ('' !== $orderBy) {
+            $orderBy = 'ORDER BY ' . $orderBy;
+        }
+
+        if ('' !== $limit) {
+            $limit = 'LIMIT ' . $limit;
+        }
+
+        $result = $this->persistenceService->query(sprintf(
+            'SELECT %s FROM %s %s %s %s',
+            $fields,
+            $this->persistenceService->backquote($this->getTableName()),
+            $where,
+            $orderBy,
+            $limit
         ));
 
         return $result->convertToModels(get_class($this));
@@ -321,12 +354,7 @@ abstract class AbstractModel implements ModelInterface
      */
     public function findAll()
     {
-        $result = $this->persistenceService->query(sprintf(
-            'SELECT * FROM %s',
-            $this->persistenceService->backquote($this->getTableName())
-        ));
-
-        return $result->convertToModels(get_class($this));
+        return $this->findByQuery();
     }
 
     /**

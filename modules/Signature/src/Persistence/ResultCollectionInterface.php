@@ -41,6 +41,7 @@ interface ResultCollectionInterface extends \Iterator, \Countable
     /**
      * Converts the items in this collection to models.
      * @param $modelClassname
+     * @throws \InvalidArgumentException
      * @return ResultCollectionInterface
      */
     public function convertToModels($modelClassname);

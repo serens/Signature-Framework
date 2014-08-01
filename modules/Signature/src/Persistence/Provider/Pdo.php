@@ -23,6 +23,11 @@ class Pdo implements \Signature\Persistence\Provider\ProviderInterface
     protected $connectionInfo = null;
 
     /**
+     * @var array
+     */
+    protected $requiredConnectionInfoFields = ['Host', 'Username', 'Password', 'Database'];
+
+    /**
      * Executes a SQL-query and returns a Result collection.
      * @param string $queryString
      * @throws \RuntimeException If query could not be executed.
@@ -64,6 +69,13 @@ class Pdo implements \Signature\Persistence\Provider\ProviderInterface
             throw new \UnexpectedValueException('No connection information is set.');
         }
 
+        // Do not connect if connection info is empty
+        foreach ($this->requiredConnectionInfoFields as $requiredField) {
+            if ((string) $this->connectionInfo[$requiredField] === '') {
+                return;
+            }
+        }
+
         $this->pdo = new \PDO(sprintf(
                 'mysql:host=%s;dbname=%s',
                 $this->connectionInfo['Host'],
@@ -82,7 +94,7 @@ class Pdo implements \Signature\Persistence\Provider\ProviderInterface
      */
     public function setConnectionInfo(array $connectionInfo)
     {
-        foreach (['Host', 'Username', 'Password', 'Database'] as $requiredField) {
+        foreach ($this->requiredConnectionInfoFields as $requiredField) {
             if (!array_key_exists($requiredField, $connectionInfo)) {
                 throw new \InvalidArgumentException(
                     'Given connection information does not contain required field "' . $requiredField . '". ' .

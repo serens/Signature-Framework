@@ -91,13 +91,13 @@ class Module extends \Signature\Module\AbstractModule
             'Service' => [
                 'Persistence' => [
                     'DefaultProviderClassname' => 'Signature\\Persistence\\Provider\\Pdo',
+                    'ConnectionInfo'           => [
+                        'Host'     => '',
+                        'Username' => '',
+                        'Password' => '',
+                        'Database' => ''
+                    ],
                 ],
-                'ConnectionInfo' => [
-                    'Host'     => '',
-                    'Username' => '',
-                    'Password' => '',
-                    'Database' => ''
-                ]
             ],
             'Mvc' => [
                 'Controller' => [

@@ -126,6 +126,16 @@ interface ModelInterface
     public function findByField($field, $value);
 
     /**
+     * Finds records by a given sql-statement.
+     * @param string $fields
+     * @param string $where
+     * @param string $orderBy
+     * @param string $limit
+     * @return \Signature\Persistence\ResultCollectionInterface
+     */
+    public function findByQuery($fields = '*', $where = '', $orderBy = '', $limit = '');
+
+    /**
      * Loads all rows of the table.
      * @return \Signature\Persistence\ResultCollectionInterface
      */
