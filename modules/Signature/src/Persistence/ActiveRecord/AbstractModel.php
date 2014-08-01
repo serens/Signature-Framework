@@ -289,7 +289,7 @@ abstract class AbstractModel implements ModelInterface
     public function find($id)
     {
         if (($result = $this->findByField($this->getPrimaryKeyName(), $id)) && $result->count()) {
-            $this->setFieldValues($result->getFirst());
+            $this->setFieldValues($result->getFirst()->getFieldValues());
 
             return true;
         }
