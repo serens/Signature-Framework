@@ -45,15 +45,24 @@ abstract class AbstractModel implements ModelInterface
             $this->setFieldValues($fieldValues);
         }
 
-        /*
-         * Initialize table name.
-         * Get rid of namespaces and underscores and just take the last part of the classname.
-         */
-        $classname  = str_replace('\\', '_', get_class($this));
+        if ('' === $this->tableName) {
+            $this->tableName = $this->determineTablenameFromClassname(get_class($this));
+        }
+    }
+
+    /**
+     * Returns the tablename in which the data of this model is stored.
+     * @param string $className
+     * @return string
+     */
+    protected function determineTablenameFromClassname($className)
+    {
+        // Get rid of namespaces and underscores and just take the last part of the classname.
+        $classname  = str_replace('\\', '_', $className);
         $classParts = explode('_', $classname);
         $classname  = array_pop($classParts);
 
-        $this->tableName = strtolower($classname);
+        return strtolower($classname);
     }
 
     /**
