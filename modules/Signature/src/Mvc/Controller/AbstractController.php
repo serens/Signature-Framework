@@ -75,6 +75,7 @@ abstract class AbstractController implements ControllerInterface
      * @param string $actionName
      * @param string $controllerName
      * @param array  $parameters
+     * @throws \Signature\Mvc\Exception\ForwardedRequestException
      * @return void
      */
     public function forward($actionName, $controllerName = null, array $parameters = null)
@@ -89,5 +90,7 @@ abstract class AbstractController implements ControllerInterface
         if (is_array($parameters)) {
             $this->request->setParameters($parameters);
         }
+
+        throw new \Signature\Mvc\Exception\ForwardedRequestException();
     }
 }

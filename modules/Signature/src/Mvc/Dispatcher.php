@@ -32,23 +32,27 @@ class Dispatcher
         $dispatchIterationCount = 0;
 
         while (!$request->isDispatched()) {
-            if ($dispatchIterationCount++ > self::DISPATCH_ITERATION_LIMIT) {
-                throw new \RuntimeException (sprintf(
-                    'The request took more than %d iterations to dispatch. Giving up.',
-                    self::DISPATCH_ITERATION_LIMIT
+            $controller = $this->objectProviderService->create($request->getControllerName());
+
+            if (!$controller instanceof \Signature\Mvc\Controller\ControllerInterface) {
+                throw new \UnexpectedValueException(sprintf(
+                    'Invalid controller. Controller "%s" must implement \Signature\Mvc\Controller\ControllerInterface.',
+                    $request->getControllerName()
                 ));
             }
 
-            $controllerName = $request->getControllerName();
-            $controller = $this->objectProviderService->create($controllerName);
+            try {
+                $controller->handleRequest($request, $response);
+            } catch (\Signature\Mvc\Exception\ForwardedRequestException $e) {
+                // Do nothing, if the request has been forwarded. Just step into another dispatching-loop.
 
-            if (!$controller instanceof \Signature\Mvc\Controller\ControllerInterface) {
-                throw new \UnexpectedValueException(
-                    'Invalid controller. Controller "' . $controllerName . '" must implement \Signature\Mvc\Controller\ControllerInterface.'
-                );
+                if ($dispatchIterationCount++ > self::DISPATCH_ITERATION_LIMIT) {
+                    throw new \RuntimeException (sprintf(
+                        'The request took more than %d iterations to dispatch. Giving up.',
+                        self::DISPATCH_ITERATION_LIMIT
+                    ));
+                }
             }
-
-            $controller->handleRequest($request, $response);
         }
     }
 }
