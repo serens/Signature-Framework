@@ -184,7 +184,7 @@ class Module extends \Signature\Module\AbstractModule
     /**
      * Takes all request variables and removes slashes from them.
      * @param array $requestVariables
-     * @return \Signature\Module\ModuleInterface
+     * @return Module
      */
     protected function initializeRequestVariables(array &$requestVariables = [])
     {

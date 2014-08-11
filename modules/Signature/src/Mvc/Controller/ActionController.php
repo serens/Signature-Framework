@@ -53,6 +53,10 @@ class ActionController extends AbstractController
         $actionResult = call_user_func_array(array($this, $actionName), $request->getControllerActionParameters());
 
         if (null === $actionResult && $this->view instanceof \Signature\Mvc\View\ViewInterface) {
+            if ('' === $this->view->getTemplate()) {
+                $this->view->setTemplate($this->resolveViewTemplateName());
+            }
+
             $this->response->appendContent($this->view->render());
         } elseif ($actionResult !== '') {
             $this->response->appendContent($actionResult);
