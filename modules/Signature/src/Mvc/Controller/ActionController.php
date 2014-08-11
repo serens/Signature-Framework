@@ -87,7 +87,6 @@ class ActionController extends AbstractController
         }
 
         $this->view = $view;
-        $this->view->setTemplate($this->resolveViewTemplateName());
 
         // Assign basic view data
         $this->view->setViewData([
