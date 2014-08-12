@@ -91,6 +91,21 @@ abstract class AbstractController implements ControllerInterface
             $this->request->setParameters($parameters);
         }
 
+        // Stop this dispatch-cycle by throwing an exception
         throw new \Signature\Mvc\Exception\ForwardedRequestException();
+    }
+
+    /**
+     * Redirects to another uri by setting new header-information to the response.
+     * @param string $uri
+     * @throws \Signature\Mvc\Exception\RedirectedRequestException
+     * @return void
+     */
+    public function redirect($uri)
+    {
+        $this->response->setContent('')->addToHeader('Location', $uri);
+
+        // Stop this dispatch-cycle by throwing an exception
+        throw new \Signature\Mvc\Exception\RedirectedRequestException();
     }
 }

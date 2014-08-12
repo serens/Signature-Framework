@@ -43,6 +43,9 @@ class Dispatcher
 
             try {
                 $controller->handleRequest($request, $response);
+            } catch (\Signature\Mvc\Exception\RedirectedRequestException $e) {
+                // Stop further more dispatching, if a redirect has been detected.
+                break;
             } catch (\Signature\Mvc\Exception\ForwardedRequestException $e) {
                 // Do nothing, if the request has been forwarded. Just step into another dispatching-loop.
 

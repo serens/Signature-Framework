@@ -75,6 +75,12 @@ class Module extends \Signature\Module\AbstractModule
         if (null === ($response = $this->handleRequest())) {
             throw new \RuntimeException('The request could not be handled.');
         } else {
+            if (!headers_sent()) {
+                foreach ($response->getHeader() as $header => $value) {
+                    header($header . ': ' . $value);
+                }
+            }
+
             echo $response->getContent();
 
             return true;

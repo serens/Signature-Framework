@@ -229,7 +229,7 @@ abstract class AbstractModel implements ModelInterface
      */
     public function create()
     {
-        if ($this->getID()) {
+        if ($this->hasField($this->getPrimaryKeyName()) && $this->getID()) {
             return $this;
         }
 
