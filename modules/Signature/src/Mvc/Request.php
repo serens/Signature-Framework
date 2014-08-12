@@ -130,12 +130,12 @@ class Request implements RequestInterface
     /**
      * Sets a parameter to the request. An already existing parameter will be overwritten.
      * @param string $parameter
-     * @param string $value
+     * @param mixed $value
      * @return \Signature\Mvc\RequestInterface
      */
     public function setParameter($parameter, $value)
     {
-        $this->parameters[(string) $parameter] = (string) $value;
+        $this->parameters[(string) $parameter] = $value;
 
         return $this;
     }
