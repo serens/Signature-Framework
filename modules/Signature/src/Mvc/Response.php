@@ -18,6 +18,11 @@ class Response implements ResponseInterface
     protected $content = '';
 
     /**
+     * @var array
+     */
+    protected $header = [];
+
+    /**
      * Sets the full content of the reponse-object.
      * @param string $content
      * @return \Signature\Mvc\ResponseInterface
@@ -27,6 +32,28 @@ class Response implements ResponseInterface
         $this->content = (string) $content;
 
         return $this;
+    }
+
+    /**
+     * Adds header information to the response.
+     * @param string $header
+     * @param string $content
+     * @return \Signature\Mvc\ResponseInterface
+     */
+    public function addToHeader($header, $content)
+    {
+        $this->header[(string) $header] = (string) $content;
+
+        return $this;
+    }
+
+    /**
+     * Returns the header of the response-object.
+     * @return array
+     */
+    public function getHeader()
+    {
+        return $this->header;
     }
 
     /**

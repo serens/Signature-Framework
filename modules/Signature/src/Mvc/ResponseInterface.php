@@ -20,6 +20,20 @@ interface ResponseInterface
     public function setContent($content);
 
     /**
+     * Adds header information to the response.
+     * @param string $header
+     * @param string $content
+     * @return \Signature\Mvc\ResponseInterface
+     */
+    public function addToHeader($header, $content);
+
+    /**
+     * Returns the header of the response-object.
+     * @return array
+     */
+    public function getHeader();
+
+    /**
      * Returns the actual contained content in the reponse-object.
      * @return string
      */
