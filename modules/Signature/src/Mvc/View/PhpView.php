@@ -111,6 +111,7 @@ class PhpView implements ViewInterface
                     $layoutView = new \Signature\Mvc\View\PhpView();
                     $layoutView
                         ->setTemplate($this->getLayout())
+                        ->setViewData($this->getViewData())
                         ->setViewData('content', $content);
 
                     return $layoutView->render();
