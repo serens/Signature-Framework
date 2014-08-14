@@ -20,11 +20,11 @@ class AboutConfigController extends \Signature\Mvc\Controller\ActionController
      */
     public function indexAction()
     {
-        $this->view->setViewData(array(
+        $this->view->setViewData([
             'routes'        => $this->getRoutingInformation(),
             'activemodules' => $this->getActiveModules(),
             'persistence'   => $this->getPersistenceInformation(),
-        ));
+        ]);
     }
 
     /**
