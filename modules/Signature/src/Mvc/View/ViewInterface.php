@@ -47,6 +47,13 @@ interface ViewInterface
     public function setViewData($data, $value = null);
 
     /**
+     * Checks if the given view data exists.
+     * @param string $key
+     * @return boolean
+     */
+    public function hasViewData($key);
+
+    /**
      * Gets the view data.
      * @throws \OutOfRangeException
      * @param string $key
