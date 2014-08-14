@@ -50,7 +50,7 @@ class ActionController extends AbstractController
         }
 
         // Prepare and execute the action which has been called.
-        $actionResult = call_user_func_array(array($this, $actionName), $request->getControllerActionParameters());
+        $actionResult = call_user_func_array([$this, $actionName], $request->getControllerActionParameters());
 
         if (null === $actionResult && $this->view instanceof \Signature\Mvc\View\ViewInterface) {
             if ('' === $this->view->getTemplate()) {

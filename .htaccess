@@ -2,7 +2,8 @@
     RewriteEngine On
     RewriteBase /
 
-    RewriteCond %{REQUEST_URI} !(\.gif)|(\.jpg)|(\.png)|(\.css)|(\.js)|(\.php)$
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule .? - [L]
 
     RewriteRule .* index.php [L]
 </IfModule>

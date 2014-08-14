@@ -49,7 +49,7 @@ class PhpView implements ViewInterface
             return $this->viewData;
         }
 
-        if (array_key_exists($key, $this->viewData)) {
+        if ($this->hasViewData($key)) {
             return $this->viewData[$key];
         } else {
             throw new \OutOfRangeException(
@@ -76,6 +76,16 @@ class PhpView implements ViewInterface
         }
 
         return $this;
+    }
+
+    /**
+     * Checks if the given view data exists.
+     * @param string $key
+     * @return boolean
+     */
+    public function hasViewData($key)
+    {
+        return array_key_exists($key, $this->viewData);
     }
 
     /**
@@ -111,6 +121,7 @@ class PhpView implements ViewInterface
                     $layoutView = new \Signature\Mvc\View\PhpView();
                     $layoutView
                         ->setTemplate($this->getLayout())
+                        ->setViewData($this->getViewData())
                         ->setViewData('content', $content);
 
                     return $layoutView->render();
