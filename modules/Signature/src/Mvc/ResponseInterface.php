@@ -28,10 +28,24 @@ interface ResponseInterface
     public function addToHeader($header, $content);
 
     /**
-     * Returns the header of the response-object.
+     * Returns the specified header of the response-object.
+     * @param string $header
+     * @return string
+     */
+    public function getHeader($header);
+
+    /**
+     * Returns all header information.
      * @return array
      */
-    public function getHeader();
+    public function getHeaders();
+
+    /**
+     * Removes a header entry.
+     * @param string $header
+     * @return \Signature\Mvc\ResponseInterface
+     */
+    public function removeFromHeader($header);
 
     /**
      * Returns the actual contained content in the reponse-object.
@@ -52,4 +66,10 @@ interface ResponseInterface
      * @return \Signature\Mvc\ResponseInterface
      */
     public function prependContent($content);
+
+    /**
+     * Renders all headers and the content of the response object.
+     * @return void
+     */
+    public function output();
 }
