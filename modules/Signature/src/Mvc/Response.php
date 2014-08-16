@@ -48,12 +48,38 @@ class Response implements ResponseInterface
     }
 
     /**
-     * Returns the header of the response-object.
+     * Returns the specified header of the response-object.
+     * @param string $header
+     * @return string
+     */
+    public function getHeader($header)
+    {
+        return array_key_exists($header, $this->header)
+            ? $this->header[$header]
+            : '';
+    }
+
+    /**
+     * Returns all header information.
      * @return array
      */
-    public function getHeader()
+    public function getHeaders()
     {
         return $this->header;
+    }
+
+    /**
+     * Removes a header entry.
+     * @param string $header
+     * @return \Signature\Mvc\ResponseInterface
+     */
+    public function removeFromHeader($header)
+    {
+        if (array_key_exists($header, $this->header)) {
+            unset($this->header[$header]);
+        }
+
+        return $this;
     }
 
     /**
@@ -87,5 +113,20 @@ class Response implements ResponseInterface
         $this->content = (string) $content . $this->content;
 
         return $this;
+    }
+
+    /**
+     * Renders all headers and the content of the response object.
+     * @return void
+     */
+    public function output()
+    {
+        if (!headers_sent()) {
+            foreach ($this->header as $header => $value) {
+                header($header . ': ' . $value);
+            }
+        }
+
+        echo $this->content;
     }
 }
