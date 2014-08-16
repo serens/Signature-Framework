@@ -98,12 +98,16 @@ abstract class AbstractController implements ControllerInterface
     /**
      * Redirects to another uri by setting new header-information to the response.
      * @param string $uri
+     * @param integer $statusCode
      * @throws \Signature\Mvc\Exception\RedirectedRequestException
      * @return void
      */
-    public function redirect($uri)
+    public function redirect($uri, $statusCode = 302)
     {
-        $this->response->setContent('')->addToHeader('Location', $uri);
+        $this->response
+            ->setContent('')
+            ->setStatusCode($statusCode)
+            ->addToHeader('Location', $uri);
 
         // Stop this dispatch-cycle by throwing an exception
         throw new \Signature\Mvc\Exception\RedirectedRequestException();

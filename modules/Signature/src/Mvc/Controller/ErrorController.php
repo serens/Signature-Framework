@@ -29,6 +29,7 @@ class ErrorController extends ActionController
      */
     public function noRouteFoundAction()
     {
+        $this->response->setStatusCode(404);
         $this->view->setViewData('originalRequestUri', $this->request->getRequestUri());
     }
 }

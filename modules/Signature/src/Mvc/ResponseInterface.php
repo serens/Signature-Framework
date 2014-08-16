@@ -48,6 +48,19 @@ interface ResponseInterface
     public function removeFromHeader($header);
 
     /**
+     * Sets a new status code for the response object.
+     * @param integer $statusCode
+     * @return \Signature\Mvc\ResponseInterface
+     */
+    public function setStatusCode($statusCode);
+
+    /**
+     * Returns the current status code of the response object.
+     * @return integer
+     */
+    public function getStatusCode();
+
+    /**
      * Returns the actual contained content in the reponse-object.
      * @return string
      */
