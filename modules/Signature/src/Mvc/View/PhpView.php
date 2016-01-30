@@ -6,6 +6,8 @@
 
 namespace Signature\Mvc\View;
 
+use Signature\Mvc\Exception\Exception;
+
 /**
  * Class PhpView
  * @package Signature\Mvc\View
@@ -26,6 +28,11 @@ class PhpView implements ViewInterface
      * @var string
      */
     protected $layoutFilename = '';
+
+    /**
+     * @var array
+     */
+    protected $viewhelperInstanceContainer = [];
 
     /**
      * Implemented magic method which creates an easier access to view-data in view-context.
@@ -192,5 +199,70 @@ class PhpView implements ViewInterface
         } else {
             echo 'Partial template [' . $partialFilename . '] cannot be loaded.';
         }
+    }
+
+    /**
+     * Renders the given viewhelper with the given arguments.
+     * @param string $viewhelperClassname
+     * @param array $arguments
+     * @return string
+     */
+    public function viewhelper($viewhelperClassname, array $arguments = [])
+    {
+        if ($viewhelper = $this->getViewHelperInstance($viewhelperClassname)) {
+            $viewhelper->setArguments($arguments);
+            return $viewhelper->render();
+        }
+
+        return '';
+    }
+
+    /**
+     * Creates an instance of a viewhelper by a given classname.
+     *
+     * Viewhelper can be found in two places. 1st: Signature, 2nd: Module. When using a Signature viewhelper, there
+     * is no need of a fully qualified namespace. In both cases the namespace-part "ViewHelper" can be ignored.
+     * This will result in a shorter classname. But, if you want, you can still use the fully qualified namespace.
+     *
+     * Examples of viewhelper classnames:
+     *  - Signature built in: \Signature\Format\Crop
+     *  - Module provied: \MyModule\Format\Date
+     *
+     * The created instance will be cached.
+     * @param string $viewhelperClassname
+     * @throws \UnexpectedValueException If the viewhelper is not well implemented
+     * @return \Signature\ViewHelper\ViewHelperInterface
+     */
+    public function getViewHelperInstance($viewhelperClassname)
+    {
+        if ('\\' !== $viewhelperClassname[0]) {
+            $viewhelperClassname = '\\' . $viewhelperClassname;
+        }
+
+        $namespaceParts = explode('\\', $viewhelperClassname);
+
+        if ('ViewHelper' !== $namespaceParts[2]) {
+            array_splice($namespaceParts, 2, 0, 'ViewHelper');
+        }
+
+        $newViewhelperClassname = implode('\\', $namespaceParts) . 'ViewHelper';
+
+        if (array_key_exists($newViewhelperClassname, $this->viewhelperInstanceContainer)) {
+            return $this->viewhelperInstanceContainer[$newViewhelperClassname];
+        }
+
+        $objectProviderService  = \Signature\Object\ObjectProviderService::getInstance();
+        $viewhelperInstance     = $objectProviderService->create($newViewhelperClassname);
+
+        if (!$viewhelperInstance instanceof \Signature\ViewHelper\ViewHelperInterface) {
+            throw new \UnexpectedValueException(sprintf(
+                'Invalid viewhelper. Viewhelper "%s" must implement \Signature\ViewHelper\ViewHelperInterface.',
+                $newViewhelperClassname
+            ));
+        }
+
+        $this->viewhelperInstanceContainer[$newViewhelperClassname] = $viewhelperInstance;
+
+        return $viewhelperInstance;
     }
 }
