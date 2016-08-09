@@ -58,14 +58,14 @@ class PersistenceService extends AbstractInjectableService implements ProviderIn
     public function getProvider()
     {
         if (null === $this->provider) {
-            throw new \UnexpectedValueException('No peristence provider has been set.');
+            throw new \UnexpectedValueException('No persistence provider has been set.');
         }
 
         return $this->provider;
     }
 
     /**
-     * Sets a peristence provider.
+     * Sets a persistence provider.
      * @param ProviderInterface $provider
      * @return PersistenceService
      */
