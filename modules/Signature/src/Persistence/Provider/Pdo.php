@@ -77,7 +77,7 @@ class Pdo implements \Signature\Persistence\Provider\ProviderInterface
         }
 
         $this->pdo = new \PDO(sprintf(
-                'mysql:host=%s;dbname=%s',
+                'mysql:host=%s;dbname=%s;charset=utf8',
                 $this->connectionInfo['Host'],
                 $this->connectionInfo['Database']
             ),
