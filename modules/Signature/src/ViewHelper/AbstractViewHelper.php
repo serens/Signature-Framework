@@ -135,6 +135,11 @@ abstract class AbstractViewHelper implements ViewHelperInterface
                 ));
             }
 
+            // Mixed arguments do not need further checks
+            if ('mixed' === $description->getType()) {
+                continue;
+            }
+
             // Check, if all arguments have the required type
             if (null !== $argumentValue) {
                 if ($description->mustBeScalarType() && gettype($argumentValue) != $description->getType()) {

@@ -46,7 +46,7 @@ class ArgumentDescription
         }
 
         $this->isRequired = (boolean) $isRequired;
-        $this->type       = $type;
+        $this->type       = strtolower((string) $type);
         $this->default    = (string) $default;
     }
 
