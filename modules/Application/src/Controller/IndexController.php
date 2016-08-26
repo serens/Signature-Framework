@@ -20,7 +20,7 @@ class IndexController extends \Signature\Mvc\Controller\ActionController
     {
         parent::initView();
 
-        $this->view->setLayout('modules/Signature/tpl/Layouts/Default.html');
+        $this->view->setLayout('modules/Signature/tpl/Layouts/Default.phtml');
     }
 
     /**

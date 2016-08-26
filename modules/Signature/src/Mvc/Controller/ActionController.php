@@ -153,6 +153,6 @@ class ActionController extends AbstractController
                 implode('\\', $namespaceParts),
                 ucfirst($controllerClassName),
                 ucfirst($this->request->getControllerActionName())
-            ]) . '.html';
+            ]) . '.phtml';
     }
 }
