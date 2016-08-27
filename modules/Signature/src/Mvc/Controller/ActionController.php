@@ -103,7 +103,13 @@ class ActionController extends AbstractController
      */
     protected function getResourceDir()
     {
-        return \Signature\Core\AutoloaderInterface::MODULES_PATHNAME . '/' . $this->getModuleContext() . '/res';
+        $dirParts = [
+            \Signature\Core\AutoloaderInterface::MODULES_PATHNAME,
+            $this->getModuleContext(),
+            'res'
+        ];
+
+        return implode(DIRECTORY_SEPARATOR, $dirParts);
     }
 
     /**
@@ -112,7 +118,13 @@ class ActionController extends AbstractController
      */
     protected function getTemplateDir()
     {
-        return \Signature\Core\AutoloaderInterface::MODULES_PATHNAME . '/' . $this->getModuleContext() . '/tpl';
+        $dirParts = [
+            \Signature\Core\AutoloaderInterface::MODULES_PATHNAME,
+            $this->getModuleContext(),
+            'tpl'
+        ];
+
+        return implode(DIRECTORY_SEPARATOR, $dirParts);
     }
 
     /**
