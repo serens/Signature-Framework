@@ -20,7 +20,7 @@ class ErrorController extends ActionController
     {
         parent::initView();
 
-        $this->view->setLayout($this->getTemplateDir() . 'Layouts/Default.phtml');
+        $this->view->setLayout($this->getTemplateDir() . '/Layouts/Default.phtml');
     }
 
     /**
