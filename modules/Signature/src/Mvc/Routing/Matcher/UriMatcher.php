@@ -25,11 +25,23 @@ class UriMatcher extends AbstractMatcher
     const URI_PART_NUMBER = '#';
 
     /**
+     * @var string
+     */
+    const URI_PART_OBJECT = '(';
+
+    /**
+     * @var string
+     */
+    const URI_PART_ARRAY = '@';
+
+    /**
      * @var array
      */
     protected $validUriPartIdentifierChars = [
         self::URI_PART_NUMBER,
         self::URI_PART_STRING,
+        self::URI_PART_OBJECT,
+        self::URI_PART_ARRAY,
     ];
 
     /**
@@ -84,6 +96,8 @@ class UriMatcher extends AbstractMatcher
         for ($i = 0; $i < count($uriParts); $i++) {
             if ($this->matchUriPart($uriParts[$i], $requestUriParts[$i], $parameters)) {
                 $matchCount++;
+            } else {
+                break;
             }
         }
 
@@ -121,23 +135,72 @@ class UriMatcher extends AbstractMatcher
         }
 
         if (($identChar = substr($uriPart, 0, 1)) && in_array($identChar, $this->validUriPartIdentifierChars)) {
-            $parameterName = substr($uriPart, 1);
-
             switch ($identChar) {
                 case self::URI_PART_STRING:
+                    $parameterName = substr($uriPart, 1);
                     $parameters[$parameterName] = $requestUriPart;
 
                     return true;
 
                 case self::URI_PART_NUMBER:
                     if (is_numeric($requestUriPart)) {
+                        $parameterName = substr($uriPart, 1);
                         $parameters[$parameterName] = (int) $requestUriPart;
 
                         return true;
                     }
+
+                    break;
+
+                case self::URI_PART_OBJECT:
+                    if ($instance = $this->resolveObjectClass($uriPart, $requestUriPart)) {
+                        $parameterName = substr($uriPart, strpos($uriPart, ')') + 1);
+                        $parameters[$parameterName] = $instance;
+
+                        return true;
+                    }
+
+                    break;
+
+                case self::URI_PART_ARRAY:
+                    $parameterName = substr($uriPart, 1);
+                    $values        = [$requestUriPart];
+
+                    foreach ([';', ',', ':', '|'] as $separator) {
+                        if (false !== strpos($requestUriPart, $separator)) {
+                            $values = explode($separator, $requestUriPart);
+                            break;
+                        }
+                    }
+
+                    $parameters[$parameterName] = $values;
+
+                    return true;
             }
         }
 
         return false;
+    }
+
+    /**
+     * Tries to parse an uri part in a form like "(DateTime)myParam".
+     * @param string $uriPart
+     * @param string $requestUriPart
+     * @return object|null
+     */
+    protected function resolveObjectClass($uriPart, $requestUriPart) {
+        if (1 === preg_match('/\((.*?)\)/', $uriPart, $objectClassname)) {
+            if (is_a($objectClassname[1], 'Signature\Persistence\ActiveRecord\AbstractModel', true)) {
+                $objectProviderService = \Signature\Object\ObjectProviderService::getInstance();
+
+                /** @var \Signature\Persistence\ActiveRecord\AbstractModel $instance */
+                $instance = $objectProviderService->create($objectClassname[1]);
+                $instance->find((int) $requestUriPart);
+            } else {
+                $instance = new $objectClassname[1]($requestUriPart);
+            }
+
+            return $instance;
+        }
     }
 }
