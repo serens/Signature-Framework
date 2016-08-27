@@ -19,7 +19,7 @@ class DefaultExceptionHandler implements \Signature\Core\Error\ExceptionHandlerI
      */
     public static function handleException(\Exception $e)
     {
-        ob_clean();
+        if (ob_get_contents()) ob_clean();
 
         print('<div style="border:1px solid #FF4949; background-color:#FF4949; padding:0; margin:0; font-family:\'Courier New\'; font-size:12px; color:white;">');
         print('<p style="padding:5px 10px 7px 10px; margin:0;">Uncaught Exception: <strong>' . get_class($e) . '</strong></p>');

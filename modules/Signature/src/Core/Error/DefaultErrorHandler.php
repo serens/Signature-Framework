@@ -23,7 +23,7 @@ class DefaultErrorHandler implements \Signature\Core\Error\ErrorHandlerInterface
      */
     public static function handleError($errno, $errstr, $errfile, $errline, $context)
     {
-        ob_clean();
+        if (ob_get_contents()) ob_clean();
 
         print('<div style="border:1px solid #FF4949; background-color:#FF4949; padding:0; margin:0; font-family:\'Courier New\'; font-size:12px; color:white;">');
         print('<p style="padding:5px 10px 7px 10px; margin:0;">Error: <strong> ' . $errstr . '</strong></p>');
