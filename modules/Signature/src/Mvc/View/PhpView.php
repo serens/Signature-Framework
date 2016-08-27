@@ -118,11 +118,9 @@ class PhpView implements ViewInterface
 
                 include $template;
 
-                if (!$content = ob_get_contents()) {
+                if (!$content = ob_get_clean()) {
                     $content = '';
                 }
-
-                ob_clean();
 
                 if ($this->getLayout()) {
                     $layoutView = new \Signature\Mvc\View\PhpView();
