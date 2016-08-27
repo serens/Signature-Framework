@@ -57,7 +57,7 @@ final class Loader
      */
     public function __construct()
     {
-        $this->cacheFilename         = realpath(__DIR__ . '/../../../../') . '/' . self::CACHE_PATHNAME . '/' . self::MODULELIST_CACHE_FILENAME;
+        $this->cacheFilename         = self::CACHE_PATHNAME . '/' . self::MODULELIST_CACHE_FILENAME;
         $this->objectProviderService = \Signature\Object\ObjectProviderService::getInstance();
         $this->moduleService         = $this->objectProviderService->getService('ModuleService');
         $this->configurationService  = $this->objectProviderService->getService('ConfigurationService');
