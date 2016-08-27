@@ -64,6 +64,15 @@ class Request implements RequestInterface
     }
 
     /**
+     * Returns the current request method.
+     * @return string
+     */
+    public function getMethod()
+    {
+        return !empty($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
+    }
+
+    /**
      * Gets the original request uri.
      * @return string
      */
@@ -201,5 +210,59 @@ class Request implements RequestInterface
         $this->controllerActionParameters = $parameters;
 
         return $this;
+    }
+
+    /**
+     * Returns true if current request method is POST.
+     * @return boolean
+     */
+    public function isPost()
+    {
+        return ('POST' == $this->getMethod());
+    }
+
+    /**
+     * Returns true if current request method is GET.
+     * @return boolean
+     */
+    public function isGet()
+    {
+        return ('GET' == $this->getMethod());
+    }
+
+    /**
+     * Returns true if current request method is PUT.
+     * @return boolean
+     */
+    public function isPut()
+    {
+        return ('PUT' == $this->getMethod());
+    }
+
+    /**
+     * Returns true if current request method is DELETE.
+     * @return boolean
+     */
+    public function isDelete()
+    {
+        return ('DELETE' == $this->getMethod());
+    }
+
+    /**
+     * Returns true if current request method is HEAD.
+     * @return boolean
+     */
+    public function isHead()
+    {
+        return ('HEAD' == $this->getMethod());
+    }
+
+    /**
+     * Returns true if current request method is OPTIONS.
+     * @return boolean
+     */
+    public function isOptions()
+    {
+        return ('OPTIONS' == $this->getMethod());
     }
 }

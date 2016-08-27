@@ -111,4 +111,10 @@ interface RequestInterface
      * @return \Signature\Mvc\Request
      */
     public function setRequestUri($requestUri);
+
+    /**
+     * Returns the current request method.
+     * @return string
+     */
+    public function getMethod();
 }
