@@ -23,6 +23,11 @@ class Select extends AbstractElement
     protected $value = '';
 
     /**
+     * @var boolean
+     */
+    protected $forceUseClosingTag = true;
+
+    /**
      * Sets name, value, options and type.
      * @param string $name
      * @param string $value
