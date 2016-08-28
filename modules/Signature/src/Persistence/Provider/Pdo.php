@@ -28,6 +28,16 @@ class Pdo implements \Signature\Persistence\Provider\ProviderInterface
     protected $requiredConnectionInfoFields = ['Host', 'Username', 'Password', 'Database'];
 
     /**
+     * Quotes a single string.
+     * @param string $string
+     * @return string
+     */
+    public function quote($string)
+    {
+        return $this->pdo->quote($string);
+    }
+
+    /**
      * Executes a SQL-query and returns a Result collection.
      * @param string $queryString
      * @throws \RuntimeException If query could not be executed.

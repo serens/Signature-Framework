@@ -37,7 +37,7 @@ class PersistenceService extends AbstractInjectableService implements ProviderIn
      */
     public function quote($string)
     {
-        return "'" . $string . "'";
+        return $this->getProvider()->quote($string);
     }
 
     /**

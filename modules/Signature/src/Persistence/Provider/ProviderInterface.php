@@ -13,6 +13,13 @@ namespace Signature\Persistence\Provider;
 interface ProviderInterface
 {
     /**
+     * Quotes a single string.
+     * @param string $string
+     * @return string
+     */
+    public function quote($string);
+
+    /**
      * Executes a SQL-query and returns a Result collection.
      * @param string $queryString
      * @throws \RuntimeException If query could not be executed.
