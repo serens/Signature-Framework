@@ -23,7 +23,7 @@ abstract class AbstractElement extends \Signature\Html\Tag implements ElementInt
      * @param string $value
      * @param array  $attributes
      */
-    public function __construct($name, $value, array $attributes = [])
+    public function __construct($name, $value = '', array $attributes = [])
     {
         $attributes['name'] = (string) $name;
 

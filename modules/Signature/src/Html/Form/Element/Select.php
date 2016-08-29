@@ -34,7 +34,7 @@ class Select extends AbstractElement
      * @param array  $attributes
      * @param array  $options
      */
-    public function __construct($name, $value, array $attributes = [], array $options = [])
+    public function __construct($name, $value = '', array $attributes = [], array $options = [])
     {
         parent::__construct($name, $value, $attributes);
 
