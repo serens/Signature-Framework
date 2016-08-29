@@ -63,6 +63,15 @@ class Checkbox extends Input
     }
 
     /**
+     * Returns checked or unchecked value of the checkbox.
+     * @return string
+     */
+    public function getValue()
+    {
+        return 'checked' == $this->getAttribute('checked') ? $this->checkedValue : $this->uncheckedValue;
+    }
+
+    /**
      * Renders the checkbox with its hidden helper element.
      * @return string
      */
