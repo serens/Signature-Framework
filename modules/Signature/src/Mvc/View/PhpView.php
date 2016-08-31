@@ -186,6 +186,38 @@ class PhpView implements ViewInterface
     }
 
     /**
+     * Renders information of the current view.
+     * @return string
+     */
+    public function debug()
+    {
+        $debug = '';
+        $info  = [
+            'View' => [
+                'Class' => get_class($this),
+                'View template' => $this->getTemplate(),
+                'Layout' => $this->getLayout(),
+            ],
+        ];
+
+        $info['View variables'] = $this->getViewData();
+
+        foreach ($info as $title => $data) {
+            $debug .= ('<h2>' . $title . '</h2>');
+            $debug .= '<dl>';
+
+            foreach ($data as $key => $value) {
+                $debug .= ('<dt>' . $key . '</dt>');
+                $debug .= ('<dd>' . (is_object($value) ? ('Object: ' . get_class($value)) : $value) . '</dd>');
+            }
+
+            $debug .= '</dl>';
+        }
+
+        return $debug;
+    }
+
+    /**
      * Includes a partial template within the currently rendered main template.
      * @param string $partialFilename
      * @return void
