@@ -112,7 +112,7 @@ class Select extends AbstractElement
                     $optionsHtml .= sprintf(
                         '<option value="%s"%s>%s</option>',
                         htmlspecialchars($key),
-                        ($key === $this->getValue()) ? ' selected="selected"' : '',
+                        ((string) $key === (string)$this->getValue()) ? ' selected="selected"' : '',
                         $caption
                     );
                 }
@@ -122,7 +122,7 @@ class Select extends AbstractElement
                 $optionsHtml .= sprintf(
                     '<option value="%s"%s>%s</option>',
                     htmlspecialchars($key),
-                    ($key === $this->getValue()) ? ' selected="selected"' : '',
+                    ((string) $key === (string) $this->getValue()) ? ' selected="selected"' : '',
                     $options
                 );
             }
