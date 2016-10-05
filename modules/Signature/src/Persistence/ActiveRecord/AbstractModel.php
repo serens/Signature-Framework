@@ -30,12 +30,6 @@ abstract class AbstractModel implements ModelInterface
     protected $primaryKeyName = 'ID';
 
     /**
-     * Once the active record got initialized, no more fields can be added.
-     * @var boolean
-     */
-    protected $initialized = false;
-
-    /**
      * Sets the fields of this record object.
      * @param array $fieldValues
      */
@@ -102,26 +96,14 @@ abstract class AbstractModel implements ModelInterface
 
     /**
      * Sets multiple field values at once.
-     *
-     * After calling this method no more fields can be added to the model.
      * @param array $fieldValues
-     * @throws \BadMethodCallException
      * @return ModelInterface
      */
     public function setFieldValues(array $fieldValues)
     {
-        if ($this->initialized) {
-            throw new \BadMethodCallException(sprintf(
-                'Multiple call to %s::setFieldValues(): All fields of this model are already set.',
-                get_class($this)
-            ));
-        }
-
         foreach ($fieldValues as $field => $value) {
-            $this->setFieldValueInternal($field, $value);
+            $this->setFieldValue($field, $value);
         }
-
-        $this->initialized = true;
 
         return $this;
     }
@@ -139,18 +121,17 @@ abstract class AbstractModel implements ModelInterface
      * Sets the value of a field.
      * @param string $field
      * @param mixed  $value
-     * @throws Exception\InvalidFieldException
      * @return ModelInterface
      */
     public function setFieldValue($field, $value)
     {
-        if ($this->hasField($field)) {
+        if (method_exists($this, $setter = 'set' . ucfirst(strtolower($field)))) {
+            $this->$setter($value);
+        } else {
             $this->fieldValues[$field] = $value;
-
-            return $this;
         }
 
-        throw new Exception\InvalidFieldException($field);
+        return $this;
     }
 
     /**
@@ -252,7 +233,7 @@ abstract class AbstractModel implements ModelInterface
             implode(',', $values)
         ));
 
-        $this->setFieldValueInternal($this->getPrimaryKeyName(), $this->persistenceService->getLastInsertId());
+        $this->setFieldValue($this->getPrimaryKeyName(), $this->persistenceService->getLastInsertId());
 
         return $this;
     }
@@ -364,20 +345,5 @@ abstract class AbstractModel implements ModelInterface
     public function findAll()
     {
         return $this->findByQuery();
-    }
-
-    /**
-     * Sets the internal value of a field by calling magic setters if available.
-     * @param string $field
-     * @param string $value
-     * @return void
-     */
-    protected function setFieldValueInternal($field, $value)
-    {
-        if (method_exists($this, $setter = 'set' . ucfirst(strtolower($field)))) {
-            $this->$setter($value);
-        } else {
-            $this->fieldValues[$field] = $value;
-        }
     }
 }
