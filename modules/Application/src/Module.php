@@ -49,7 +49,7 @@ class Module extends \Signature\Module\AbstractModule
             [
                 'home' => [
                     'Uris'                => ['/'],
-                    'ControllerClassname' => 'Application\\Controller\\IndexController',
+                    'ControllerClassname' => \Application\Controller\IndexController::class,
                     'ActionName'          => 'index',
                 ],
             ]

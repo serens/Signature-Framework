@@ -21,9 +21,9 @@ final class ObjectProviderService extends \Signature\Service\AbstractInjectableS
      * @var array
      */
     protected $registeredServices = [
-        'ObjectProviderService' => 'Signature\\Object\\ObjectProviderService',
-        'ModuleService'         => 'Signature\\Module\\ModuleService',
-        'ConfigurationService'  => 'Signature\\Configuration\\ConfigurationService',
+        'ObjectProviderService' => \Signature\Object\ObjectProviderService::class,
+        'ModuleService'         => \Signature\Module\ModuleService::class,
+        'ConfigurationService'  => \Signature\Configuration\ConfigurationService::class,
     ];
 
     /**

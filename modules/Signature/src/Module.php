@@ -90,7 +90,7 @@ class Module extends \Signature\Module\AbstractModule
         return [
             'Service' => [
                 'Persistence' => [
-                    'DefaultProviderClassname' => 'Signature\\Persistence\\Provider\\Pdo',
+                    'DefaultProviderClassname' => \Signature\Persistence\Provider\Pdo::class,
                     'ConnectionInfo'           => [
                         'Host'     => '',
                         'Username' => '',
@@ -102,12 +102,12 @@ class Module extends \Signature\Module\AbstractModule
             'Mvc' => [
                 'Controller' => [
                     'NoRouteFoundHandling' => [
-                        'ControllerClassname' => 'Signature\\Mvc\\Controller\\ErrorController',
+                        'ControllerClassname' => \Signature\Mvc\Controller\ErrorController::class,
                         'ActionName'          => 'noRouteFound'
                     ]
                 ],
                 'View' => [
-                    'DefaultViewClassname' => 'Signature\\Mvc\\View\\PhpView'
+                    'DefaultViewClassname' => \Signature\Mvc\View\PhpView::class
                 ],
                 'Routing' => [
                     'Matcher' => [
@@ -116,7 +116,7 @@ class Module extends \Signature\Module\AbstractModule
                             'Routes' => [
                                 'about:config' => [
                                     'Uris'                => ['/about/config', '/about/config/'],
-                                    'ControllerClassname' => 'Signature\\Mvc\\Controller\\AboutConfigController',
+                                    'ControllerClassname' => \Signature\Mvc\Controller\AboutConfigController::class,
                                     'ActionName'          => 'index',
                                 ],
                             ]
@@ -138,16 +138,16 @@ class Module extends \Signature\Module\AbstractModule
         $matcherConfig = $this->configurationService->getConfigByPath('Signature', 'Mvc.Routing.Matcher');
 
         /** @var \Signature\Mvc\Response $response */
-        $response = $this->objectProviderService->create('Signature\\Mvc\\Response');
+        $response = $this->objectProviderService->create(\Signature\Mvc\Response::class);
 
         /** @var \Signature\Mvc\Dispatcher $dispatcher */
-        $dispatcher = $this->objectProviderService->create('Signature\\Mvc\\Dispatcher');
+        $dispatcher = $this->objectProviderService->create(\Signature\Mvc\Dispatcher::class);
 
         /** @var \Signature\Mvc\Routing\Router $router */
-        $router = $this->objectProviderService->create('Signature\\Mvc\\Routing\\Router', $matcherConfig);
+        $router = $this->objectProviderService->create(\Signature\Mvc\Routing\Router::class, $matcherConfig);
 
         /** @var \Signature\Mvc\Request $request */
-        $request = $this->objectProviderService->create('Signature\\Mvc\\Request');
+        $request = $this->objectProviderService->create(\Signature\Mvc\Request::class);
 
         $request
             ->setRequestUri($_SERVER['REQUEST_URI'])
@@ -175,8 +175,8 @@ class Module extends \Signature\Module\AbstractModule
     protected function initializeObjectProviderService()
     {
         $this->objectProviderService
-            ->registerService('PersistenceService', 'Signature\\Persistence\\PersistenceService')
-            ->registerService('LoggingService', 'Signature\\Logging\\LoggingService');
+            ->registerService('PersistenceService', \Signature\Persistence\PersistenceService::class)
+            ->registerService('LoggingService', \Signature\Logging\LoggingService::class);
 
         return $this;
     }
