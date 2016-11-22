@@ -112,11 +112,11 @@ class PhpView implements ViewInterface
      */
     public function renderWith($templateFilename)
     {
-        if ($template = $this->getTemplate()) {
-            if (file_exists($template)) {
+        if ($templateFilename) {
+            if (file_exists($templateFilename)) {
                 ob_start();
 
-                include $template;
+                include $templateFilename;
 
                 if (!$content = ob_get_clean()) {
                     $content = '';
@@ -135,7 +135,7 @@ class PhpView implements ViewInterface
                 }
             } else {
                 throw new \Signature\Mvc\Exception\Exception(
-                    'Assigned template "' . $template . '" cannot be loaded.'
+                    'Assigned template "' . $templateFilename . '" cannot be loaded.'
                 );
             }
         }
