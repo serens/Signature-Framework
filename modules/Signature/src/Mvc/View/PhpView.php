@@ -35,6 +35,22 @@ class PhpView implements ViewInterface
     protected $viewhelperInstanceContainer = [];
 
     /**
+     * Constructor.
+     * @param string $template
+     * @param array $viewData
+     */
+    public function __construct($template = '', array $viewData = [])
+    {
+        if ('' !== $template) {
+            $this->setTemplate($template);
+        }
+
+        if ($viewData) {
+            $this->setViewData($viewData);
+        }
+    }
+
+    /**
      * Implemented magic method which creates an easier access to view-data in view-context.
      * @param string $varname
      * @return mixed
