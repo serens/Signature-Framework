@@ -1,4 +1,4 @@
-Signature MVC-Framework
+Signature framework
 =======================
 
 What is the Signature framework? Signature is a simple and fast MVC framework, written in PHP 7.0. It is designed to make web development easier, faster and more fun.
