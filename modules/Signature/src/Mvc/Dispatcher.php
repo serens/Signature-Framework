@@ -6,6 +6,10 @@
 
 namespace Signature\Mvc;
 
+use Signature\Mvc\Controller\ControllerInterface;
+use Signature\Mvc\Exception\ForwardedRequestException;
+use Signature\Mvc\Exception\RedirectedRequestException;
+
 /**
  * Class Dispatcher
  * @package Signature\Mvc
@@ -15,7 +19,7 @@ class Dispatcher
     use \Signature\Object\ObjectProviderServiceTrait;
 
     /**
-     * @var integer
+     * @var int
      */
     const DISPATCH_ITERATION_LIMIT = 50;
 
@@ -34,19 +38,20 @@ class Dispatcher
         while (!$request->isDispatched()) {
             $controller = $this->objectProviderService->create($request->getControllerName());
 
-            if (!$controller instanceof \Signature\Mvc\Controller\ControllerInterface) {
+            if (!$controller instanceof ControllerInterface) {
                 throw new \UnexpectedValueException(sprintf(
-                    'Invalid controller. Controller "%s" must implement \Signature\Mvc\Controller\ControllerInterface.',
-                    $request->getControllerName()
+                    'Invalid controller. Controller "%s" must implement "%s".',
+                    $request->getControllerName(),
+                    \Signature\Mvc\Controller\ControllerInterface::class
                 ));
             }
 
             try {
                 $controller->handleRequest($request, $response);
-            } catch (\Signature\Mvc\Exception\RedirectedRequestException $e) {
+            } catch (RedirectedRequestException $e) {
                 // Stop further more dispatching, if a redirect has been detected.
                 break;
-            } catch (\Signature\Mvc\Exception\ForwardedRequestException $e) {
+            } catch (ForwardedRequestException $e) {
                 // Do nothing, if the request has been forwarded. Just step into another dispatching-loop.
 
                 if ($dispatchIterationCount++ > self::DISPATCH_ITERATION_LIMIT) {

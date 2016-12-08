@@ -13,7 +13,7 @@ namespace Signature\Html\Form\Element;
 class Textarea extends AbstractElement
 {
     /**
-     * @var boolean
+     * @var bool
      */
     protected $forceUseClosingTag = true;
 
@@ -21,9 +21,9 @@ class Textarea extends AbstractElement
      * Sets name, value and type.
      * @param string $name
      * @param string $value
-     * @param array  $attributes
+     * @param array $attributes
      */
-    public function __construct($name, $value = '', array $attributes = [])
+    public function __construct(string $name, string $value = '', array $attributes = [])
     {
         parent::__construct($name, $value, $attributes);
 
@@ -34,7 +34,7 @@ class Textarea extends AbstractElement
      * Returns the current value of the textarea.
      * @return string
      */
-    public function getValue()
+    public function getValue(): string
     {
         return $this->getContent();
     }
@@ -44,8 +44,10 @@ class Textarea extends AbstractElement
      * @param string $value
      * @return ElementInterface
      */
-    public function setValue($value)
+    public function setValue(string $value): ElementInterface
     {
-        return $this->setContent($value);
+        $this->setContent($value);
+
+        return $this;
     }
 }

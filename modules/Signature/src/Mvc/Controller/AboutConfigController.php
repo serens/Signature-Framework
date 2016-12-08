@@ -10,7 +10,7 @@ namespace Signature\Mvc\Controller;
  * Class AboutConfigController
  * @package Signature\Mvc\Controller
  */
-class AboutConfigController extends \Signature\Mvc\Controller\ActionController
+class AboutConfigController extends ActionController
 {
     use \Signature\Module\ModuleServiceTrait;
 
@@ -31,7 +31,7 @@ class AboutConfigController extends \Signature\Mvc\Controller\ActionController
      * Gets information about the current routing configuration.
      * @return array
      */
-    protected function getRoutingInformation()
+    protected function getRoutingInformation(): array
     {
         return $this->configurationService->getConfigByPath('Signature', 'Mvc.Routing.Matcher');
     }
@@ -40,7 +40,7 @@ class AboutConfigController extends \Signature\Mvc\Controller\ActionController
      * Returns an array of active modules.
      * @return array
      */
-    protected function getActiveModules()
+    protected function getActiveModules(): array
     {
         return $this->moduleService->getRegisteredModules();
     }
@@ -49,7 +49,7 @@ class AboutConfigController extends \Signature\Mvc\Controller\ActionController
      * Returns information about the current persistence settings.
      * @return array
      */
-    protected function getPersistenceInformation()
+    protected function getPersistenceInformation(): array
     {
         return $this->configurationService->getConfigByPath('Signature', 'Service.Persistence');
     }

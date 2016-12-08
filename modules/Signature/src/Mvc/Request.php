@@ -13,7 +13,7 @@ namespace Signature\Mvc;
 class Request implements RequestInterface
 {
     /**
-     * @var boolean
+     * @var bool
      */
     protected $dispatched = false;
 
@@ -44,30 +44,30 @@ class Request implements RequestInterface
 
     /**
      * Sets the actual dispatched state of the request.
-     * @param boolean $dispatched
-     * @return \Signature\Mvc\RequestInterface
+     * @param bool $dispatched
+     * @return RequestInterface
      */
-    public function setDispatched($dispatched)
+    public function setDispatched(bool $dispatched): RequestInterface
     {
-        $this->dispatched = (bool) $dispatched;
+        $this->dispatched = $dispatched;
 
         return $this;
     }
 
     /**
      * Returns the current state of the request, whether it has already been dispatched or not.
-     * @return boolean
+     * @return bool
      */
-    public function isDispatched()
+    public function isDispatched(): bool
     {
-        return $this->dispatched === true;
+        return $this->dispatched == true;
     }
 
     /**
      * Returns the current request method.
      * @return string
      */
-    public function getMethod()
+    public function getMethod(): string
     {
         return !empty($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
     }
@@ -76,7 +76,7 @@ class Request implements RequestInterface
      * Gets the original request uri.
      * @return string
      */
-    public function getRequestUri()
+    public function getRequestUri(): string
     {
         return $this->requestUri;
     }
@@ -84,11 +84,11 @@ class Request implements RequestInterface
     /**
      * Sets the original request-uri.
      * @param string $requestUri
-     * @return \Signature\Mvc\Request
+     * @return RequestInterface
      */
-    public function setRequestUri($requestUri)
+    public function setRequestUri(string $requestUri): RequestInterface
     {
-        $this->requestUri = (string) $requestUri;
+        $this->requestUri = $requestUri;
 
         return $this;
     }
@@ -98,26 +98,26 @@ class Request implements RequestInterface
      * @param string $parameter
      * @return string|null
      */
-    public function getParameter($parameter)
+    public function getParameter(string $parameter)
     {
-        return $this->hasParameter((string) $parameter) ? $this->parameters[(string) $parameter] : null;
+        return $this->hasParameter($parameter) ? $this->parameters[$parameter] : null;
     }
 
     /**
      * Checks, if the given parameter exists in the request.
      * @param string $parameter
-     * @return boolean
+     * @return bool
      */
-    public function hasParameter($parameter)
+    public function hasParameter(string $parameter): bool
     {
-        return array_key_exists((string) $parameter, $this->parameters);
+        return array_key_exists($parameter, $this->parameters);
     }
 
     /**
      * Gets all parameters existing in this request.
      * @return array
      */
-    public function getParameters()
+    public function getParameters(): array
     {
         return $this->parameters;
     }
@@ -125,12 +125,12 @@ class Request implements RequestInterface
     /**
      * Sets a set of parameters to the request
      * @param array $parameters
-     * @return \Signature\Mvc\RequestInterface
+     * @return RequestInterface
      */
-    public function setParameters(array $parameters)
+    public function setParameters(array $parameters): RequestInterface
     {
         foreach ($parameters as $parameter => $value) {
-            $this->setParameter($parameter, $value);
+            $this->setParameter($parameter, (string) $value);
         }
 
         return $this;
@@ -139,12 +139,12 @@ class Request implements RequestInterface
     /**
      * Sets a parameter to the request. An already existing parameter will be overwritten.
      * @param string $parameter
-     * @param mixed $value
-     * @return \Signature\Mvc\RequestInterface
+     * @param string $value
+     * @return RequestInterface
      */
-    public function setParameter($parameter, $value)
+    public function setParameter(string $parameter, string $value): RequestInterface
     {
-        $this->parameters[(string) $parameter] = $value;
+        $this->parameters[$parameter] = $value;
 
         return $this;
     }
@@ -153,7 +153,7 @@ class Request implements RequestInterface
      * Gets the classname of the controller which is handling this request.
      * @return string
      */
-    public function getControllerName()
+    public function getControllerName(): string
     {
         return $this->controllerName;
     }
@@ -161,11 +161,11 @@ class Request implements RequestInterface
     /**
      * Sets the classname of the controlle which is handling this request.
      * @param string $controllerName
-     * @return \Signature\Mvc\RequestInterface
+     * @return RequestInterface
      */
-    public function setControllerName($controllerName)
+    public function setControllerName(string $controllerName): RequestInterface
     {
-        $this->controllerName = (string) $controllerName;
+        $this->controllerName = $controllerName;
 
         return $this;
     }
@@ -174,7 +174,7 @@ class Request implements RequestInterface
      * Returns the current action name of the controller.
      * @return string
      */
-    public function getControllerActionName()
+    public function getControllerActionName(): string
     {
         return $this->controllerActionName;
     }
@@ -182,11 +182,11 @@ class Request implements RequestInterface
     /**
      * Sets the name of the current action of the controller.
      * @param string $controllerActionName
-     * @return \Signature\Mvc\RequestInterface
+     * @return RequestInterface
      */
-    public function setControllerActionName($controllerActionName)
+    public function setControllerActionName(string $controllerActionName): RequestInterface
     {
-        $this->controllerActionName = strtolower((string) $controllerActionName);
+        $this->controllerActionName = strtolower($controllerActionName);
 
         return $this;
     }
@@ -203,9 +203,9 @@ class Request implements RequestInterface
     /**
      * Sets the parameters which should be passed to the action-method.
      * @param array $parameters
-     * @return \Signature\Mvc\RequestInterface
+     * @return RequestInterface
      */
-    public function setControllerActionParameters(array $parameters)
+    public function setControllerActionParameters(array $parameters): RequestInterface
     {
         $this->controllerActionParameters = $parameters;
 
@@ -214,54 +214,54 @@ class Request implements RequestInterface
 
     /**
      * Returns true if current request method is POST.
-     * @return boolean
+     * @return bool
      */
-    public function isPost()
+    public function isPost(): bool
     {
         return ('POST' == $this->getMethod());
     }
 
     /**
      * Returns true if current request method is GET.
-     * @return boolean
+     * @return bool
      */
-    public function isGet()
+    public function isGet(): bool
     {
         return ('GET' == $this->getMethod());
     }
 
     /**
      * Returns true if current request method is PUT.
-     * @return boolean
+     * @return bool
      */
-    public function isPut()
+    public function isPut(): bool
     {
         return ('PUT' == $this->getMethod());
     }
 
     /**
      * Returns true if current request method is DELETE.
-     * @return boolean
+     * @return bool
      */
-    public function isDelete()
+    public function isDelete(): bool
     {
         return ('DELETE' == $this->getMethod());
     }
 
     /**
      * Returns true if current request method is HEAD.
-     * @return boolean
+     * @return bool
      */
-    public function isHead()
+    public function isHead(): bool
     {
         return ('HEAD' == $this->getMethod());
     }
 
     /**
      * Returns true if current request method is OPTIONS.
-     * @return boolean
+     * @return bool
      */
-    public function isOptions()
+    public function isOptions(): bool
     {
         return ('OPTIONS' == $this->getMethod());
     }

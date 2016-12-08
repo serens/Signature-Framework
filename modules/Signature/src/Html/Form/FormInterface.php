@@ -6,6 +6,7 @@
 
 namespace Signature\Html\Form;
 
+use Signature\Html\Form\Element\ElementInterface;
 use Signature\Mvc\RequestInterface;
 
 /**
@@ -34,49 +35,49 @@ interface FormInterface extends \Signature\Html\TagInterface
 
     /**
      * Adds a single element to this form.
-     * @param Element\ElementInterface $element
+     * @param ElementInterface $element
      * @return Form
      */
-    public function addElement(Element\ElementInterface $element);
+    public function addElement(ElementInterface $element): Form;
 
     /**
      * Adds several elements to the form at once.
      * @param array $elements
      * @return Form
      */
-    public function addElements(array $elements);
+    public function addElements(array $elements): Form;
 
     /**
      * Returns an element specified by its name.
-     * @param string $name
+     * @param string $elementName
      * @throws \RuntimeException If the specified element does not exist in this form.
-     * @return Element\ElementInterface
+     * @return ElementInterface
      */
-    public function getElement($name);
+    public function getElement(string $elementName): ElementInterface;
 
     /**
      * Returns all elements in the form.
      * @return array
      */
-    public function getElements();
+    public function getElements(): array;
 
     /**
      * Returns the value of the element specified.
-     * @param string $elementName
+     * @param string $name
      * @throws \RuntimeException If the specified element does not exist in this form.
      * @return string
      */
-    public function getElementValue($elementName);
+    public function getElementValue(string $name): string;
 
     /**
      * Returns a serialized string of the form.
      * @return string
      */
-    public function getSerializedData();
+    public function getSerializedData(): string;
 
     /**
      * Validates the form and its elements.
-     * @return boolean
+     * @return bool
      */
-    public function validate();
+    public function validate(): bool;
 }

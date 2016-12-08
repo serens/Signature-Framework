@@ -6,6 +6,21 @@
 
 namespace Signature;
 
+use Signature\Core\Error\DefaultExceptionHandler;
+use Signature\Logging\LoggingService;
+use Signature\Module\ModuleInterface;
+use Signature\Mvc\Controller\AboutConfigController;
+use Signature\Mvc\Controller\ErrorController;
+use Signature\Mvc\Dispatcher;
+use Signature\Mvc\Request;
+use Signature\Mvc\Response;
+use Signature\Mvc\ResponseInterface;
+use Signature\Mvc\Routing\Exception\NoRouteFoundException;
+use Signature\Mvc\Routing\Router;
+use Signature\Mvc\View\PhpView;
+use Signature\Persistence\PersistenceService;
+use Signature\Persistence\Provider\Pdo;
+
 /**
  * Class Module
  * @package Signature
@@ -27,12 +42,12 @@ class Module extends \Signature\Module\AbstractModule
     /**
      * @var string
      */
-    protected $version = '0.1 Alpha';
+    protected $version = '0.2 Alpha';
 
     /**
      * @var string
      */
-    protected $description = 'A simple and fast MVC Framework for PHP 5.4.';
+    protected $description = 'A simple and fast MVC Framework for PHP 7.0.';
 
     /**
      * @var string
@@ -41,9 +56,9 @@ class Module extends \Signature\Module\AbstractModule
 
     /**
      * Initializes this module.
-     * @return boolean
+     * @return bool
      */
-    public function init()
+    public function init(): bool
     {
         if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
             $this
@@ -61,10 +76,10 @@ class Module extends \Signature\Module\AbstractModule
 
     /**
      * Starts the module by giving control to the request handler.
-     * @return boolean
+     * @return bool
      * @throws \RuntimeException
      */
-    public function start()
+    public function start(): bool
     {
         /*
          * Initialize persistence service here, because an application module has to set
@@ -85,12 +100,12 @@ class Module extends \Signature\Module\AbstractModule
      * Returns the core configuration of the Signature module.
      * @return array
      */
-    public function getConfig()
+    public function getConfig(): array
     {
         return [
             'Service' => [
                 'Persistence' => [
-                    'DefaultProviderClassname' => \Signature\Persistence\Provider\Pdo::class,
+                    'DefaultProviderClassname' => Pdo::class,
                     'ConnectionInfo'           => [
                         'Host'     => '',
                         'Username' => '',
@@ -102,12 +117,12 @@ class Module extends \Signature\Module\AbstractModule
             'Mvc' => [
                 'Controller' => [
                     'NoRouteFoundHandling' => [
-                        'ControllerClassname' => \Signature\Mvc\Controller\ErrorController::class,
+                        'ControllerClassname' => ErrorController::class,
                         'ActionName'          => 'noRouteFound'
                     ]
                 ],
                 'View' => [
-                    'DefaultViewClassname' => \Signature\Mvc\View\PhpView::class
+                    'DefaultViewClassname' => PhpView::class
                 ],
                 'Routing' => [
                     'Matcher' => [
@@ -116,7 +131,7 @@ class Module extends \Signature\Module\AbstractModule
                             'Routes' => [
                                 'about:config' => [
                                     'Uris'                => ['/about/config', '/about/config/'],
-                                    'ControllerClassname' => \Signature\Mvc\Controller\AboutConfigController::class,
+                                    'ControllerClassname' => AboutConfigController::class,
                                     'ActionName'          => 'index',
                                 ],
                             ]
@@ -131,23 +146,23 @@ class Module extends \Signature\Module\AbstractModule
      * Creates a request-object and handles it by passing it to the dispatcher.
      *
      * This is the main entry point of the framework.
-     * @return \Signature\Mvc\ResponseInterface
+     * @return ResponseInterface
      */
-    protected function handleRequest()
+    protected function handleRequest(): ResponseInterface
     {
         $matcherConfig = $this->configurationService->getConfigByPath('Signature', 'Mvc.Routing.Matcher');
 
-        /** @var \Signature\Mvc\Response $response */
-        $response = $this->objectProviderService->create(\Signature\Mvc\Response::class);
+        /** @var Response $response */
+        $response = $this->objectProviderService->create(Response::class);
 
-        /** @var \Signature\Mvc\Dispatcher $dispatcher */
-        $dispatcher = $this->objectProviderService->create(\Signature\Mvc\Dispatcher::class);
+        /** @var Dispatcher $dispatcher */
+        $dispatcher = $this->objectProviderService->create(Dispatcher::class);
 
-        /** @var \Signature\Mvc\Routing\Router $router */
-        $router = $this->objectProviderService->create(\Signature\Mvc\Routing\Router::class, $matcherConfig);
+        /** @var Router $router */
+        $router = $this->objectProviderService->create(Router::class, $matcherConfig);
 
-        /** @var \Signature\Mvc\Request $request */
-        $request = $this->objectProviderService->create(\Signature\Mvc\Request::class);
+        /** @var Request $request */
+        $request = $this->objectProviderService->create(Request::class);
 
         $request
             ->setRequestUri($_SERVER['REQUEST_URI'])
@@ -155,7 +170,7 @@ class Module extends \Signature\Module\AbstractModule
 
         try {
             $router->match($request);
-        } catch (\Signature\Mvc\Routing\Exception\NoRouteFoundException $e) {
+        } catch (NoRouteFoundException $e) {
             $fallback = $this->configurationService->getConfigByPath('Signature', 'Mvc.Controller.NoRouteFoundHandling');
 
             $request
@@ -170,13 +185,13 @@ class Module extends \Signature\Module\AbstractModule
 
     /**
      * Adds several services to the service provider service.
-     * @return \Signature\Module\ModuleInterface
+     * @return ModuleInterface
      */
-    protected function initializeObjectProviderService()
+    protected function initializeObjectProviderService(): ModuleInterface
     {
         $this->objectProviderService
-            ->registerService('PersistenceService', \Signature\Persistence\PersistenceService::class)
-            ->registerService('LoggingService', \Signature\Logging\LoggingService::class);
+            ->registerService('PersistenceService', PersistenceService::class)
+            ->registerService('LoggingService', LoggingService::class);
 
         return $this;
     }
@@ -186,7 +201,7 @@ class Module extends \Signature\Module\AbstractModule
      * @param array $requestVariables
      * @return Module
      */
-    protected function initializeRequestVariables(array &$requestVariables = [])
+    protected function initializeRequestVariables(array &$requestVariables = []): Module
     {
         if (!$requestVariables)
             return $this;
@@ -211,13 +226,8 @@ class Module extends \Signature\Module\AbstractModule
         // Set the error reporting...
         error_reporting(E_ALL ^ E_DEPRECATED);
 
-        // ... and set error- and exception andlers:
-        set_error_handler(function ($errno, $errstr, $errfile, $errline, $context) {
-            \Signature\Core\Error\DefaultErrorHandler::handleError($errno, $errstr, $errfile, $errline, $context);
-        }, error_reporting());
-
-        set_exception_handler(function ($e) {
-            \Signature\Core\Error\DefaultExceptionHandler::handleException($e);
+        set_exception_handler(function ($t) {
+            DefaultExceptionHandler::handleException($t);
         });
 
         return $this;
@@ -247,7 +257,7 @@ class Module extends \Signature\Module\AbstractModule
             /**
              * As this module has been created before the object provider knew about the persistence service,
              * we must retrieve the service manually.
-             * @var \Signature\Persistence\PersistenceService $persistenceService
+             * @var PersistenceService $persistenceService
              */
             $persistenceService = $this->objectProviderService->getService('PersistenceService');
 

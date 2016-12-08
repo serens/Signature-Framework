@@ -6,8 +6,10 @@
 
 namespace Signature\Mvc\Controller;
 
-use \Signature\Mvc\RequestInterface;
-use \Signature\Mvc\ResponseInterface;
+use Signature\Mvc\Exception\ActionNotFoundException;
+use Signature\Mvc\RequestInterface;
+use Signature\Mvc\ResponseInterface;
+use Signature\Mvc\View\ViewInterface;
 
 /**
  * Class ActionController
@@ -19,15 +21,15 @@ class ActionController extends AbstractController
     use \Signature\Configuration\ConfigurationServiceTrait;
 
     /**
-     * @var \Signature\Mvc\View\ViewInterface
+     * @var ViewInterface
      */
     protected $view = null;
 
     /**
      * Starts handling the request. Will call initAction() before any other action will be called.
-     * @param \Signature\Mvc\RequestInterface  $request
-     * @param \Signature\Mvc\ResponseInterface $response
-     * @throws \Signature\Mvc\Exception\ActionNotFoundException
+     * @param RequestInterface $request
+     * @param ResponseInterface $response
+     * @throws ActionNotFoundException
      * @return void
      */
     public function handleRequest(RequestInterface $request, ResponseInterface $response)
@@ -42,7 +44,7 @@ class ActionController extends AbstractController
         }
 
         if (!method_exists($this, $actionName = $this->request->getControllerActionName() . 'Action')) {
-            throw new \Signature\Mvc\Exception\ActionNotFoundException(sprintf(
+            throw new ActionNotFoundException(sprintf(
                 'Controller "%s" does not have an action called "%s".',
                 $this->request->getControllerName(),
                 $this->request->getControllerActionName()
@@ -52,7 +54,7 @@ class ActionController extends AbstractController
         // Prepare and execute the action which has been called.
         $actionResult = call_user_func_array([$this, $actionName], $request->getControllerActionParameters());
 
-        if (null === $actionResult && $this->view instanceof \Signature\Mvc\View\ViewInterface) {
+        if (null === $actionResult && $this->view instanceof ViewInterface) {
             if ('' === $this->view->getTemplate()) {
                 $this->view->setTemplate($this->resolveViewTemplateName());
             }
@@ -80,7 +82,7 @@ class ActionController extends AbstractController
     {
         $view = $this->objectProviderService->create($this->resolveViewClassName());
 
-        if (!$view instanceof \Signature\Mvc\View\ViewInterface) {
+        if (!$view instanceof ViewInterface) {
             throw new \UnexpectedValueException(
                 'View "' . get_class($view) . '" does not implement Signature\Mvc\View\ViewInterface.'
             );
@@ -101,7 +103,7 @@ class ActionController extends AbstractController
      * Returns the path to the resources of the current module.
      * @return string
      */
-    protected function getResourceDir()
+    protected function getResourceDir(): string
     {
         $dirParts = [
             \Signature\Core\AutoloaderInterface::MODULES_PATHNAME,
@@ -116,7 +118,7 @@ class ActionController extends AbstractController
      * Returns the path to the templates of the current module.
      * @return string
      */
-    protected function getTemplateDir()
+    protected function getTemplateDir(): string
     {
         $dirParts = [
             \Signature\Core\AutoloaderInterface::MODULES_PATHNAME,
@@ -131,7 +133,7 @@ class ActionController extends AbstractController
      * Returns the classname of a view implementation.
      * @return string
      */
-    protected function resolveViewClassName()
+    protected function resolveViewClassName(): string
     {
         return $this->configurationService->getConfigByPath('Signature', 'Mvc.View.DefaultViewClassname');
     }
@@ -140,7 +142,7 @@ class ActionController extends AbstractController
      * Returns a view template name based on the current controller and action.
      * @return string
      */
-    protected function resolveViewTemplateName()
+    protected function resolveViewTemplateName(): string
     {
         $controllerName      = ltrim($this->request->getControllerName(), '\\');
         $namespaceParts      = explode('\\', $controllerName);

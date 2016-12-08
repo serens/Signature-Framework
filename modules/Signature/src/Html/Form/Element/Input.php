@@ -19,9 +19,9 @@ class Input extends AbstractElement
      * @param array $attributes
      * @param string $type The type of the input, eg "text", "password", "submit" ...
      */
-    public function __construct($name, $value = '', array $attributes = [], $type = 'text')
+    public function __construct(string $name, string $value = '', array $attributes = [], string $type = 'text')
     {
-        $attributes['type'] = (string) $type;
+        $attributes['type'] = $type;
 
         parent::__construct($name, $value, $attributes);
 

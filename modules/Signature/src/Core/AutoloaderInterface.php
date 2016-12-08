@@ -25,7 +25,7 @@ interface AutoloaderInterface
     /**
      * Autoloads a single class.
      * @param string $className
-     * @return boolean
+     * @return bool
      */
-    public static function autoload($className);
+    public static function autoload(string $className): bool;
 }

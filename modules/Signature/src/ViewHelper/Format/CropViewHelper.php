@@ -31,7 +31,7 @@ class CropViewHelper extends \Signature\ViewHelper\AbstractViewHelper
     /**
      * @return string
      */
-    public function render()
+    public function render(): string
     {
         $suffix = $this->getArgument('suffix') ?: $this->getArgumentDescription('suffix')->getDefault();
 

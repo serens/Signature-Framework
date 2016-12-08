@@ -6,6 +6,8 @@
 
 namespace Signature\Persistence\ActiveRecord;
 
+use Signature\Persistence\ResultCollectionInterface;
+
 /**
  * Class AbstractModel
  * @package Signature\Persistence\ActiveRecord
@@ -49,7 +51,7 @@ abstract class AbstractModel implements ModelInterface
      * @param string $className
      * @return string
      */
-    protected function determineTablenameFromClassname($className)
+    protected function determineTablenameFromClassname(string $className): string
     {
         // Get rid of namespaces and underscores and just take the last part of the classname.
         $classname  = str_replace('\\', '_', $className);
@@ -62,9 +64,9 @@ abstract class AbstractModel implements ModelInterface
     /**
      * Checks, if a given set of fields are available on this record model.
      * @param array $fields
-     * @return boolean
+     * @return bool
      */
-    public function hasFields(array $fields)
+    public function hasFields(array $fields): bool
     {
         foreach ($fields as $field) {
             if (!$this->hasField($field)) {
@@ -78,9 +80,9 @@ abstract class AbstractModel implements ModelInterface
     /**
      * Checks, if a given field is available on this record model.
      * @param string $field
-     * @return boolean
+     * @return bool
      */
-    public function hasField($field)
+    public function hasField(string $field): bool
     {
         return array_key_exists($field, $this->fieldValues);
     }
@@ -89,7 +91,7 @@ abstract class AbstractModel implements ModelInterface
      * Returns all values of this record model.
      * @return array
      */
-    public function getFieldValues()
+    public function getFieldValues(): array
     {
         return $this->toArray();
     }
@@ -99,7 +101,7 @@ abstract class AbstractModel implements ModelInterface
      * @param array $fieldValues
      * @return ModelInterface
      */
-    public function setFieldValues(array $fieldValues)
+    public function setFieldValues(array $fieldValues): ModelInterface
     {
         foreach ($fieldValues as $field => $value) {
             $this->setFieldValue($field, $value);
@@ -112,7 +114,7 @@ abstract class AbstractModel implements ModelInterface
      * Returns all values of this record model.
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return $this->fieldValues;
     }
@@ -120,10 +122,10 @@ abstract class AbstractModel implements ModelInterface
     /**
      * Sets the value of a field.
      * @param string $field
-     * @param mixed  $value
+     * @param mixed $value
      * @return ModelInterface
      */
-    public function setFieldValue($field, $value)
+    public function setFieldValue(string $field, $value): ModelInterface
     {
         if (method_exists($this, $setter = 'set' . ucfirst(strtolower($field)))) {
             $this->$setter($value);
@@ -157,9 +159,9 @@ abstract class AbstractModel implements ModelInterface
 
     /**
      * Returns the primary id of this record model.
-     * @return integer
+     * @return int
      */
-    public function getID()
+    public function getID(): int
     {
         return (int) $this->getFieldValue($this->getPrimaryKeyName());
     }
@@ -170,7 +172,7 @@ abstract class AbstractModel implements ModelInterface
      * @throws Exception\InvalidFieldException
      * @return string
      */
-    public function getFieldValue($field)
+    public function getFieldValue(string $field): string
     {
         if ($this->hasField($field)) {
             return $this->fieldValues[$field];
@@ -185,7 +187,7 @@ abstract class AbstractModel implements ModelInterface
      * Override this method when the default value ("ID") is not wished.
      * @return string
      */
-    public function getPrimaryKeyName()
+    public function getPrimaryKeyName(): string
     {
         return $this->primaryKeyName;
     }
@@ -197,7 +199,7 @@ abstract class AbstractModel implements ModelInterface
      * the table name. This method must be overridden, when the standard-behavior is not wished.
      * @return string
      */
-    public function getTableName()
+    public function getTableName(): string
     {
         return $this->tableName;
     }
@@ -208,7 +210,7 @@ abstract class AbstractModel implements ModelInterface
      * A new row is only created, if this model does not have a primary key id set.
      * @return ModelInterface
      */
-    public function create()
+    public function create(): ModelInterface
     {
         if ($this->hasField($this->getPrimaryKeyName()) && $this->getID()) {
             return $this;
@@ -243,7 +245,7 @@ abstract class AbstractModel implements ModelInterface
      * @throws Exception\InvalidRecordException
      * @return ModelInterface
      */
-    public function save()
+    public function save(): ModelInterface
     {
         if (!$this->getID()) {
             throw new Exception\InvalidRecordException();
@@ -273,10 +275,10 @@ abstract class AbstractModel implements ModelInterface
 
     /**
      * Loads data into this model by fetching a row from the database using the primary key.
-     * @param integer $id
-     * @return boolean True, if the record could be loaded.
+     * @param int $id
+     * @return bool True, if the record could be loaded.
      */
-    public function find($id)
+    public function find(int $id): bool
     {
         if (($result = $this->findByField($this->getPrimaryKeyName(), $id)) && $result->count()) {
             $this->setFieldValues($result->getFirst()->getFieldValues());
@@ -291,9 +293,9 @@ abstract class AbstractModel implements ModelInterface
      * Loads data into this model by fetching a row identified by $field.
      * @param string $field
      * @param string $value
-     * @return \Signature\Persistence\ResultCollectionInterface
+     * @return ResultCollectionInterface
      */
-    public function findByField($field, $value)
+    public function findByField(string $field, string $value): ResultCollectionInterface
     {
         $where = sprintf(
             '%s = %s',
@@ -310,9 +312,9 @@ abstract class AbstractModel implements ModelInterface
      * @param string $where
      * @param string $orderBy
      * @param string $limit
-     * @return \Signature\Persistence\ResultCollectionInterface
+     * @return ResultCollectionInterface
      */
-    public function findByQuery($fields = '*', $where = '', $orderBy = '', $limit = '')
+    public function findByQuery(string $fields = '*', string $where = '', string $orderBy = '', string $limit = ''): ResultCollectionInterface
     {
         if ('' !== $where) {
             $where = 'WHERE ' . $where;
@@ -340,9 +342,9 @@ abstract class AbstractModel implements ModelInterface
 
     /**
      * Loads all rows of the table.
-     * @return \Signature\Persistence\ResultCollectionInterface
+     * @return ResultCollectionInterface
      */
-    public function findAll()
+    public function findAll(): ResultCollectionInterface
     {
         return $this->findByQuery();
     }

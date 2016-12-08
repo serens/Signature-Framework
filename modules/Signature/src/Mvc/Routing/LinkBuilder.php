@@ -6,6 +6,8 @@
 
 namespace Signature\Mvc\Routing;
 
+use Signature\Mvc\Routing\Exception\NoRouteFoundException;
+
 /**
  * Class LinkBuilder
  * @package Signature\Mvc
@@ -18,11 +20,9 @@ class LinkBuilder
      * Generates an uri to a route by a given identifier.
      * @param string $routeIdentifier
      * @param array $arguments
-     * @throws \Signature\Mvc\Routing\Exception\NoRouteFoundException
-     * @throws \RuntimeException
      * @return string
      */
-    public function build($routeIdentifier, array $arguments = [])
+    public function build(string $routeIdentifier, array $arguments = []): string
     {
         $configuration = $this->getMatcherConfiguration($routeIdentifier);
         $uri = array_shift($configuration[$routeIdentifier]['Uris']);
@@ -53,10 +53,10 @@ class LinkBuilder
      * Gets the matcher configuration for a given route and validates this configuration.
      * @param string $routeIdentifier
      * @throws \RuntimeException
-     * @throws \Signature\Mvc\Routing\Exception\NoRouteFoundException
+     * @throws NoRouteFoundException
      * @return array
      */
-    protected function getMatcherConfiguration($routeIdentifier)
+    protected function getMatcherConfiguration(string $routeIdentifier): array
     {
         $matcherConfiguration = $this->configurationService->getConfigByPath(
             'Signature',
@@ -64,20 +64,20 @@ class LinkBuilder
         );
 
         if (!array_key_exists($routeIdentifier, $matcherConfiguration)) {
-            throw new \Signature\Mvc\Routing\Exception\NoRouteFoundException(
-                'A route identified by "' . (string) $routeIdentifier . '" does not exist in any configuration.'
+            throw new NoRouteFoundException(
+                'A route identified by "' . $routeIdentifier . '" does not exist in any configuration.'
             );
         }
 
         if (!array_key_exists('Uris', $matcherConfiguration[$routeIdentifier])) {
             throw new \RuntimeException(
-                'Route configuration of "' . (string) $routeIdentifier . '" is invalid due to missing field "Uris".'
+                'Route configuration of "' . $routeIdentifier . '" is invalid due to missing field "Uris".'
             );
         }
 
         if (!is_array($matcherConfiguration[$routeIdentifier]['Uris'])) {
             throw new \RuntimeException(
-                'Route configuration of "' . (string) $routeIdentifier . '" is invalid.'
+                'Route configuration of "' . $routeIdentifier . '" is invalid.'
             );
         }
 

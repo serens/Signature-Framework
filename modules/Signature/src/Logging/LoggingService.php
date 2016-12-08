@@ -22,16 +22,16 @@ class LoggingService extends \Signature\Service\AbstractInjectableService
     /**
      * Logs a given message to all registered loggers.
      * @param string $message
-     * @param integer $priority
-     * @param integer $code
+     * @param int $priority
+     * @param int $code
      * @return LoggingService
      */
-    public function log($message, $priority = LoggerInterface::PRIORITY_NORMAL, $code = 0)
+    public function log(string $message, int $priority = LoggerInterface::PRIORITY_NORMAL, int $code = 0): LoggingService
     {
         /* @var $logger LoggerInterface */
         foreach ($this->registeredLoggers as $logger) {
             if ($logger->getLogFilter() & $priority || $logger->getLogFilter() == LoggerInterface::PRIORITY_ALL) {
-                $logger->log((string) $message, (int) $priority, (int) $code);
+                $logger->log($message, $priority, $code);
             }
         }
 
@@ -43,7 +43,7 @@ class LoggingService extends \Signature\Service\AbstractInjectableService
      * @param LoggerInterface $logger
      * @return LoggingService
      */
-    public function registerLogger(LoggerInterface $logger)
+    public function registerLogger(LoggerInterface $logger): LoggingService
     {
         $this->registeredLoggers[] = $logger;
 
@@ -54,7 +54,7 @@ class LoggingService extends \Signature\Service\AbstractInjectableService
      * Returns the list of currently registered loggers.
      * @return array
      */
-    public function getRegisteredLoggers()
+    public function getRegisteredLoggers(): array
     {
         return $this->registeredLoggers;
     }
@@ -65,7 +65,7 @@ class LoggingService extends \Signature\Service\AbstractInjectableService
      * @throws \OutOfBoundsException
      * @return LoggerInterface
      */
-    public function getLogger($loggerClassname)
+    public function getLogger(string $loggerClassname): LoggerInterface
     {
         foreach ($this->registeredLoggers as $logger) {
             if (get_class($logger) == $loggerClassname) {

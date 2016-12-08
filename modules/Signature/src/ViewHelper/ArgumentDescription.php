@@ -23,17 +23,17 @@ class ArgumentDescription
     protected $default = '';
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $isRequired = false;
 
     /**
      * Creates an argument description.
-     * @param boolean $isRequired
+     * @param bool $isRequired
      * @param string $type
      * @param string $default
      */
-    public function __construct($isRequired = false, $type = 'string', $default = '')
+    public function __construct(bool $isRequired = false, string $type = 'string', string $default = '')
     {
         $type = trim(strtolower((string) $type));
 
@@ -45,23 +45,23 @@ class ArgumentDescription
             $type = 'boolean';
         }
 
-        $this->isRequired = (boolean) $isRequired;
-        $this->type       = strtolower((string) $type);
-        $this->default    = (string) $default;
+        $this->isRequired = $isRequired;
+        $this->type       = strtolower($type);
+        $this->default    = $default;
     }
 
     /**
      * @return string
      */
-    public function getDefault()
+    public function getDefault(): string
     {
         return $this->default;
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
-    public function isRequired()
+    public function isRequired(): bool
     {
         return $this->isRequired;
     }
@@ -69,16 +69,16 @@ class ArgumentDescription
     /**
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
 
     /**
      * Returns true if the type must be a scalar type.
-     * @return boolean
+     * @return bool
      */
-    public function mustBeScalarType()
+    public function mustBeScalarType(): bool
     {
         return in_array(strtolower($this->type), ['string', 'integer', 'boolean', 'double', 'array']);
     }

@@ -6,6 +6,9 @@
 
 namespace Signature\Mvc\Controller;
 
+use Signature\Mvc\RequestInterface;
+use Signature\Mvc\ResponseInterface;
+
 /**
  * Interface ControllerInterface
  * @package Signature\Mvc\Controller
@@ -14,22 +17,22 @@ interface ControllerInterface
 {
     /**
      * Returns true, if the supplied request can be handled by the controller.
-     * @param \Signature\Mvc\RequestInterface $request
-     * @return boolean
+     * @param RequestInterface $request
+     * @return bool
      */
-    public function canHandleRequest(\Signature\Mvc\RequestInterface $request);
+    public function canHandleRequest(RequestInterface $request): bool;
 
     /**
      * Handles the request.
-     * @param \Signature\Mvc\RequestInterface  $request
-     * @param \Signature\Mvc\ResponseInterface $response
+     * @param RequestInterface $request
+     * @param ResponseInterface $response
      * @return void
      */
-    public function handleRequest(\Signature\Mvc\RequestInterface $request, \Signature\Mvc\ResponseInterface $response);
+    public function handleRequest(RequestInterface $request, ResponseInterface $response);
 
     /**
      * Returns the module name this controller belongs to.
      * @return string
      */
-    public function getModuleContext();
+    public function getModuleContext(): string;
 }

@@ -14,77 +14,77 @@ interface RequestInterface
 {
     /**
      * Sets the actual dispatched state of the request.
-     * @param boolean $dispatched
-     * @return \Signature\Mvc\RequestInterface
+     * @param bool $dispatched
+     * @return RequestInterface
      */
-    public function setDispatched($dispatched);
+    public function setDispatched(bool $dispatched): RequestInterface;
 
     /**
      * Returns the current state of the request, whether it has already been dispatched or not.
-     * @return boolean
+     * @return bool
      */
-    public function isDispatched();
+    public function isDispatched(): bool;
 
     /**
      * Checks, if the given parameter exists in the request.
      * @param string $parameter
-     * @return boolean
+     * @return bool
      */
-    public function hasParameter($parameter);
+    public function hasParameter(string $parameter): bool;
 
     /**
      * Sets a parameter to the request. An already existing parameter will be overwritten.
      * @param string $parameter
      * @param string $value
-     * @return \Signature\Mvc\RequestInterface
+     * @return RequestInterface
      */
-    public function setParameter($parameter, $value);
+    public function setParameter(string $parameter, string $value): RequestInterface;
 
     /**
      * Gets the specified parameter from then request. If it not exists, null will be returned.
      * @param string $parameter
      * @return string|null
      */
-    public function getParameter($parameter);
+    public function getParameter(string $parameter);
 
     /**
      * Sets a set of parameters to the request
      * @param array $parameters
-     * @return \Signature\Mvc\RequestInterface
+     * @return RequestInterface
      */
-    public function setParameters(array $parameters);
+    public function setParameters(array $parameters): RequestInterface;
 
     /**
      * Gets all parameters existing in this request.
      * @return array
      */
-    public function getParameters();
+    public function getParameters(): array;
 
     /**
      * Sets the classname of the controlle which is handling this request.
      * @param string $controllerName
-     * @return \Signature\Mvc\RequestInterface
+     * @return RequestInterface
      */
-    public function setControllerName($controllerName);
+    public function setControllerName(string $controllerName): RequestInterface;
 
     /**
      * Gets the classname of the controller which is handling this request.
      * @return string
      */
-    public function getControllerName();
+    public function getControllerName(): string;
 
     /**
      * Returns the current action name of the controller.
      * @return string
      */
-    public function getControllerActionName();
+    public function getControllerActionName(): string;
 
     /**
      * Sets the name of the current action of the controller.
      * @param string $controllerActionName
-     * @return \Signature\Mvc\RequestInterface
+     * @return RequestInterface
      */
-    public function setControllerActionName($controllerActionName);
+    public function setControllerActionName(string $controllerActionName): RequestInterface;
 
     /**
      * Returns the parameters which have been passed to the called action-method.
@@ -95,26 +95,26 @@ interface RequestInterface
     /**
      * Sets the parameters which should be passed to the action-method.
      * @param array $parameters
-     * @return \Signature\Mvc\RequestInterface
+     * @return RequestInterface
      */
-    public function setControllerActionParameters(array $parameters);
+    public function setControllerActionParameters(array $parameters): RequestInterface;
 
     /**
      * Gets the original request uri.
      * @return string
      */
-    public function getRequestUri();
+    public function getRequestUri(): string;
 
     /**
      * Sets the original request-uri.
      * @param string $requestUri
-     * @return \Signature\Mvc\Request
+     * @return RequestInterface
      */
-    public function setRequestUri($requestUri);
+    public function setRequestUri(string $requestUri): RequestInterface;
 
     /**
      * Returns the current request method.
      * @return string
      */
-    public function getMethod();
+    public function getMethod(): string;
 }

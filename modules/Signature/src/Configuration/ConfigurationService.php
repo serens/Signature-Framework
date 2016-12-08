@@ -29,15 +29,15 @@ class ConfigurationService extends \Signature\Service\AbstractInjectableService 
      * @param mixed  $default
      * @return mixed
      */
-    public function getConfigByPath($moduleName, $path, $default = null)
+    public function getConfigByPath(string $moduleName, string $path, $default = null)
     {
-        if (null === ($config = $this->getConfig((string) $moduleName, null))) {
+        if (null === ($config = $this->getConfig($moduleName))) {
             return $default;
         }
 
         $found = false;
 
-        foreach (explode($this->pathSeparator, (string) $path) as $pathSegment) {
+        foreach (explode($this->pathSeparator, $path) as $pathSegment) {
             $found = false;
 
             if (is_array($config) && array_key_exists($pathSegment, $config)) {
@@ -54,30 +54,22 @@ class ConfigurationService extends \Signature\Service\AbstractInjectableService 
      *
      * If no configuration is set for the specified module, $default is returned.
      * @param string $moduleName
-     * @param mixed  $default
+     * @param mixed $default
      * @return mixed
      */
-    public function getConfig($moduleName = null, $default = null)
+    public function getConfig(string $moduleName, $default = null)
     {
-        if (null === $moduleName) {
-            return $this->config;
-        }
-
-        $moduleName = (string) $moduleName;
-
         return array_key_exists($moduleName, $this->config) ? $this->config[$moduleName] : $default;
     }
 
     /**
      * Sets the configuration for a specific module.
      * @param string $moduleName
-     * @param array  $config
+     * @param array $config
      * @return ConfigurationServiceInterface
      */
-    public function setConfig($moduleName, array $config)
+    public function setConfig(string $moduleName, array $config): ConfigurationServiceInterface
     {
-        $moduleName = (string) $moduleName;
-
         if (!array_key_exists($moduleName, $this->config)) {
             $this->config[$moduleName] = $config;
         }
@@ -93,7 +85,7 @@ class ConfigurationService extends \Signature\Service\AbstractInjectableService 
      * @param array $second
      * @return array
      */
-    protected function mergeArrayRecursive(array $first, array $second)
+    protected function mergeArrayRecursive(array $first, array $second): array
     {
         $merged = $first;
 
@@ -112,18 +104,16 @@ class ConfigurationService extends \Signature\Service\AbstractInjectableService 
      * Sets a configuration by a given path.
      * @param string $moduleName
      * @param string $path
-     * @param mixed  $config
+     * @param mixed $config
      * @return ConfigurationServiceInterface
      */
-    public function setConfigByPath($moduleName, $path, $config)
+    public function setConfigByPath(string $moduleName, string $path, $config): ConfigurationServiceInterface
     {
-        $moduleName = (string) $moduleName;
-
         if (!array_key_exists($moduleName, $this->config)) {
             $this->config[$moduleName] = [];
         }
 
-        $pathSegments = explode($this->pathSeparator, (string) $path);
+        $pathSegments = explode($this->pathSeparator, $path);
         $result       = [];
         $current      = & $result;
 
@@ -147,7 +137,7 @@ class ConfigurationService extends \Signature\Service\AbstractInjectableService 
      * Returns the symbol which is used to separate a configuration path.
      * @return string
      */
-    public function getPathSeparator()
+    public function getPathSeparator(): string
     {
         return $this->pathSeparator;
     }
@@ -157,9 +147,9 @@ class ConfigurationService extends \Signature\Service\AbstractInjectableService 
      * @param string $pathSeparator
      * @return ConfigurationServiceInterface
      */
-    public function setPathSeparator($pathSeparator)
+    public function setPathSeparator(string $pathSeparator): ConfigurationServiceInterface
     {
-        $this->pathSeparator = (string) $pathSeparator;
+        $this->pathSeparator = $pathSeparator;
 
         return $this;
     }

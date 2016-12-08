@@ -6,6 +6,8 @@
 
 namespace Signature\Mvc\Routing\Matcher;
 
+use Signature\Mvc\RequestInterface;
+
 /**
  * Interface MatcherInterface
  * @package Signature\Mvc\Routing\Matcher
@@ -14,11 +16,11 @@ interface MatcherInterface
 {
     /**
      * Matches a given request to a controller and action.
-     * @param \Signature\Mvc\RequestInterface $request
+     * @param RequestInterface $request
      * @throws \Signature\Mvc\Routing\Exception\NoRouteFoundException When no route could be matched.
-     * @return boolean
+     * @return bool
      */
-    public function match(\Signature\Mvc\RequestInterface $request);
+    public function match(RequestInterface $request): bool;
 
     /**
      * Adds a routing configuration to this type of matcher.
@@ -27,5 +29,5 @@ interface MatcherInterface
      * @param string $actionName
      * @return MatcherInterface
      */
-    public function addRouteConfiguration(array $uris, $controller, $actionName);
+    public function addRouteConfiguration(array $uris, string $controller, string $actionName): MatcherInterface;
 }

@@ -17,13 +17,12 @@ abstract class Autoloader implements AutoloaderInterface
     /**
      * Autoloads a single class.
      * @param string $className
-     * @return boolean
+     * @return bool
      */
-    public static function autoload($className)
+    public static function autoload(string $className): bool
     {
-        $className = ltrim((string) $className, '\\');
+        $className = ltrim($className, '\\');
         $fileName  = self::MODULES_PATHNAME . DIRECTORY_SEPARATOR;
-        $namespace = '';
 
         if ($lastNsPos = strrpos($className, '\\')) {
             $namespace      = substr($className, 0, $lastNsPos);

@@ -29,22 +29,22 @@ class Checkbox extends Input
 
     /**
      * Sets name and value of the element.
-     * @param string  $name
-     * @param boolean $checked
-     * @param array   $attributes
+     * @param string $name
+     * @param bool $checked
+     * @param array $attributes
      */
-    public function __construct($name, $checked = false, array $attributes = [])
+    public function __construct(string $name, bool $checked = false, array $attributes = [])
     {
-        parent::__construct($name, (bool) $checked ? $this->checkedValue : $this->uncheckedValue, $attributes, 'checkbox');
+        parent::__construct($name, $checked ? $this->checkedValue : $this->uncheckedValue, $attributes, 'checkbox');
 
         $this->helperInput = new Hidden($name, $this->uncheckedValue);
     }
 
     /**
      * Retrieves the current checked state of the checkbox.
-     * @return boolean
+     * @return bool
      */
-    public function isChecked()
+    public function isChecked(): bool
     {
         return $this->getAttribute('checked') === 'checked';
     }
@@ -54,7 +54,7 @@ class Checkbox extends Input
      * @param string $value
      * @return ElementInterface
      */
-    public function setValue($value)
+    public function setValue(string $value): ElementInterface
     {
         // checked="" won't work. Thus, we remove the hole attribute.
         (bool) $value ? $this->setAttribute('checked', 'checked') : $this->removeAttribute('checked');
@@ -66,7 +66,7 @@ class Checkbox extends Input
      * Returns checked or unchecked value of the checkbox.
      * @return string
      */
-    public function getValue()
+    public function getValue(): string
     {
         return 'checked' == $this->getAttribute('checked') ? $this->checkedValue : $this->uncheckedValue;
     }
@@ -75,7 +75,7 @@ class Checkbox extends Input
      * Renders the checkbox with its hidden helper element.
      * @return string
      */
-    public function render()
+    public function render(): string
     {
         return $this->helperInput->render() . parent::render();
     }

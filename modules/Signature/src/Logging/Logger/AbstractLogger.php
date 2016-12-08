@@ -13,18 +13,18 @@ namespace Signature\Logging\Logger;
 abstract class AbstractLogger implements LoggerInterface
 {
     /**
-     * @var integer
+     * @var int
      */
     private $filterMask = LoggerInterface::PRIORITY_ALL;
 
     /**
      * Returns a string-representation of a given priority.
-     * @param integer $priority
+     * @param int $priority
      * @return string
      */
-    public function priority2String($priority)
+    public function priority2String(int $priority): string
     {
-        switch ((int) $priority) {
+        switch ($priority) {
             case LoggerInterface::PRIORITY_NORMAL:
                 return 'NORMAL';
 
@@ -47,34 +47,34 @@ abstract class AbstractLogger implements LoggerInterface
 
     /**
      * Sets a filter-level.
-     * @param integer $filterMask
+     * @param int $filterMask
      * @return LoggerInterface
      */
-    public function setLogFilter($filterMask)
+    public function setLogFilter(int $filterMask): LoggerInterface
     {
-        $this->filterMask = (int) $filterMask;
+        $this->filterMask = $filterMask;
 
         return $this;
     }
 
     /**
      * Returns the actual filtering-level.
-     * @return integer
+     * @return int
      */
-    public function getLogFilter()
+    public function getLogFilter(): int
     {
         return $this->filterMask;
     }
 
     /**
      * Logs a given message.
-     * @param string  $message
-     * @param integer $priority
-     * @param integer $code
+     * @param string $message
+     * @param int $priority
+     * @param int $code
      * @throws \InvalidArgumentException
      * @return LoggerInterface
      */
-    public function log($message, $priority = LoggerInterface::PRIORITY_NORMAL, $code = 0)
+    public function log(string $message, int $priority = LoggerInterface::PRIORITY_NORMAL, int $code = 0): LoggerInterface
     {
         if ($priority <= 0)
             throw new \InvalidArgumentException('Invalid value for Argument $priority.');

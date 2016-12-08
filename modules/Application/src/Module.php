@@ -39,9 +39,9 @@ class Module extends \Signature\Module\AbstractModule
 
     /**
      * Adds routing information to the Signature Configuration.
-     * @return boolean
+     * @return bool
      */
-    public function init()
+    public function init(): bool
     {
         $this->configurationService->setConfigByPath(
             'Signature',

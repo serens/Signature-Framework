@@ -7,6 +7,8 @@
 namespace Signature\Mvc\View;
 
 use Signature\Mvc\Exception\Exception;
+use Signature\Object\ObjectProviderService;
+use Signature\ViewHelper\ViewHelperInterface;
 
 /**
  * Class PhpView
@@ -55,7 +57,7 @@ class PhpView implements ViewInterface
      * @param string $varname
      * @return mixed
      */
-    public function __get($varname)
+    public function __get(string $varname)
     {
         return $this->getViewData($varname);
     }
@@ -86,9 +88,9 @@ class PhpView implements ViewInterface
      * Sets view data.
      * @param mixed $data
      * @param mixed $value
-     * @return \Signature\Mvc\View\ViewInterface
+     * @return ViewInterface
      */
-    public function setViewData($data, $value = null)
+    public function setViewData($data, $value = null): ViewInterface
     {
         if (is_array($data)) {
             foreach ($data as $key => $value) {
@@ -104,9 +106,9 @@ class PhpView implements ViewInterface
     /**
      * Checks if the given view data exists.
      * @param string $key
-     * @return boolean
+     * @return bool
      */
-    public function hasViewData($key)
+    public function hasViewData(string $key): bool
     {
         return array_key_exists($key, $this->viewData);
     }
@@ -123,10 +125,10 @@ class PhpView implements ViewInterface
     /**
      * Renders the view with the given template
      * @param string $templateFilename
-     * @throws \Signature\Mvc\Exception\Exception If the assigned template cannot be found.
+     * @throws Exception If the assigned template cannot be found.
      * @return string|null
      */
-    public function renderWith($templateFilename)
+    public function renderWith(string $templateFilename)
     {
         if ($templateFilename) {
             if (file_exists($templateFilename)) {
@@ -139,7 +141,7 @@ class PhpView implements ViewInterface
                 }
 
                 if ($this->getLayout()) {
-                    $layoutView = new \Signature\Mvc\View\PhpView();
+                    $layoutView = new PhpView();
                     $layoutView
                         ->setTemplate($this->getLayout())
                         ->setViewData($this->getViewData())
@@ -150,9 +152,7 @@ class PhpView implements ViewInterface
                     return $content;
                 }
             } else {
-                throw new \Signature\Mvc\Exception\Exception(
-                    'Assigned template "' . $templateFilename . '" cannot be loaded.'
-                );
+                throw new Exception('Assigned template "' . $templateFilename . '" cannot be loaded.');
             }
         }
 
@@ -163,7 +163,7 @@ class PhpView implements ViewInterface
      * Returns the filename of the template with which the view should be rendered.
      * @return string
      */
-    public function getTemplate()
+    public function getTemplate(): string
     {
         return $this->templateFilename;
     }
@@ -172,7 +172,7 @@ class PhpView implements ViewInterface
      * Returns the active layout filename.
      * @return string
      */
-    public function getLayout()
+    public function getLayout(): string
     {
         return $this->layoutFilename;
     }
@@ -180,9 +180,9 @@ class PhpView implements ViewInterface
     /**
      * Sets the template which should be used for rendering purposes.
      * @param string $templateFilename
-     * @return \Signature\Mvc\View\ViewInterface
+     * @return ViewInterface
      */
-    public function setTemplate($templateFilename)
+    public function setTemplate(string $templateFilename): ViewInterface
     {
         $this->templateFilename = $templateFilename;
 
@@ -192,9 +192,9 @@ class PhpView implements ViewInterface
     /**
      * Sets the layout-template which used be used to render.
      * @param string $layoutFilename
-     * @return \Signature\Mvc\View\ViewInterface
+     * @return ViewInterface
      */
-    public function setLayout($layoutFilename)
+    public function setLayout(string $layoutFilename): ViewInterface
     {
         $this->layoutFilename = $layoutFilename;
 
@@ -205,7 +205,7 @@ class PhpView implements ViewInterface
      * Renders information of the current view.
      * @return string
      */
-    public function debug()
+    public function debug(): string
     {
         $debug = '';
         $info  = [
@@ -238,7 +238,7 @@ class PhpView implements ViewInterface
      * @param string $partialFilename
      * @return void
      */
-    public function renderPartial($partialFilename)
+    public function renderPartial(string $partialFilename)
     {
         if (file_exists($partialFilename)) {
             include $partialFilename;
@@ -253,7 +253,7 @@ class PhpView implements ViewInterface
      * @param array $arguments
      * @return string
      */
-    public function viewhelper($viewhelperClassname, array $arguments = [])
+    public function viewhelper(string $viewhelperClassname, array $arguments = []): string
     {
         if ($viewhelper = $this->getViewHelperInstance($viewhelperClassname)) {
             $viewhelper->setArguments($arguments);
@@ -277,9 +277,9 @@ class PhpView implements ViewInterface
      * The created instance will be cached.
      * @param string $viewhelperClassname
      * @throws \UnexpectedValueException If the viewhelper is not well implemented
-     * @return \Signature\ViewHelper\ViewHelperInterface
+     * @return ViewHelperInterface
      */
-    public function getViewHelperInstance($viewhelperClassname)
+    public function getViewHelperInstance(string $viewhelperClassname): ViewHelperInterface
     {
         if ('\\' !== $viewhelperClassname[0]) {
             $viewhelperClassname = '\\' . $viewhelperClassname;
@@ -297,10 +297,10 @@ class PhpView implements ViewInterface
             return $this->viewhelperInstanceContainer[$newViewhelperClassname];
         }
 
-        $objectProviderService  = \Signature\Object\ObjectProviderService::getInstance();
+        $objectProviderService  = ObjectProviderService::getInstance();
         $viewhelperInstance     = $objectProviderService->create($newViewhelperClassname);
 
-        if (!$viewhelperInstance instanceof \Signature\ViewHelper\ViewHelperInterface) {
+        if (!$viewhelperInstance instanceof ViewHelperInterface) {
             throw new \UnexpectedValueException(sprintf(
                 'Invalid viewhelper. Viewhelper "%s" must implement \Signature\ViewHelper\ViewHelperInterface.',
                 $newViewhelperClassname

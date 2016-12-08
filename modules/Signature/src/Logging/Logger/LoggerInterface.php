@@ -14,59 +14,59 @@ interface LoggerInterface
 {
     /**
      * Filtering is set to filter all messages.
-     * @var integer
+     * @var int
      */
     const PRIORITY_ALL = 0;
 
     /**
      * Priority of a message.
-     * @var integer
+     * @var int
      */
     const PRIORITY_NORMAL = 1;
 
     /**
      * Priority of a message.
-     * @var integer
+     * @var int
      */
     const PRIORITY_NOTICE = 2;
 
     /**
      * Priority of a message.
-     * @var integer
+     * @var int
      */
     const PRIORITY_WARNING = 4;
 
     /**
      * Priority of a message.
-     * @var integer
+     * @var int
      */
     const PRIORITY_ERROR = 8;
 
     /**
      * Priority of a message.
-     * @var integer
+     * @var int
      */
     const PRIORITY_CRITICAL = 16;
 
     /**
      * Logs a given message.
      * @param string $message
-     * @param integer $priority
-     * @param integer $code
+     * @param int $priority
+     * @param int $code
      * @return LoggerInterface
      */
-    public function log($message, $priority = LoggerInterface::PRIORITY_NORMAL, $code = 0);
+    public function log(string $message, int $priority = self::PRIORITY_NORMAL, int $code = 0): LoggerInterface;
 
     /**
      * Sets a filter-level.
-     * @param integer $filterMask
+     * @param int $filterMask
      * @return LoggerInterface
      */
-    public function setLogFilter($filterMask);
+    public function setLogFilter(int $filterMask): LoggerInterface;
 
     /**
      * Returns the actual filtering-level.
-     * @return integer
+     * @return int
      */
-    public function getLogFilter();
+    public function getLogFilter(): int;
 }

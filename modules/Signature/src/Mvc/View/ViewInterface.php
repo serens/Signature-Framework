@@ -23,35 +23,35 @@ interface ViewInterface
      * @param string $templateFilename
      * @return string|null
      */
-    public function renderWith($templateFilename);
+    public function renderWith(string $templateFilename);
 
     /**
      * Returns the filename of the template with which the view should be rendered.
      * @return string
      */
-    public function getTemplate();
+    public function getTemplate(): string;
 
     /**
      * Sets the template which should be used for rendering purposes.
      * @param string $templateFilename
-     * @return \Signature\Mvc\View\ViewInterface
+     * @return ViewInterface
      */
-    public function setTemplate($templateFilename);
+    public function setTemplate(string $templateFilename): ViewInterface;
 
     /**
      * Sets view data.
      * @param mixed $data
      * @param mixed $value
-     * @return \Signature\Mvc\View\ViewInterface
+     * @return ViewInterface
      */
-    public function setViewData($data, $value = null);
+    public function setViewData($data, $value = null): ViewInterface;
 
     /**
      * Checks if the given view data exists.
      * @param string $key
-     * @return boolean
+     * @return bool
      */
-    public function hasViewData($key);
+    public function hasViewData(string $key): bool;
 
     /**
      * Gets the view data.
@@ -64,20 +64,20 @@ interface ViewInterface
     /**
      * Sets the layout-template which used be used to render.
      * @param string $layoutFilename
-     * @return \Signature\Mvc\View\ViewInterface
+     * @return ViewInterface
      */
-    public function setLayout($layoutFilename);
+    public function setLayout(string $layoutFilename): ViewInterface;
 
     /**
      * Returns the active layout filename.
      * @return string
      */
-    public function getLayout();
+    public function getLayout(): string;
 
     /**
      * Includes a partial template within the currently rendered main template.
      * @param string $partialFilename
      * @return void
      */
-    public function renderPartial($partialFilename);
+    public function renderPartial(string $partialFilename);
 }

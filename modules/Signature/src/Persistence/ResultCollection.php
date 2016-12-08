@@ -18,12 +18,12 @@ class ResultCollection implements \Signature\Persistence\ResultCollectionInterfa
     protected $collection = [];
 
     /**
-     * @var integer
+     * @var int
      */
     protected $iteratorPos = 0;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $convertedToModels = false;
 
@@ -47,11 +47,11 @@ class ResultCollection implements \Signature\Persistence\ResultCollectionInterfa
 
     /**
      * Returns a sinle record from this collection.
-     * @param  integer $index
+     * @param  int $index
      * @throws \OutOfBoundsException If given index is out of bounds.
      * @return array|object
      */
-    public function getElement($index)
+    public function getElement(int $index)
     {
         if ($index < 0 || $index > $this->count() - 1) {
             throw new \OutOfBoundsException('Index [' . $index . '] out of valid boundaries.');
@@ -71,9 +71,9 @@ class ResultCollection implements \Signature\Persistence\ResultCollectionInterfa
 
     /**
      * Returns the length of this collection.
-     * @return integer
+     * @return int
      */
-    public function count()
+    public function count(): int
     {
         return count($this->collection);
     }
@@ -82,52 +82,52 @@ class ResultCollection implements \Signature\Persistence\ResultCollectionInterfa
      * Returns all items contained in this collection as an array.
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return $this->collection;
     }
 
     /**
      * Returns true, if current iteration position is on 1st item in collection.
-     * @return boolean
+     * @return bool
      */
-    public function First()
+    public function First(): bool
     {
         return ($this->Pos() == 1);
     }
 
     /**
      * Returns the current iteration index.
-     * @return integer
+     * @return int
      */
-    public function Pos()
+    public function Pos(): int
     {
         return $this->iteratorPos + 1;
     }
 
     /**
      * Returns true, if current iteration position is set on the last item in this collection.
-     * @return boolean
+     * @return bool
      */
-    public function Last()
+    public function Last(): bool
     {
         return ($this->Pos() == $this->count());
     }
 
     /**
      * Returns true, if current iteration position is odd.
-     * @return boolean
+     * @return bool
      */
-    public function Odd()
+    public function Odd(): bool
     {
         return !$this->Even();
     }
 
     /**
      * Returns true, if current iteration position is even.
-     * @return boolean
+     * @return bool
      */
-    public function Even()
+    public function Even(): bool
     {
         return (($this->iteratorPos + 1) % 2 == 0);
     }
@@ -144,7 +144,7 @@ class ResultCollection implements \Signature\Persistence\ResultCollectionInterfa
     /**
      * Sets the current iteration index of the collection.
      * @param array $item
-     * @return array
+     * @return array|object
      */
     private function prepareItem($item)
     {
@@ -175,7 +175,7 @@ class ResultCollection implements \Signature\Persistence\ResultCollectionInterfa
      * (non-PHPdoc)
      * @see Iterator::valid()
      */
-    public function valid()
+    public function valid(): bool
     {
         return $this->current() !== false;
     }
@@ -191,11 +191,11 @@ class ResultCollection implements \Signature\Persistence\ResultCollectionInterfa
 
     /**
      * Converts the items in this collection to models.
-     * @param $modelClassname
+     * @param string $modelClassname
      * @throws \InvalidArgumentException If argument $modelClassname does not implement ModelInterface.
      * @return ResultCollectionInterface
      */
-    public function convertToModels($modelClassname)
+    public function convertToModels(string $modelClassname): ResultCollectionInterface
     {
         if (!$this->count() || $this->convertedToModels) {
             return $this;

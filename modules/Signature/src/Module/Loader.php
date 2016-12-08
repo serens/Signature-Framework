@@ -91,6 +91,7 @@ final class Loader
      * If a module returns false, no further modules will be initialized.
      * @param array $modules
      * @throws \UnexpectedValueException
+     * @return void
      */
     protected function initializeModules(array $modules)
     {
@@ -139,7 +140,7 @@ final class Loader
      * Returns all registered modules which reside in the modules-directory.
      * @return array
      */
-    protected function getModules()
+    protected function getModules(): array
     {
         if (file_exists($this->cacheFilename)) {
             require_once $this->cacheFilename;
@@ -158,7 +159,7 @@ final class Loader
      * @throws \RuntimeException
      * @return array
      */
-    protected function retriveModulesFromModulesDirectory()
+    protected function retriveModulesFromModulesDirectory(): array
     {
         if (!$dirHandle = opendir('./' . self::MODULES_PATHNAME)) {
             throw new \RuntimeException('Cannot open modules-directory.');
@@ -218,7 +219,7 @@ final class Loader
      * @param string $moduleName
      * @return Loader
      */
-    protected function addModule($moduleName)
+    protected function addModule(string $moduleName): Loader
     {
         $this->modules[] = $moduleName;
 

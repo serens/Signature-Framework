@@ -6,6 +6,8 @@
 
 namespace Signature\Mvc\Routing\Matcher;
 
+use Signature\Mvc\RequestInterface;
+
 /**
  * Class DefaultMatcher
  * @package Signature\Mvc\Routing\Matcher
@@ -14,10 +16,10 @@ class DefaultMatcher extends AbstractMatcher
 {
     /**
      * Matches a given request to a controller and action.
-     * @param \Signature\Mvc\RequestInterface $request
-     * @return boolean
+     * @param RequestInterface $request
+     * @return bool
      */
-    public function match(\Signature\Mvc\RequestInterface $request)
+    public function match(RequestInterface $request): bool
     {
         $matched = false;
 

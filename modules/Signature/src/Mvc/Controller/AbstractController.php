@@ -6,6 +6,8 @@
 
 namespace Signature\Mvc\Controller;
 
+use Signature\Mvc\Exception\ForwardedRequestException;
+use Signature\Mvc\Exception\RedirectedRequestException;
 use Signature\Mvc\RequestInterface;
 use Signature\Mvc\ResponseInterface;
 
@@ -33,16 +35,16 @@ abstract class AbstractController implements ControllerInterface
     /**
      * Returns true, if the supplied request can be handled by the controller.
      * @param \Signature\Mvc\RequestInterface $request
-     * @return boolean
+     * @return bool
      */
-    public function canHandleRequest(RequestInterface $request)
+    public function canHandleRequest(RequestInterface $request): bool
     {
         return true;
     }
 
     /**
      * Handles the request.
-     * @param \Signature\Mvc\RequestInterface  $request
+     * @param \Signature\Mvc\RequestInterface $request
      * @param \Signature\Mvc\ResponseInterface $response
      * @return void
      */
@@ -60,7 +62,7 @@ abstract class AbstractController implements ControllerInterface
      * Via convention the first part of a namespaced class if also the modules name.
      * @return string
      */
-    public function getModuleContext()
+    public function getModuleContext(): string
     {
         if (null === $this->moduleContext) {
             $parts = explode('\\', get_class($this));
@@ -74,11 +76,11 @@ abstract class AbstractController implements ControllerInterface
      * Forwards to another action or controller.
      * @param string $actionName
      * @param string $controllerName
-     * @param array  $parameters
-     * @throws \Signature\Mvc\Exception\ForwardedRequestException
+     * @param array $parameters
+     * @throws ForwardedRequestException
      * @return void
      */
-    public function forward($actionName, $controllerName = null, array $parameters = null)
+    public function forward(string $actionName, string $controllerName = null, array $parameters = null)
     {
         $this->request->setDispatched(false);
         $this->request->setControllerActionName($actionName);
@@ -92,17 +94,17 @@ abstract class AbstractController implements ControllerInterface
         }
 
         // Stop this dispatch-cycle by throwing an exception
-        throw new \Signature\Mvc\Exception\ForwardedRequestException();
+        throw new ForwardedRequestException();
     }
 
     /**
      * Redirects to another uri by setting new header-information to the response.
      * @param string $uri
-     * @param integer $statusCode
-     * @throws \Signature\Mvc\Exception\RedirectedRequestException
+     * @param int $statusCode
+     * @throws RedirectedRequestException
      * @return void
      */
-    public function redirect($uri, $statusCode = 302)
+    public function redirect(string $uri, int $statusCode = 302)
     {
         $this->response
             ->setContent('')
@@ -110,6 +112,6 @@ abstract class AbstractController implements ControllerInterface
             ->addToHeader('Location', $uri);
 
         // Stop this dispatch-cycle by throwing an exception
-        throw new \Signature\Mvc\Exception\RedirectedRequestException();
+        throw new RedirectedRequestException();
     }
 }

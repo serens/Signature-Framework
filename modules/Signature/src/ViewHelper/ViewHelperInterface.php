@@ -6,6 +6,8 @@
 
 namespace Signature\ViewHelper;
 
+use Signature\Mvc\View\ViewInterface;
+
 /**
  * Class ViewHelperInterface
  * @package Signature\ViewHelper
@@ -15,17 +17,17 @@ interface ViewHelperInterface
     /**
      * @return string
      */
-    public function render();
+    public function render(): string;
 
     /**
      * @param array $arguments
      * @return ViewHelperInterface
      */
-    public function setArguments(array $arguments = []);
+    public function setArguments(array $arguments = []): ViewHelperInterface;
 
     /**
-     * @param \Signature\Mvc\View\ViewInterface $view
+     * @param ViewInterface $view
      * @return ViewHelperInterface
      */
-    public function setView(\Signature\Mvc\View\ViewInterface $view);
+    public function setView(ViewInterface $view): ViewHelperInterface;
 }

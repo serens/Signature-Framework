@@ -22,20 +22,20 @@ class PersistenceService extends AbstractInjectableService implements ProviderIn
 
     /**
      * Backquotes a given string.
-     * @param  string $string
+     * @param string $string
      * @return string
      */
-    public function backquote($string)
+    public function backquote(string $string): string
     {
         return '`' . $string . '`';
     }
 
     /**
      * Quotes a given string.
-     * @param  string $string
+     * @param string $string
      * @return string
      */
-    public function quote($string)
+    public function quote(string $string): string
     {
         return $this->getProvider()->quote($string);
     }
@@ -45,7 +45,7 @@ class PersistenceService extends AbstractInjectableService implements ProviderIn
      * @param string $queryString
      * @return ResultCollectionInterface
      */
-    public function query($queryString)
+    public function query(string $queryString): ResultCollectionInterface
     {
         return $this->getProvider()->query($queryString);
     }
@@ -55,7 +55,7 @@ class PersistenceService extends AbstractInjectableService implements ProviderIn
      * @return ProviderInterface
      * @throws \UnexpectedValueException
      */
-    public function getProvider()
+    public function getProvider(): ProviderInterface
     {
         if (null === $this->provider) {
             throw new \UnexpectedValueException('No persistence provider has been set.');
@@ -69,7 +69,7 @@ class PersistenceService extends AbstractInjectableService implements ProviderIn
      * @param ProviderInterface $provider
      * @return PersistenceService
      */
-    public function setProvider(ProviderInterface $provider)
+    public function setProvider(ProviderInterface $provider): PersistenceService
     {
         $this->provider = $provider;
 
@@ -88,9 +88,9 @@ class PersistenceService extends AbstractInjectableService implements ProviderIn
 
     /**
      * Returns the last generated id.
-     * @return integer
+     * @return int
      */
-    public function getLastInsertId()
+    public function getLastInsertId(): int
     {
         return $this->getProvider()->getLastInsertId();
     }
@@ -98,12 +98,10 @@ class PersistenceService extends AbstractInjectableService implements ProviderIn
     /**
      * Sets the connection info used to connect to the data source.
      * @param array $connectionInfo
-     * @return PersistenceService
+     * @return ProviderInterface
      */
-    public function setConnectionInfo(array $connectionInfo)
+    public function setConnectionInfo(array $connectionInfo): ProviderInterface
     {
-        $this->getProvider()->setConnectionInfo($connectionInfo);
-
-        return $this;
+        return $this->getProvider()->setConnectionInfo($connectionInfo);
     }
 }

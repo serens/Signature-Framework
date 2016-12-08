@@ -14,12 +14,12 @@ class ErrorlogLogger extends AbstractLogger
 {
     /**
      * Logs a given message to the PHP errorlog.
-     * @param string  $message
-     * @param integer $priority
-     * @param integer $code
+     * @param string $message
+     * @param int $priority
+     * @param int $code
      * @return LoggerInterface
      */
-    public function log($message, $priority = LoggerInterface::PRIORITY_NORMAL, $code = 0)
+    public function log(string $message, int $priority = LoggerInterface::PRIORITY_NORMAL, int $code = 0): LoggerInterface
     {
         parent::log($message, $priority, $code);
 

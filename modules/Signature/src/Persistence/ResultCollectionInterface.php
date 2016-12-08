@@ -26,23 +26,23 @@ interface ResultCollectionInterface extends \Iterator, \Countable
 
     /**
      * Returns a sinle record from this collection.
-     * @param  integer $index
+     * @param  int $index
      * @throws \OutOfBoundsException If given index is out of bounds.
      * @return array|object
      */
-    public function getElement($index);
+    public function getElement(int $index);
 
     /**
      * Returns an array representation of this collecion.
      * @return array
      */
-    public function toArray();
+    public function toArray(): array;
 
     /**
      * Converts the items in this collection to models.
-     * @param $modelClassname
+     * @param string $modelClassname
      * @throws \InvalidArgumentException
      * @return ResultCollectionInterface
      */
-    public function convertToModels($modelClassname);
+    public function convertToModels(string $modelClassname): ResultCollectionInterface;
 }

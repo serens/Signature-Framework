@@ -47,9 +47,9 @@ class UriMatcher extends AbstractMatcher
     /**
      * Matches a given request to a controller and action.
      * @param RequestInterface $request
-     * @return boolean
+     * @return bool
      */
-    public function match(RequestInterface $request)
+    public function match(RequestInterface $request): bool
     {
         foreach ($this->routeConfiguration as $routeConfiguration) {
             foreach ($routeConfiguration['Uris'] as $testUri) {
@@ -70,11 +70,11 @@ class UriMatcher extends AbstractMatcher
 
     /**
      * Matches a given uri against a route-configuration.
-     * @param                  $uri
+     * @param string $uri
      * @param RequestInterface $request
-     * @return boolean
+     * @return bool
      */
-    protected function matchSingleUri($uri, RequestInterface $request)
+    protected function matchSingleUri(string $uri, RequestInterface $request): bool
     {
         // First simple test: Given uri matches exact the configured route.
         $requestUri = $this->prepareUri($request->getRequestUri());
@@ -111,7 +111,7 @@ class UriMatcher extends AbstractMatcher
      * @param string $uri
      * @return string
      */
-    protected function prepareUri($uri)
+    protected function prepareUri(string $uri): string
     {
         $uri = urldecode($uri);
 
@@ -123,14 +123,14 @@ class UriMatcher extends AbstractMatcher
     }
 
     /**
-     * @param $uriPart
-     * @param $requestUriPart
-     * @param $parameters
-     * @return boolean
+     * @param string $uriPart
+     * @param string $requestUriPart
+     * @param array $parameters
+     * @return bool
      */
-    protected function matchUriPart($uriPart, $requestUriPart, &$parameters)
+    protected function matchUriPart(string $uriPart, string $requestUriPart, array &$parameters): bool
     {
-        if ((string) $uriPart === (string) $requestUriPart) {
+        if ($uriPart == $requestUriPart) {
             return true;
         }
 
@@ -188,9 +188,10 @@ class UriMatcher extends AbstractMatcher
      * @param string $requestUriPart
      * @return object|null
      */
-    protected function resolveObjectClass($uriPart, $requestUriPart) {
+    protected function resolveObjectClass(string $uriPart, string $requestUriPart)
+    {
         if (1 === preg_match('/\((.*?)\)/', $uriPart, $objectClassname)) {
-            if (is_a($objectClassname[1], 'Signature\Persistence\ActiveRecord\AbstractModel', true)) {
+            if (is_a($objectClassname[1], \Signature\Persistence\ActiveRecord\AbstractModel::class, true)) {
                 $objectProviderService = \Signature\Object\ObjectProviderService::getInstance();
 
                 /** @var \Signature\Persistence\ActiveRecord\AbstractModel $instance */

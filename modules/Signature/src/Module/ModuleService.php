@@ -8,10 +8,6 @@ namespace Signature\Module;
 
 /**
  * Class ModuleService
- * @package Signature\Persistence
- */
-/**
- * Class ModuleService
  * @package Signature\Module
  */
 class ModuleService extends \Signature\Service\AbstractInjectableService
@@ -23,11 +19,11 @@ class ModuleService extends \Signature\Service\AbstractInjectableService
 
     /**
      * Registers a module by a given identigiername.
-     * @param string          $moduleIdentifier
+     * @param string $moduleIdentifier
      * @param ModuleInterface $module
      * @return ModuleService
      */
-    public function registerModule($moduleIdentifier, ModuleInterface $module)
+    public function registerModule(string $moduleIdentifier, ModuleInterface $module): ModuleService
     {
         $this->registeredModules[$moduleIdentifier] = $module;
 
@@ -49,7 +45,7 @@ class ModuleService extends \Signature\Service\AbstractInjectableService
      * @return ModuleInterface
      * @throws \OutOfBoundsException
      */
-    public function getModule($moduleIdentifier)
+    public function getModule(string $moduleIdentifier): ModuleInterface
     {
         if (array_key_exists($moduleIdentifier, $this->registeredModules)) {
             return $this->registeredModules[$moduleIdentifier];

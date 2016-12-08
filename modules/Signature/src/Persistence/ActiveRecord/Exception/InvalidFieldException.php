@@ -16,7 +16,7 @@ class InvalidFieldException extends \InvalidArgumentException
      * Constructs the exception message.
      * @param string $field
      */
-    public function __construct($field)
+    public function __construct(string $field)
     {
         parent::__construct('The field "' . $field . '" does not exist on this record.');
     }

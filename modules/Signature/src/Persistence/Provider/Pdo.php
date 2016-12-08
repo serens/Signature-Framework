@@ -6,11 +6,14 @@
 
 namespace Signature\Persistence\Provider;
 
+use Signature\Persistence\ResultCollection;
+use Signature\Persistence\ResultCollectionInterface;
+
 /**
  * Class Pdo
  * @package Signature\Persistence\Provider
  */
-class Pdo implements \Signature\Persistence\Provider\ProviderInterface
+class Pdo implements ProviderInterface
 {
     /**
      * @var \PDO
@@ -32,7 +35,7 @@ class Pdo implements \Signature\Persistence\Provider\ProviderInterface
      * @param string $string
      * @return string
      */
-    public function quote($string)
+    public function quote(string $string): string
     {
         return $this->pdo->quote($string);
     }
@@ -41,9 +44,9 @@ class Pdo implements \Signature\Persistence\Provider\ProviderInterface
      * Executes a SQL-query and returns a Result collection.
      * @param string $queryString
      * @throws \RuntimeException If query could not be executed.
-     * @return \Signature\Persistence\ResultCollectionInterface
+     * @return ResultCollectionInterface
      */
-    public function query($queryString)
+    public function query(string $queryString): ResultCollectionInterface
     {
         if (false === ($result = $this->pdo->query($queryString))) {
             $error = $this->pdo->errorInfo();
@@ -54,14 +57,14 @@ class Pdo implements \Signature\Persistence\Provider\ProviderInterface
         $items = $result->fetchAll(\PDO::FETCH_ASSOC);
         $result->closeCursor();
 
-        return new \Signature\Persistence\ResultCollection($items);
+        return new ResultCollection($items);
     }
 
     /**
      * Returns the last generated id.
-     * @return integer
+     * @return int
      */
-    public function getLastInsertId()
+    public function getLastInsertId(): int
     {
         return (int) $this->pdo->lastInsertId();
     }
@@ -100,9 +103,9 @@ class Pdo implements \Signature\Persistence\Provider\ProviderInterface
      * Sets the connection info used to connect to the data source.
      * @param array $connectionInfo
      * @throws \InvalidArgumentException If connection information is not valid.
-     * @return \Signature\Persistence\PersistenceService
+     * @return ProviderInterface
      */
-    public function setConnectionInfo(array $connectionInfo)
+    public function setConnectionInfo(array $connectionInfo): ProviderInterface
     {
         foreach ($this->requiredConnectionInfoFields as $requiredField) {
             if (!array_key_exists($requiredField, $connectionInfo)) {

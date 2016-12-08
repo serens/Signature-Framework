@@ -24,12 +24,12 @@ abstract class AbstractMatcher implements MatcherInterface
      * @param string $actionName
      * @return MatcherInterface
      */
-    public function addRouteConfiguration(array $uris, $controllerClassname, $actionName)
+    public function addRouteConfiguration(array $uris, string $controllerClassname, string $actionName): MatcherInterface
     {
         $this->routeConfiguration[] = [
             'Uris'                => $uris,
-            'ControllerClassname' => (string) $controllerClassname,
-            'ActionName'          => (string) $actionName
+            'ControllerClassname' => $controllerClassname,
+            'ActionName'          => $actionName
         ];
 
         return $this;

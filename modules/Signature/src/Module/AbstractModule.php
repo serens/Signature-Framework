@@ -50,7 +50,7 @@ abstract class AbstractModule implements ModuleInterface
      * If a file called Config.php exists, then this file will be included. Otherwise, an empty array will be returned.
      * @return array
      */
-    public function getConfig()
+    public function getConfig(): array
     {
         $file = implode(DIRECTORY_SEPARATOR, [
             \Signature\Core\AutoloaderInterface::MODULES_PATHNAME,
@@ -74,18 +74,18 @@ abstract class AbstractModule implements ModuleInterface
 
     /**
      * Initializes this module.
-     * @return boolean
+     * @return bool
      */
-    public function init()
+    public function init(): bool
     {
         return true;
     }
 
     /**
      * Starts the module.
-     * @return boolean
+     * @return bool
      */
-    public function start()
+    public function start(): bool
     {
         return true;
     }
@@ -94,45 +94,45 @@ abstract class AbstractModule implements ModuleInterface
      * Returns information about the author of the module.
      * @return string
      */
-    public function getAuthor()
+    public function getAuthor(): string
     {
-        return (string) $this->author;
+        return $this->author;
     }
 
     /**
      * Returns a description of the module.
      * @return string
      */
-    public function getDescription()
+    public function getDescription(): string
     {
-        return (string) $this->description;
+        return $this->description;
     }
 
     /**
      * Returns a copyright notive of the module.
      * @return string
      */
-    public function getCopyright()
+    public function getCopyright(): string
     {
-        return (string) $this->copyright;
+        return $this->copyright;
     }
 
     /**
      * Returns the current version of the module.
      * @return string
      */
-    public function getVersion()
+    public function getVersion(): string
     {
-        return (string) $this->version;
+        return $this->version;
     }
 
     /**
      * Returns the website of the module.
      * @return string
      */
-    public function getUrl()
+    public function getUrl(): string
     {
-        return (string) $this->url;
+        return $this->url;
     }
 
     /**
@@ -141,7 +141,7 @@ abstract class AbstractModule implements ModuleInterface
      * The module name must match the directory name in which the module resides.
      * @return string
      */
-    public function getModuleName()
+    public function getModuleName(): string
     {
         if (null === $this->moduleName) {
             $parts = explode('\\', get_class($this));

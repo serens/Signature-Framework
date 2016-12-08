@@ -18,7 +18,7 @@ class Radio extends Select
      * @param string $value
      * @return string
      */
-    public function renderOption($value)
+    public function renderOption(string $value): string
     {
         if (!$this->isValidValue($value)) {
             throw new \OutOfRangeException('Value "' . $value . '" does not exist in the set of options.');
@@ -34,7 +34,7 @@ class Radio extends Select
      * Renders the set of radio inputs.
      * @return string
      */
-    public function render()
+    public function render(): string
     {
         $options = '';
 
@@ -48,12 +48,12 @@ class Radio extends Select
     /**
      * Returns true, if the given value does exist in the set of options.
      * @param string $value
-     * @return boolean
+     * @return bool
      */
-    protected function isValidValue($value)
+    protected function isValidValue(string $value): bool
     {
         foreach ($this->options as $option) {
-            if ((string) $option === (string) $value) {
+            if ((string) $option === $value) {
                 return true;
             }
         }

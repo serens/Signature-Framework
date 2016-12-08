@@ -6,6 +6,8 @@
 
 namespace Signature\Persistence\ActiveRecord;
 
+use Signature\Persistence\ResultCollectionInterface;
+
 /**
  * Interface ModelInterface
  * @package Signature\Persistence\ActiveRecord
@@ -15,22 +17,22 @@ interface ModelInterface
     /**
      * Checks, if a given set of fields are available on this record model.
      * @param array $fields
-     * @return boolean
+     * @return bool
      */
-    public function hasFields(array $fields);
+    public function hasFields(array $fields): bool;
 
     /**
      * Checks, if a given field is available on this record model.
      * @param string $field
-     * @return boolean
+     * @return bool
      */
-    public function hasField($field);
+    public function hasField(string $field): bool;
 
     /**
      * Returns all values of this record model.
      * @return array
      */
-    public function getFieldValues();
+    public function getFieldValues(): array;
 
     /**
      * Sets multiple field values at once.
@@ -40,13 +42,13 @@ interface ModelInterface
      * @throws \BadMethodCallException
      * @return ModelInterface
      */
-    public function setFieldValues(array $fieldValues);
+    public function setFieldValues(array $fieldValues): ModelInterface;
 
     /**
      * Returns all values of this record model.
      * @return array
      */
-    public function toArray();
+    public function toArray(): array;
 
     /**
      * Returns the table name to which this record model belongs to.
@@ -55,13 +57,13 @@ interface ModelInterface
      * the table name. This method must be overridden, when the standard-behavior is not wished.
      * @return string
      */
-    public function getTableName();
+    public function getTableName(): string;
 
     /**
      * Returns the primary id of this record model.
-     * @return integer
+     * @return int
      */
-    public function getID();
+    public function getID(): int;
 
     /**
      * Returns the value of the given field.
@@ -69,7 +71,7 @@ interface ModelInterface
      * @throws Exception\InvalidFieldException
      * @return string
      */
-    public function getFieldValue($field);
+    public function getFieldValue(string $field): string;
 
     /**
      * Returns the name of the field which represents the primary key of the record model.
@@ -77,16 +79,16 @@ interface ModelInterface
      * Override this method when the default value ("ID") is not wished.
      * @return string
      */
-    public function getPrimaryKeyName();
+    public function getPrimaryKeyName(): string;
 
     /**
      * Sets the value of a field.
      * @param string $field
-     * @param mixed  $value
+     * @param mixed $value
      * @throws Exception\InvalidFieldException
      * @return ModelInterface
      */
-    public function setFieldValue($field, $value);
+    public function setFieldValue(string $field, $value): ModelInterface;
 
     /**
      * Creates a new row of this model.
@@ -94,14 +96,14 @@ interface ModelInterface
      * A new row is only created, if this model does not have a primary key id set.
      * @return ModelInterface
      */
-    public function create();
+    public function create(): ModelInterface;
 
     /**
      * Saves the current state of this model.
      * @throws Exception\InvalidRecordException
      * @return ModelInterface
      */
-    public function save();
+    public function save(): ModelInterface;
 
     /**
      * Deletes the row of this model.
@@ -112,18 +114,18 @@ interface ModelInterface
 
     /**
      * Loads data into this model by fetching a row from the database using the primary key.
-     * @param integer $id
-     * @return boolean True, if the record could be loaded.
+     * @param int $id
+     * @return bool True, if the record could be loaded.
      */
-    public function find($id);
+    public function find(int $id): bool;
 
     /**
      * Loads data into this model by fetching a row identified by $field.
      * @param string $field
      * @param string $value
-     * @return \Signature\Persistence\ResultCollectionInterface
+     * @return ResultCollectionInterface
      */
-    public function findByField($field, $value);
+    public function findByField(string $field, string $value): ResultCollectionInterface;
 
     /**
      * Finds records by a given sql-statement.
@@ -131,13 +133,13 @@ interface ModelInterface
      * @param string $where
      * @param string $orderBy
      * @param string $limit
-     * @return \Signature\Persistence\ResultCollectionInterface
+     * @return ResultCollectionInterface
      */
-    public function findByQuery($fields = '*', $where = '', $orderBy = '', $limit = '');
+    public function findByQuery(string $fields = '*', string $where = '', string $orderBy = '', string $limit = ''): ResultCollectionInterface;
 
     /**
      * Loads all rows of the table.
-     * @return \Signature\Persistence\ResultCollectionInterface
+     * @return ResultCollectionInterface
      */
-    public function findAll();
+    public function findAll(): ResultCollectionInterface;
 }

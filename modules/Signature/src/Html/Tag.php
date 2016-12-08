@@ -28,7 +28,7 @@ class Tag implements TagInterface
     protected $attributes = [];
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $forceUseClosingTag = false;
 
@@ -37,10 +37,10 @@ class Tag implements TagInterface
      * @param string $tagName
      * @param array $attributes
      */
-    public function __construct($tagName, array $attributes = [])
+    public function __construct(string $tagName, array $attributes = [])
     {
         $this
-            ->setTagName((string) $tagName)
+            ->setTagName($tagName)
             ->setAttributes($attributes);
     }
 
@@ -49,7 +49,7 @@ class Tag implements TagInterface
      * @param array $attributes
      * @return TagInterface
      */
-    public function setAttributes(array $attributes)
+    public function setAttributes(array $attributes): TagInterface
     {
         foreach ($attributes as $name => $value) {
             $this->setAttribute($name, $value);
@@ -63,9 +63,9 @@ class Tag implements TagInterface
      * @param string $tagName
      * @return TagInterface
      */
-    public function setTagName($tagName)
+    public function setTagName(string $tagName): TagInterface
     {
-        $this->tagName = (string) $tagName;
+        $this->tagName = $tagName;
 
         return $this;
     }
@@ -75,7 +75,7 @@ class Tag implements TagInterface
      * @param string $name
      * @return TagInterface
      */
-    public function removeAttribute($name)
+    public function removeAttribute(string $name): TagInterface
     {
         if (array_key_exists($name, $this->attributes)) {
             unset($this->attributes[$name]);
@@ -90,9 +90,9 @@ class Tag implements TagInterface
      * @param string $value
      * @return TagInterface
      */
-    public function setAttribute($name, $value)
+    public function setAttribute(string $name, string $value): TagInterface
     {
-        $this->attributes[$name] = (string) $value;
+        $this->attributes[$name] = $value;
 
         return $this;
     }
@@ -103,7 +103,7 @@ class Tag implements TagInterface
      * @param string $default
      * @return string
      */
-    public function getAttribute($name, $default = '')
+    public function getAttribute(string $name, $default = '')
     {
         return array_key_exists($name, $this->attributes) ? $this->attributes[$name] : $default;
     }
@@ -112,7 +112,7 @@ class Tag implements TagInterface
      * Returns all attributes of this tag.
      * @return array
      */
-    public function getAttributes()
+    public function getAttributes(): array
     {
         return $this->attributes;
     }
@@ -121,7 +121,7 @@ class Tag implements TagInterface
      * Renders the tag with all attributes.
      * @return string
      */
-    public function render()
+    public function render(): string
     {
         $attributes = '';
 
@@ -140,7 +140,7 @@ class Tag implements TagInterface
      * Returns the content of this tag.
      * @return string
      */
-    public function getContent()
+    public function getContent(): string
     {
         return $this->content;
     }
@@ -150,9 +150,9 @@ class Tag implements TagInterface
      * @param string $content
      * @return TagInterface
      */
-    public function setContent($content)
+    public function setContent(string $content): TagInterface
     {
-        $this->content = (string) $content;
+        $this->content = $content;
 
         return $this;
     }

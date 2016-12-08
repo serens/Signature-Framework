@@ -23,7 +23,7 @@ class Select extends AbstractElement
     protected $value = '';
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $forceUseClosingTag = true;
 
@@ -31,10 +31,10 @@ class Select extends AbstractElement
      * Sets name, value, options and type.
      * @param string $name
      * @param string $value
-     * @param array  $attributes
-     * @param array  $options
+     * @param array $attributes
+     * @param array $options
      */
-    public function __construct($name, $value = '', array $attributes = [], array $options = [])
+    public function __construct(string $name, string $value = '', array $attributes = [], array $options = [])
     {
         parent::__construct($name, $value, $attributes);
 
@@ -47,7 +47,7 @@ class Select extends AbstractElement
      * Returns the value of the selectbox.
      * @return string
      */
-    public function getValue()
+    public function getValue(): string
     {
         return $this->value;
     }
@@ -57,9 +57,9 @@ class Select extends AbstractElement
      * @param string $value
      * @return ElementInterface
      */
-    public function setValue($value)
+    public function setValue(string $value): ElementInterface
     {
-        $this->value = (string) $value;
+        $this->value = $value;
 
         return $this;
     }
@@ -68,7 +68,7 @@ class Select extends AbstractElement
      * Returns the currently set options.
      * @return array
      */
-    public function getOptions()
+    public function getOptions(): array
     {
         return $this->options;
     }
@@ -78,7 +78,7 @@ class Select extends AbstractElement
      * @param array $options
      * @return Select
      */
-    public function setOptions(array $options)
+    public function setOptions(array $options): Select
     {
         $this->options = $options;
 
@@ -89,7 +89,7 @@ class Select extends AbstractElement
      * Renders the selectbox.
      * @return string
      */
-    public function render()
+    public function render(): string
     {
         $this->setContent($this->renderOptions());
 
@@ -100,7 +100,7 @@ class Select extends AbstractElement
      * Renders the options-elements of the selectbox.
      * @return string
      */
-    protected function renderOptions()
+    protected function renderOptions(): string
     {
         $optionsHtml = '';
 
@@ -112,7 +112,7 @@ class Select extends AbstractElement
                     $optionsHtml .= sprintf(
                         '<option value="%s"%s>%s</option>',
                         htmlspecialchars($key),
-                        ((string) $key === (string)$this->getValue()) ? ' selected="selected"' : '',
+                        ((string) $key === $this->getValue()) ? ' selected="selected"' : '',
                         $caption
                     );
                 }
@@ -122,7 +122,7 @@ class Select extends AbstractElement
                 $optionsHtml .= sprintf(
                     '<option value="%s"%s>%s</option>',
                     htmlspecialchars($key),
-                    ((string) $key === (string) $this->getValue()) ? ' selected="selected"' : '',
+                    ((string) $key === $this->getValue()) ? ' selected="selected"' : '',
                     $options
                 );
             }

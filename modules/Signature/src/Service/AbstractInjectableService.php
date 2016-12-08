@@ -14,9 +14,9 @@ abstract class AbstractInjectableService implements InjectableServiceInterface
 {
     /**
      * Return true, if this Service should only be created once by the Service Locator.
-     * @return boolean
+     * @return bool
      */
-    public function threatAsSingleton()
+    public function threatAsSingleton(): bool
     {
         return true;
     }

@@ -6,6 +6,7 @@
 
 namespace Signature\Html\Form;
 
+use Signature\Html\Form\Element\ElementInterface;
 use Signature\Html\Tag;
 use Signature\Mvc\RequestInterface;
 
@@ -16,7 +17,7 @@ use Signature\Mvc\RequestInterface;
 class Form extends Tag implements FormInterface
 {
     /**
-     * @var boolean
+     * @var bool
      */
     protected $forceUseClosingTag = true;
 
@@ -26,7 +27,7 @@ class Form extends Tag implements FormInterface
     protected $elements = [];
 
     /**
-     * @var \Signature\Mvc\RequestInterface
+     * @var RequestInterface
      */
     protected $request = null;
 
@@ -36,7 +37,8 @@ class Form extends Tag implements FormInterface
      * @param array $attributes
      * @param array $elements
      */
-    public function __construct(RequestInterface $request, array $attributes = [], array $elements = []) {
+    public function __construct(RequestInterface $request, array $attributes = [], array $elements = [])
+    {
         if (!array_key_exists('action', $attributes)) {
             $attributes['action'] = $request->getRequestUri();
         }
@@ -57,7 +59,7 @@ class Form extends Tag implements FormInterface
      * @param array $elements
      * @return Form
      */
-    public function addElements(array $elements)
+    public function addElements(array $elements): Form
     {
         foreach ($elements as $element) {
             $this->addElement($element);
@@ -68,10 +70,10 @@ class Form extends Tag implements FormInterface
 
     /**
      * Adds a single element to this form.
-     * @param Element\ElementInterface $element
+     * @param ElementInterface $element
      * @return Form
      */
-    public function addElement(Element\ElementInterface $element)
+    public function addElement(ElementInterface $element): Form
     {
         $element->setForm($this);
 
@@ -88,31 +90,31 @@ class Form extends Tag implements FormInterface
      * Returns all elements in the form.
      * @return array
      */
-    public function getElements()
+    public function getElements(): array
     {
         return $this->elements;
     }
 
     /**
      * Returns the value of the element specified.
-     * @param string $elementName
+     * @param string $name
      * @throws \RuntimeException If the specified element does not exist in this form.
      * @return string
      */
-    public function getElementValue($elementName)
+    public function getElementValue(string $name): string
     {
-        return $this->getElement($elementName)->getValue();
+        return $this->getElement($name)->getValue();
     }
 
     /**
      * Returns an element specified by its name.
      * @param string $name
      * @throws \RuntimeException If the specified element does not exist in this form.
-     * @return Element\ElementInterface
+     * @return ElementInterface
      */
-    public function getElement($name)
+    public function getElement(string $name): ElementInterface
     {
-        /** @var \Signature\Html\Form\Element\ElementInterface $element */
+        /** @var ElementInterface $element */
         foreach ($this->elements as $element) {
             if ($element->getAttribute('name') == $name) {
                 return $element;
@@ -126,7 +128,7 @@ class Form extends Tag implements FormInterface
      * Returns a serialized string of the form.
      * @return string
      */
-    public function getSerializedData()
+    public function getSerializedData(): string
     {
         $data = array_map(
             function ($element) {
@@ -143,7 +145,7 @@ class Form extends Tag implements FormInterface
      * Renders the form with all its elements.
      * @return string
      */
-    public function render()
+    public function render(): string
     {
         $content = '';
 
@@ -162,9 +164,9 @@ class Form extends Tag implements FormInterface
 
     /**
      * Validates the form and its elements.
-     * @return boolean
+     * @return bool
      */
-    public function validate()
+    public function validate(): bool
     {
         return true;
     }

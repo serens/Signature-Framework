@@ -6,6 +6,8 @@
 
 namespace Signature\Persistence\Provider;
 
+use Signature\Persistence\ResultCollectionInterface;
+
 /**
  * Interface ProviderInterface
  * @package Signature\Persistence\Provider
@@ -17,15 +19,15 @@ interface ProviderInterface
      * @param string $string
      * @return string
      */
-    public function quote($string);
+    public function quote(string $string): string;
 
     /**
      * Executes a SQL-query and returns a Result collection.
      * @param string $queryString
      * @throws \RuntimeException If query could not be executed.
-     * @return \Signature\Persistence\ResultCollectionInterface
+     * @return ResultCollectionInterface
      */
-    public function query($queryString);
+    public function query(string $queryString): ResultCollectionInterface;
 
     /**
      * Connects to a data source.
@@ -36,14 +38,14 @@ interface ProviderInterface
 
     /**
      * Returns the last generated id.
-     * @return integer
+     * @return int
      */
-    public function getLastInsertId();
+    public function getLastInsertId(): int;
 
     /**
      * Sets the connection info used to connect to the data source.
      * @param array $connectionInfo
      * @return ProviderInterface
      */
-    public function setConnectionInfo(array $connectionInfo);
+    public function setConnectionInfo(array $connectionInfo): ProviderInterface;
 }

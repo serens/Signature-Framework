@@ -6,11 +6,14 @@
 
 namespace Signature\Object;
 
+use Signature\Service\AbstractInjectableService;
+use Signature\Service\InjectableServiceInterface;
+
 /**
  * Class ObjectProviderService
  * @package Signature\Object
  */
-final class ObjectProviderService extends \Signature\Service\AbstractInjectableService
+final class ObjectProviderService extends AbstractInjectableService
 {
     /**
      * @var ObjectProviderService
@@ -21,7 +24,7 @@ final class ObjectProviderService extends \Signature\Service\AbstractInjectableS
      * @var array
      */
     protected $registeredServices = [
-        'ObjectProviderService' => \Signature\Object\ObjectProviderService::class,
+        'ObjectProviderService' => ObjectProviderService::class,
         'ModuleService'         => \Signature\Module\ModuleService::class,
         'ConfigurationService'  => \Signature\Configuration\ConfigurationService::class,
     ];
@@ -42,7 +45,7 @@ final class ObjectProviderService extends \Signature\Service\AbstractInjectableS
      * Get the instance of this Service.
      * @return ObjectProviderService
      */
-    public static function getInstance()
+    public static function getInstance(): ObjectProviderService
     {
         if (null === self::$instance) {
             self::$instance = new self;
@@ -55,9 +58,9 @@ final class ObjectProviderService extends \Signature\Service\AbstractInjectableS
      * Adds a new service mapping to the service manager.
      * @param string $serviceIdentifier
      * @param string $serviceClassname
-     * @return \Signature\Object\ObjectProviderService
+     * @return ObjectProviderService
      */
-    public function registerService($serviceIdentifier, $serviceClassname)
+    public function registerService(string $serviceIdentifier, string $serviceClassname): ObjectProviderService
     {
         $this->registeredServices[$serviceIdentifier] = $serviceClassname;
 
@@ -68,7 +71,7 @@ final class ObjectProviderService extends \Signature\Service\AbstractInjectableS
      * Returns the current service mapping.
      * @return array
      */
-    public function getRegisteredServices()
+    public function getRegisteredServices(): array
     {
         return $this->registeredServices;
     }
@@ -78,9 +81,9 @@ final class ObjectProviderService extends \Signature\Service\AbstractInjectableS
      * @throws \OutOfBoundsException
      * @throws \UnexpectedValueException
      * @param string $serviceIdentifier
-     * @return \Signature\Service\InjectableServiceInterface
+     * @return InjectableServiceInterface
      */
-    public function getService($serviceIdentifier)
+    public function getService(string $serviceIdentifier): InjectableServiceInterface
     {
         if (array_key_exists($serviceIdentifier, $this->singletonServices)) {
             return $this->singletonServices[$serviceIdentifier];
@@ -91,10 +94,10 @@ final class ObjectProviderService extends \Signature\Service\AbstractInjectableS
                 );
             }
 
-            /* @var $seviceObject \Signature\Service\InjectableServiceInterface */
+            /* @var $seviceObject InjectableServiceInterface */
             $serviceObject = new $this->registeredServices[$serviceIdentifier];
 
-            if (!$serviceObject instanceof \Signature\Service\InjectableServiceInterface) {
+            if (!$serviceObject instanceof InjectableServiceInterface) {
                 throw new \UnexpectedValueException(
                     $serviceIdentifier . ' must implement Signature\Service\InjectableServiceInterface.'
                 );
@@ -141,7 +144,7 @@ final class ObjectProviderService extends \Signature\Service\AbstractInjectableS
      * @param string $className
      * @return object
      */
-    public function create($className)
+    public function create(string $className)
     {
         if (!class_exists($className)) {
             throw new \RuntimeException('Cannot load class "' . $className . '".');

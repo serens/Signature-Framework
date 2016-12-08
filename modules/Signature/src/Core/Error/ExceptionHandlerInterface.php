@@ -14,8 +14,8 @@ interface ExceptionHandlerInterface
 {
     /**
      * Handles a given exception.
-     * @param \Exception $e
-     * @return boolean
+     * @param \Throwable $t
+     * @return bool
      */
-    public static function handleException(\Exception $e);
+    public static function handleException(\Throwable $t): bool;
 }

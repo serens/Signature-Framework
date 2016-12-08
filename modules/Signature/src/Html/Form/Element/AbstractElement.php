@@ -6,6 +6,8 @@
 
 namespace Signature\Html\Form\Element;
 
+use Signature\Html\Form\FormInterface;
+
 /**
  * Class AbstractElement
  * @package Signature\Html\Form\Element
@@ -13,7 +15,7 @@ namespace Signature\Html\Form\Element;
 abstract class AbstractElement extends \Signature\Html\Tag implements ElementInterface
 {
     /**
-     * @var \Signature\Html\Form\FormInterface
+     * @var FormInterface
      */
     protected $form = null;
 
@@ -21,11 +23,11 @@ abstract class AbstractElement extends \Signature\Html\Tag implements ElementInt
      * Sets name and value of the element.
      * @param string $name
      * @param string $value
-     * @param array  $attributes
+     * @param array $attributes
      */
-    public function __construct($name, $value = '', array $attributes = [])
+    public function __construct(string $name, string $value = '', array $attributes = [])
     {
-        $attributes['name'] = (string) $name;
+        $attributes['name'] = $name;
 
         $this
             ->setValue($value)
@@ -37,7 +39,7 @@ abstract class AbstractElement extends \Signature\Html\Tag implements ElementInt
      * @param string $value
      * @return ElementInterface
      */
-    public function setValue($value)
+    public function setValue(string $value): ElementInterface
     {
         $this->setAttribute('value', $value);
 
@@ -48,26 +50,26 @@ abstract class AbstractElement extends \Signature\Html\Tag implements ElementInt
      * Returns the current value of the form element.
      * @return string
      */
-    public function getValue()
+    public function getValue(): string
     {
         return $this->getAttribute('value');
     }
 
     /**
      * Returns the current form this element belongs to.
-     * @return \Signature\Html\Form\FormInterface
+     * @return FormInterface
      */
-    public function getForm()
+    public function getForm(): FormInterface
     {
         return $this->form;
     }
 
     /**
      * Sets the form this element belongs to.
-     * @param \Signature\Html\Form\FormInterface $form
+     * @param FormInterface $form
      * @return ElementInterface
      */
-    public function setForm(\Signature\Html\Form\FormInterface $form)
+    public function setForm(FormInterface $form): ElementInterface
     {
         $this->form = $form;
 

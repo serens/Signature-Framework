@@ -23,7 +23,7 @@ class Response implements ResponseInterface
     protected $header = [];
 
     /**
-     * @var integer
+     * @var int
      */
     protected $statusCode = 200;
 
@@ -75,11 +75,11 @@ class Response implements ResponseInterface
     /**
      * Sets the full content of the reponse-object.
      * @param string $content
-     * @return \Signature\Mvc\ResponseInterface
+     * @return ResponseInterface
      */
-    public function setContent($content)
+    public function setContent(string $content): ResponseInterface
     {
-        $this->content = (string) $content;
+        $this->content = $content;
 
         return $this;
     }
@@ -88,11 +88,11 @@ class Response implements ResponseInterface
      * Adds header information to the response.
      * @param string $header
      * @param string $content
-     * @return \Signature\Mvc\ResponseInterface
+     * @return ResponseInterface
      */
-    public function addToHeader($header, $content)
+    public function addToHeader(string $header, string $content): ResponseInterface
     {
-        $this->header[(string) $header] = (string) $content;
+        $this->header[$header] = $content;
 
         return $this;
     }
@@ -102,7 +102,7 @@ class Response implements ResponseInterface
      * @param string $header
      * @return string
      */
-    public function getHeader($header)
+    public function getHeader(string $header): string
     {
         return array_key_exists($header, $this->header)
             ? $this->header[$header]
@@ -113,7 +113,7 @@ class Response implements ResponseInterface
      * Returns all header information.
      * @return array
      */
-    public function getHeaders()
+    public function getHeaders(): array
     {
         return $this->header;
     }
@@ -121,9 +121,9 @@ class Response implements ResponseInterface
     /**
      * Removes a header entry.
      * @param string $header
-     * @return \Signature\Mvc\ResponseInterface
+     * @return ResponseInterface
      */
-    public function removeFromHeader($header)
+    public function removeFromHeader(string $header): ResponseInterface
     {
         if (array_key_exists($header, $this->header)) {
             unset($this->header[$header]);
@@ -134,25 +134,25 @@ class Response implements ResponseInterface
 
     /**
      * Sets a new status code for the response object.
-     * @param integer $statusCode
-     * @return \Signature\Mvc\ResponseInterface
+     * @param int $statusCode
+     * @return ResponseInterface
      */
-    public function setStatusCode($statusCode)
+    public function setStatusCode(int $statusCode): ResponseInterface
     {
-        if (!array_key_exists((int) $statusCode, $this->validStatusCodes)) {
-            user_error('Unknown HTTP status code "' . (int) $statusCode . '" given.', E_USER_WARNING);
+        if (!array_key_exists($statusCode, $this->validStatusCodes)) {
+            user_error('Unknown HTTP status code "' . $statusCode . '" given.', E_USER_WARNING);
         }
 
-        $this->statusCode = (int) $statusCode;
+        $this->statusCode = $statusCode;
 
         return $this;
     }
 
     /**
      * Returns the current status code of the response object.
-     * @return integer
+     * @return int
      */
-    public function getStatusCode()
+    public function getStatusCode(): int
     {
         return $this->statusCode;
     }
@@ -161,7 +161,7 @@ class Response implements ResponseInterface
      * Returns the actual contained content in the reponse-object.
      * @return string
      */
-    public function getContent()
+    public function getContent(): string
     {
         return $this->content;
     }
@@ -169,11 +169,11 @@ class Response implements ResponseInterface
     /**
      * Adds additional content to the already existing content.
      * @param string $content
-     * @return \Signature\Mvc\ResponseInterface
+     * @return ResponseInterface
      */
-    public function appendContent($content)
+    public function appendContent(string $content): ResponseInterface
     {
-        $this->content .= (string) $content;
+        $this->content .= $content;
 
         return $this;
     }
@@ -181,11 +181,11 @@ class Response implements ResponseInterface
     /**
      * Adds additional content to the beginning of the already existing content.
      * @param string $content
-     * @return \Signature\Mvc\ResponseInterface
+     * @return ResponseInterface
      */
-    public function prependContent($content)
+    public function prependContent(string $content): ResponseInterface
     {
-        $this->content = (string) $content . $this->content;
+        $this->content = $content . $this->content;
 
         return $this;
     }

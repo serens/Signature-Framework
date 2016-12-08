@@ -15,18 +15,18 @@ interface ConfigurationServiceInterface
     /**
      * Sets the configuration for a specific module.
      * @param string $moduleName
-     * @param array  $config
+     * @param array $config
      * @return ConfigurationServiceInterface
      */
-    public function setConfig($moduleName, array $config);
+    public function setConfig(string $moduleName, array $config): ConfigurationServiceInterface;
 
     /**
      * Returns the configuration for a specific module.
      *
      * If no configuration is set for the specified module, $default is returned.
      * @param string $moduleName
-     * @param mixed  $default
+     * @param mixed $default
      * @return mixed
      */
-    public function getConfig($moduleName, $default = null);
+    public function getConfig(string $moduleName, $default = null);
 }

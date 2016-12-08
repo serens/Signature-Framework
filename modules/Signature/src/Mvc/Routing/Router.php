@@ -6,6 +6,7 @@
 
 namespace Signature\Mvc\Routing;
 
+use Signature\Mvc\RequestInterface;
 use Signature\Mvc\Routing\Matcher\MatcherInterface;
 
 /**
@@ -37,11 +38,11 @@ class Router
 
     /**
      * Matches a given request to a controller and action.
-     * @param \Signature\Mvc\RequestInterface $request
+     * @param RequestInterface $request
      * @throws \Signature\Mvc\Routing\Exception\NoRouteFoundException When no route could be matched.
-     * @return boolean
+     * @return bool
      */
-    public function match(\Signature\Mvc\RequestInterface $request)
+    public function match(RequestInterface $request): bool
     {
         /** @var $matcher Matcher\MatcherInterface */
         foreach ($this->getMatchers() as $matcher) {
@@ -58,7 +59,7 @@ class Router
      * @throws \UnexpectedValueException When a configured route or matcher is not valid.
      * @return array
      */
-    protected function getMatchers()
+    protected function getMatchers(): array
     {
         if (null === $this->matchers) {
             foreach ($this->matcherConfig as $matcherClassname => $matcherConfiguration) {
@@ -97,7 +98,7 @@ class Router
      * @throws \InvalidArgumentException When a configured route or matcher is not valid.
      * @return void
      */
-    protected function validateRouteConfiguration($routeName, array $routeConfiguration)
+    protected function validateRouteConfiguration(string $routeName, array $routeConfiguration)
     {
         foreach (['Uris', 'ControllerClassname', 'ActionName'] as $field) {
             if (empty($routeConfiguration[$field])) {

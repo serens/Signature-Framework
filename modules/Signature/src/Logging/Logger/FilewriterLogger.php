@@ -28,9 +28,8 @@ class FilewriterLogger extends AbstractLogger
      * @param string $mode
      * @throws \RuntimeException
      */
-    public function __construct($logFile, $mode = 'a')
+    public function __construct(string $logFile, string $mode = 'a')
     {
-        $logFile = (string) $logFile;
         $this->logFile = $logFile;
 
         if (!$this->fileResource = fopen($logFile, $mode, false)) {
@@ -43,12 +42,12 @@ class FilewriterLogger extends AbstractLogger
 
     /**
      * Logs a given message to the output-stream.
-     * @param string  $message
-     * @param integer $priority
-     * @param integer $code
+     * @param string $message
+     * @param int $priority
+     * @param int $code
      * @return LoggerInterface
      */
-    public function log($message, $priority = LoggerInterface::PRIORITY_NORMAL, $code = 0)
+    public function log(string $message, int $priority = LoggerInterface::PRIORITY_NORMAL, int $code = 0): LoggerInterface
     {
         parent::log($message, $priority, $code);
 

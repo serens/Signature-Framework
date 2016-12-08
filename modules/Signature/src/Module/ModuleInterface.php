@@ -26,49 +26,49 @@ interface ModuleInterface
      * Returns a configuration-array of this module.
      * @return array
      */
-    public function getConfig();
+    public function getConfig(): array;
 
     /**
      * Initializes this module.
-     * @return boolean
+     * @return bool
      */
-    public function init();
+    public function init(): bool;
 
     /**
      * Starts the module.
-     * @return boolean
+     * @return bool
      */
-    public function start();
+    public function start(): bool;
 
     /**
      * Returns information about the author of the module.
      * @return string
      */
-    public function getAuthor();
+    public function getAuthor(): string;
 
     /**
      * Returns a description of the module.
      * @return string
      */
-    public function getDescription();
+    public function getDescription(): string;
 
     /**
      * Returns a copyright notive of the module.
      * @return string
      */
-    public function getCopyright();
+    public function getCopyright(): string;
 
     /**
      * Returns the current version of the module.
      * @return string
      */
-    public function getVersion();
+    public function getVersion(): string;
 
     /**
      * Returns the website of the module.
      * @return string
      */
-    public function getUrl();
+    public function getUrl(): string;
 
     /**
      * Returns the name of the module.
@@ -76,5 +76,5 @@ interface ModuleInterface
      * The module name must match the directory name in which the module resides.
      * @return string
      */
-    public function getModuleName();
+    public function getModuleName(): string;
 }

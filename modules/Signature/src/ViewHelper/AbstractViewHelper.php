@@ -6,7 +6,7 @@
 
 namespace Signature\ViewHelper;
 
-use Signature\ViewHelper\ArgumentDescription;
+use Signature\Mvc\View\ViewInterface;
 
 /**
  * Class AbstractViewHelper
@@ -25,7 +25,7 @@ abstract class AbstractViewHelper implements ViewHelperInterface
     protected $arguments = [];
 
     /**
-     * @var \Signature\Mvc\View\Viewinterface
+     * @var Viewinterface
      */
     protected $view;
 
@@ -56,7 +56,7 @@ abstract class AbstractViewHelper implements ViewHelperInterface
      * @throws \InvalidArgumentException
      * @return ViewHelperInterface
      */
-    public function setArguments(array $arguments = [])
+    public function setArguments(array $arguments = []): ViewHelperInterface
     {
         $this->arguments = [];
 
@@ -81,10 +81,10 @@ abstract class AbstractViewHelper implements ViewHelperInterface
     }
 
     /**
-     * @param \Signature\Mvc\View\ViewInterface $view
+     * @param ViewInterface $view
      * @return ViewHelperInterface
      */
-    public function setView(\Signature\Mvc\View\ViewInterface $view)
+    public function setView(ViewInterface $view): ViewHelperInterface
     {
         $this->view = $view;
 
@@ -94,9 +94,9 @@ abstract class AbstractViewHelper implements ViewHelperInterface
     /**
      * Checks if a given argument exists in this view helper.
      * @param string $argument
-     * @return boolean
+     * @return bool
      */
-    protected function hasArgument($argument)
+    protected function hasArgument(string $argument): bool
     {
         return array_key_exists(trim(strtolower($argument)), $this->arguments);
     }
@@ -106,7 +106,7 @@ abstract class AbstractViewHelper implements ViewHelperInterface
      * @param string $argument
      * @return mixed|null
      */
-    protected function getArgument($argument)
+    protected function getArgument(string $argument)
     {
         $argument = trim(strtolower($argument));
 
@@ -170,7 +170,7 @@ abstract class AbstractViewHelper implements ViewHelperInterface
      * @param string $argument
      * @return ArgumentDescription
      */
-    protected function getArgumentDescription($argument)
+    protected function getArgumentDescription(string $argument): ArgumentDescription
     {
         return $this->argumentDescriptions[strtolower(trim($argument))];
     }
