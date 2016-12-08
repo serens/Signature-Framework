@@ -1,13 +1,13 @@
 Signature MVC-Framework
 =======================
 
-What is the Signature Framework? Signature is a simple and fast MVC-Framework, written in PHP 5.5. It is designed to make web development easier, faster and more fun.
+What is the Signature Framework? Signature is a simple and fast MVC-Framework, written in PHP 7.0. It is designed to make web development easier, faster and more fun.
 
 Requirements
 ------------
 
  * An Apache web server with the mod_rewrite module enabled and configured
- * PHP 5.5.x or newer
+ * PHP 7.0.x or newer
  * A database like MySQL is highly recommended
 
 Installation
