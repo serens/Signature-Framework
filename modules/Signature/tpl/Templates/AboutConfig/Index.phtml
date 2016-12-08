@@ -1,67 +1,67 @@
 <div class="infobox">
-	<h1>Configuration</h1>
+    <h1>Configuration</h1>
 
-	<p>
-	Here you can view your current configuration settings like default controllers, persistence settings and routes.
-	</p>
+    <p>
+    Here you can view your current configuration settings like default controllers, persistence settings and routes.
+    </p>
 
-	<div class="collapsable">
-		<h2>Available routes</h2>
+    <div class="collapsable">
+        <h2>Available routes</h2>
 
-		<ul>
-			<?php foreach ($this->routes as $matcher => $config): ?>
-				<li>
-					<b><?php echo $matcher ?></b><br />
-					<?php if (isset($config['Routes'])): ?>
-						<ol>
-							<?php foreach ($config['Routes'] as $identifier => $routes): ?>
-								<li>
-									<p>
-									<b>Identifier:</b> <?php echo $identifier ?><br />
-									<b>Routes:</b> <?php echo implode(', ', $routes['Uris']) ?><br />
-									<b>Controller:</b> <?php echo $routes['ControllerClassname'] ?><br />
-									<b>Action:</b> <?php echo $routes['ActionName'] ?>
-									</p>
-								</li>
-							<?php endforeach; ?>
-						</ol>
-					<?php else: ?>
-						<p>
-						No configuration found for this matcher.
-						</p>
-					<?php endif; ?>
-				</li>
-			<?php endforeach; ?>
-		</ul>
-	</div>
+        <ul>
+            <?php foreach ($this->routes as $matcher => $config): ?>
+                <li>
+                    <b><?= $matcher ?></b><br />
+                    <?php if (isset($config['Routes'])): ?>
+                        <ol>
+                            <?php foreach ($config['Routes'] as $identifier => $routes): ?>
+                                <li>
+                                    <p>
+                                    <b>Identifier:</b> <?= $identifier ?><br />
+                                    <b>Routes:</b> <?= implode(', ', $routes['Uris']) ?><br />
+                                    <b>Controller:</b> <?= $routes['ControllerClassname'] ?><br />
+                                    <b>Action:</b> <?= $routes['ActionName'] ?>
+                                    </p>
+                                </li>
+                            <?php endforeach; ?>
+                        </ol>
+                    <?php else: ?>
+                        <p>
+                        No configuration found for this matcher.
+                        </p>
+                    <?php endif; ?>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
 
-	<div class="collapsable">
-		<h2>Active modules</h2>
+    <div class="collapsable">
+        <h2>Active modules</h2>
 
-		<ol>
-			<?php foreach ($this->activemodules as $moduleidentifier => $module): ?>
-			<li>
-				<p>
-					<b><?php echo $moduleidentifier ?></b><br />
-					<?php echo $module->getDescription() ?><br />
-					<b>Author:</b> <?php echo $module->getAuthor() ?><br />
-					<b>Version:</b> <?php echo $module->getVersion() ?><br />
-					<b>Copyright:</b> <?php echo $module->getCopyright() ?>
-				</p>
-			</li>
-			<?php endforeach; ?>
-		</ol>
-	</div>
+        <ol>
+            <?php foreach ($this->activemodules as $moduleidentifier => $module): ?>
+            <li>
+                <p>
+                    <b><?= $moduleidentifier ?></b><br />
+                    <?= $module->getDescription() ?><br />
+                    <b>Author:</b> <?= $module->getAuthor() ?><br />
+                    <b>Version:</b> <?= $module->getVersion() ?><br />
+                    <b>Copyright:</b> <?= $module->getCopyright() ?>
+                </p>
+            </li>
+            <?php endforeach; ?>
+        </ol>
+    </div>
 
-	<div class="collapsable">
-		<h2>Persistence</h2>
+    <div class="collapsable">
+        <h2>Persistence</h2>
 
-		<ul>
-			<li><b>Provider:</b> <?php echo $this->persistence['DefaultProviderClassname'] ?></li>
-			<li><b>Host:</b> <?php echo $this->persistence['ConnectionInfo']['Host'] ?></li>
-			<li><b>Database:</b> <?php echo $this->persistence['ConnectionInfo']['Database'] ?></li>
-			<li><b>Username:</b> <?php echo $this->persistence['ConnectionInfo']['Username'] ?></li>
-			<li><b>Password:</b> <?php echo $this->persistence['ConnectionInfo']['Password'] ? '***********' : '' ?></li>
-		</ul>
-	</div>
+        <ul>
+            <li><b>Provider:</b> <?=$this->persistence['DefaultProviderClassname'] ?></li>
+            <li><b>Host:</b> <?=$this->persistence['ConnectionInfo']['Host'] ?></li>
+            <li><b>Database:</b> <?=$this->persistence['ConnectionInfo']['Database'] ?></li>
+            <li><b>Username:</b> <?=$this->persistence['ConnectionInfo']['Username'] ?></li>
+            <li><b>Password:</b> <?=$this->persistence['ConnectionInfo']['Password'] ? '***********' : '' ?></li>
+        </ul>
+    </div>
 </div>
