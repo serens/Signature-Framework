@@ -7,13 +7,45 @@
         <link href="http://fonts.googleapis.com/css?family=Roboto:100,400" rel="stylesheet" type="text/css">
 
         <style type="text/css">
+            @font-face {
+                font-family: 'DIN Pro';
+                font-style: normal;
+                font-weight: normal;
+                src: local('DIN Pro'), url('/modules/Signature/res/fonts/DINPro.woff') format('woff');
+            }
+
+            @font-face {
+                font-family: 'DIN Pro Light';
+                font-style: normal;
+                font-weight: normal;
+                src: local('DIN Pro Light'), url('/modules/Signature/res/fonts/DINPro-Light.woff') format('woff');
+            }
+
+            @font-face {
+                font-family: 'DIN Pro Medium';
+                font-style: normal;
+                font-weight: normal;
+                src: local('DIN Pro Medium'), url('/modules/Signature/res/fonts/DINPro-Medium.woff') format('woff');
+            }
+
+            @font-face {
+                font-family: 'DIN Pro Bold';
+                font-style: normal;
+                font-weight: normal;
+                src: local('DIN Pro Bold'), url('/modules/Signature/res/fonts/DINPro-Bold.woff') format('woff');
+            }
+
             body {
                 background-color: #232323;
                 margin: 0;
                 padding: 0;
                 line-height: 1.65;
-                font-family: 'Roboto';
-                letter-spacing: 0.025em;
+                font-family: 'DIN Pro Light';
+            }
+
+            b {
+                font-family: 'DIN Pro Medium';
+                font-weight: normal;
             }
 
             #Logo {
@@ -31,7 +63,7 @@
             }
 
             .infobox h1, h2 {
-                font-weight: 100;
+                font-weight: normal;
                 margin: 0 0 10px 0;
                 padding: 0;
             }
