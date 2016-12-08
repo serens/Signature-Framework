@@ -6,6 +6,7 @@
 
 namespace Signature\Mvc\Controller;
 
+use Signature\Core\AutoloaderInterface;
 use Signature\Mvc\Exception\ActionNotFoundException;
 use Signature\Mvc\RequestInterface;
 use Signature\Mvc\ResponseInterface;
@@ -106,7 +107,7 @@ class ActionController extends AbstractController
     protected function getResourceDir(): string
     {
         $dirParts = [
-            \Signature\Core\AutoloaderInterface::MODULES_PATHNAME,
+            AutoloaderInterface::MODULES_PATHNAME,
             $this->getModuleContext(),
             'res'
         ];
@@ -121,7 +122,7 @@ class ActionController extends AbstractController
     protected function getTemplateDir(): string
     {
         $dirParts = [
-            \Signature\Core\AutoloaderInterface::MODULES_PATHNAME,
+            AutoloaderInterface::MODULES_PATHNAME,
             $this->getModuleContext(),
             'tpl'
         ];

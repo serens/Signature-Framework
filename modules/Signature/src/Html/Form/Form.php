@@ -57,9 +57,9 @@ class Form extends Tag implements FormInterface
     /**
      * Adds several elements to the form at once.
      * @param array $elements
-     * @return Form
+     * @return FormInterface
      */
-    public function addElements(array $elements): Form
+    public function addElements(array $elements): FormInterface
     {
         foreach ($elements as $element) {
             $this->addElement($element);
@@ -71,9 +71,9 @@ class Form extends Tag implements FormInterface
     /**
      * Adds a single element to this form.
      * @param ElementInterface $element
-     * @return Form
+     * @return FormInterface
      */
-    public function addElement(ElementInterface $element): Form
+    public function addElement(ElementInterface $element): FormInterface
     {
         $element->setForm($this);
 

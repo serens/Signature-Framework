@@ -34,7 +34,7 @@ class ModuleService extends \Signature\Service\AbstractInjectableService
      * Returns all registered modules.
      * @return array
      */
-    public function getRegisteredModules()
+    public function getRegisteredModules(): array
     {
         return $this->registeredModules;
     }

@@ -36,16 +36,16 @@ interface FormInterface extends \Signature\Html\TagInterface
     /**
      * Adds a single element to this form.
      * @param ElementInterface $element
-     * @return Form
+     * @return FormInterface
      */
-    public function addElement(ElementInterface $element): Form;
+    public function addElement(ElementInterface $element): FormInterface;
 
     /**
      * Adds several elements to the form at once.
      * @param array $elements
-     * @return Form
+     * @return FormInterface
      */
-    public function addElements(array $elements): Form;
+    public function addElements(array $elements): FormInterface;
 
     /**
      * Returns an element specified by its name.

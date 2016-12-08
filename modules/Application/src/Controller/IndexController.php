@@ -6,11 +6,13 @@
 
 namespace Application\Controller;
 
+use Signature\Mvc\Controller\ActionController;
+
 /**
  * Class IndexController
  * @package Application\Controller
  */
-class IndexController extends \Signature\Mvc\Controller\ActionController
+class IndexController extends ActionController
 {
     /**
      * Set a layout-template for the view.
@@ -27,7 +29,8 @@ class IndexController extends \Signature\Mvc\Controller\ActionController
      * Indexaction for this controller.
      * @return void
      */
-    public function indexAction() {
+    public function indexAction()
+    {
 
     }
 }

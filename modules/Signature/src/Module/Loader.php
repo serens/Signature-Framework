@@ -6,6 +6,9 @@
 
 namespace Signature\Module;
 
+use Signature\Module\ModuleInterface;
+use Signature\Object\ObjectProviderService;
+
 /**
  * Class Loader
  * @package Signature\Module
@@ -38,7 +41,7 @@ final class Loader
     protected $cacheFilename = '';
 
     /**
-     * @var \Signature\Object\ObjectProviderService
+     * @var ObjectProviderService
      */
     protected $objectProviderService = null;
 
@@ -58,7 +61,7 @@ final class Loader
     public function __construct()
     {
         $this->cacheFilename         = self::CACHE_PATHNAME . '/' . self::MODULELIST_CACHE_FILENAME;
-        $this->objectProviderService = \Signature\Object\ObjectProviderService::getInstance();
+        $this->objectProviderService = ObjectProviderService::getInstance();
         $this->moduleService         = $this->objectProviderService->getService('ModuleService');
         $this->configurationService  = $this->objectProviderService->getService('ConfigurationService');
     }
@@ -99,7 +102,7 @@ final class Loader
             $moduleClassname = $moduleName . '\\Module';
             $moduleInstance  = $this->objectProviderService->create($moduleClassname);
 
-            if (!$moduleInstance instanceof \Signature\Module\ModuleInterface) {
+            if (!$moduleInstance instanceof ModuleInterface) {
                 throw new \UnexpectedValueException(sprintf(
                     'Failed to initialize registered module "%s". Class "%s" must implement "Signature\Module\ModuleInterface".',
                     $moduleName,

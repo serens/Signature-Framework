@@ -42,7 +42,7 @@ class Dispatcher
                 throw new \UnexpectedValueException(sprintf(
                     'Invalid controller. Controller "%s" must implement "%s".',
                     $request->getControllerName(),
-                    \Signature\Mvc\Controller\ControllerInterface::class
+                    ControllerInterface::class
                 ));
             }
 

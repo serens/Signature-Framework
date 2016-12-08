@@ -6,6 +6,8 @@
 
 namespace Application;
 
+use Application\Controller\IndexController;
+
 /**
  * Class Module
  * @package Application
@@ -49,7 +51,7 @@ class Module extends \Signature\Module\AbstractModule
             [
                 'home' => [
                     'Uris'                => ['/'],
-                    'ControllerClassname' => \Application\Controller\IndexController::class,
+                    'ControllerClassname' => IndexController::class,
                     'ActionName'          => 'index',
                 ],
             ]

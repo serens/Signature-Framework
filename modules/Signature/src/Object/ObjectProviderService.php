@@ -6,6 +6,8 @@
 
 namespace Signature\Object;
 
+use Signature\Configuration\ConfigurationService;
+use Signature\Module\ModuleService;
 use Signature\Service\AbstractInjectableService;
 use Signature\Service\InjectableServiceInterface;
 
@@ -25,8 +27,8 @@ final class ObjectProviderService extends AbstractInjectableService
      */
     protected $registeredServices = [
         'ObjectProviderService' => ObjectProviderService::class,
-        'ModuleService'         => \Signature\Module\ModuleService::class,
-        'ConfigurationService'  => \Signature\Configuration\ConfigurationService::class,
+        'ModuleService'         => ModuleService::class,
+        'ConfigurationService'  => ConfigurationService::class,
     ];
 
     /**

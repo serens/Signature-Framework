@@ -104,9 +104,7 @@ class Response implements ResponseInterface
      */
     public function getHeader(string $header): string
     {
-        return array_key_exists($header, $this->header)
-            ? $this->header[$header]
-            : '';
+        return array_key_exists($header, $this->header) ? $this->header[$header] : '';
     }
 
     /**

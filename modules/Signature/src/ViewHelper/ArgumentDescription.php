@@ -80,6 +80,6 @@ class ArgumentDescription
      */
     public function mustBeScalarType(): bool
     {
-        return in_array(strtolower($this->type), ['string', 'integer', 'boolean', 'double', 'array']);
+        return in_array($this->type, ['string', 'integer', 'boolean', 'double', 'array']);
     }
 }
