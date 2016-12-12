@@ -96,7 +96,7 @@ class Request implements RequestInterface
     /**
      * Gets the specified parameter from then request. If it not exists, null will be returned.
      * @param string $parameter
-     * @return string|null
+     * @return mixed|null
      */
     public function getParameter(string $parameter)
     {
@@ -130,7 +130,7 @@ class Request implements RequestInterface
     public function setParameters(array $parameters): RequestInterface
     {
         foreach ($parameters as $parameter => $value) {
-            $this->setParameter($parameter, (string) $value);
+            $this->setParameter($parameter, $value);
         }
 
         return $this;
@@ -139,10 +139,10 @@ class Request implements RequestInterface
     /**
      * Sets a parameter to the request. An already existing parameter will be overwritten.
      * @param string $parameter
-     * @param string $value
+     * @param mixed $value
      * @return RequestInterface
      */
-    public function setParameter(string $parameter, string $value): RequestInterface
+    public function setParameter(string $parameter, $value): RequestInterface
     {
         $this->parameters[$parameter] = $value;
 
