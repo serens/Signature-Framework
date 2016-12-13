@@ -9,10 +9,10 @@ namespace Signature\Persistence\ActiveRecord;
 use Signature\Persistence\ResultCollectionInterface;
 
 /**
- * Class AbstractModel
+ * Class AbstractRecord
  * @package Signature\Persistence\ActiveRecord
  */
-abstract class AbstractModel implements ModelInterface
+abstract class AbstractRecord implements RecordInterface
 {
     use \Signature\Persistence\PersistenceServiceTrait;
 
@@ -47,7 +47,7 @@ abstract class AbstractModel implements ModelInterface
     }
 
     /**
-     * Returns the tablename in which the data of this model is stored.
+     * Returns the tablename in which the data of this record is stored.
      * @param string $className
      * @return string
      */
@@ -62,7 +62,7 @@ abstract class AbstractModel implements ModelInterface
     }
 
     /**
-     * Checks, if a given set of fields are available on this record model.
+     * Checks, if a given set of fields are available on this record.
      * @param array $fields
      * @return bool
      */
@@ -78,7 +78,7 @@ abstract class AbstractModel implements ModelInterface
     }
 
     /**
-     * Checks, if a given field is available on this record model.
+     * Checks, if a given field is available on this record.
      * @param string $field
      * @return bool
      */
@@ -88,7 +88,7 @@ abstract class AbstractModel implements ModelInterface
     }
 
     /**
-     * Returns all values of this record model.
+     * Returns all values of this record.
      * @return array
      */
     public function getFieldValues(): array
@@ -99,9 +99,9 @@ abstract class AbstractModel implements ModelInterface
     /**
      * Sets multiple field values at once.
      * @param array $fieldValues
-     * @return ModelInterface
+     * @return RecordInterface
      */
-    public function setFieldValues(array $fieldValues): ModelInterface
+    public function setFieldValues(array $fieldValues): RecordInterface
     {
         foreach ($fieldValues as $field => $value) {
             $this->setFieldValue($field, $value);
@@ -111,7 +111,7 @@ abstract class AbstractModel implements ModelInterface
     }
 
     /**
-     * Returns all values of this record model.
+     * Returns all values of this record.
      * @return array
      */
     public function toArray(): array
@@ -123,9 +123,9 @@ abstract class AbstractModel implements ModelInterface
      * Sets the value of a field.
      * @param string $field
      * @param mixed $value
-     * @return ModelInterface
+     * @return RecordInterface
      */
-    public function setFieldValue(string $field, $value): ModelInterface
+    public function setFieldValue(string $field, $value): RecordInterface
     {
         if (method_exists($this, $setter = 'set' . ucfirst(strtolower($field)))) {
             $this->$setter($value);
@@ -137,8 +137,8 @@ abstract class AbstractModel implements ModelInterface
     }
 
     /**
-     * Deletes the row of this model.
-     * @throws Exception\InvalidRecordException If no primary key exists for this model.
+     * Deletes the row of this record.
+     * @throws Exception\InvalidRecordException If no primary key exists for this record.
      * @return void
      */
     public function delete()
@@ -158,7 +158,7 @@ abstract class AbstractModel implements ModelInterface
     }
 
     /**
-     * Returns the primary id of this record model.
+     * Returns the primary id of this record.
      * @return int
      */
     public function getID(): int
@@ -182,7 +182,7 @@ abstract class AbstractModel implements ModelInterface
     }
 
     /**
-     * Returns the name of the field which represents the primary key of the record model.
+     * Returns the name of the field which represents the primary key of the record.
      *
      * Override this method when the default value ("ID") is not wished.
      * @return string
@@ -193,7 +193,7 @@ abstract class AbstractModel implements ModelInterface
     }
 
     /**
-     * Returns the table name to which this record model belongs to.
+     * Returns the table name to which this record belongs to.
      *
      * By default the full qualified classname is seperated by underscores and the last part of this will be taken as
      * the table name. This method must be overridden, when the standard-behavior is not wished.
@@ -205,12 +205,12 @@ abstract class AbstractModel implements ModelInterface
     }
 
     /**
-     * Creates a new row of this model.
+     * Creates a new row of this record.
      *
-     * A new row is only created, if this model does not have a primary key id set.
-     * @return ModelInterface
+     * A new row is only created, if this record does not have a primary key id set.
+     * @return RecordInterface
      */
-    public function create(): ModelInterface
+    public function create(): RecordInterface
     {
         if ($this->hasField($this->getPrimaryKeyName()) && $this->getID()) {
             return $this;
@@ -241,11 +241,11 @@ abstract class AbstractModel implements ModelInterface
     }
 
     /**
-     * Saves the current state of this model.
+     * Saves the current state of this record.
      * @throws Exception\InvalidRecordException
-     * @return ModelInterface
+     * @return RecordInterface
      */
-    public function save(): ModelInterface
+    public function save(): RecordInterface
     {
         if (!$this->getID()) {
             throw new Exception\InvalidRecordException();
@@ -274,7 +274,7 @@ abstract class AbstractModel implements ModelInterface
     }
 
     /**
-     * Loads data into this model by fetching a row from the database using the primary key.
+     * Loads data into this record by fetching a row from the database using the primary key.
      * @param int $id
      * @return bool True, if the record could be loaded.
      */
@@ -290,7 +290,7 @@ abstract class AbstractModel implements ModelInterface
     }
 
     /**
-     * Loads data into this model by fetching a row identified by $field.
+     * Loads data into this record by fetching a row identified by $field.
      * @param string $field
      * @param string $value
      * @return ResultCollectionInterface

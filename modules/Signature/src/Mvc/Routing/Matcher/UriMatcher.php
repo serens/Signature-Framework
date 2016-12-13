@@ -8,7 +8,7 @@ namespace Signature\Mvc\Routing\Matcher;
 
 use Signature\Mvc\RequestInterface;
 use Signature\Object\ObjectProviderService;
-use Signature\Persistence\ActiveRecord\AbstractModel;
+use Signature\Persistence\ActiveRecord\AbstractRecord;
 
 /**
  * Class UriMatcher
@@ -193,10 +193,10 @@ class UriMatcher extends AbstractMatcher
     protected function resolveObjectClass(string $uriPart, string $requestUriPart)
     {
         if (1 === preg_match('/\((.*?)\)/', $uriPart, $objectClassname)) {
-            if (is_a($objectClassname[1], AbstractModel::class, true)) {
+            if (is_a($objectClassname[1], AbstractRecord::class, true)) {
                 $objectProviderService = ObjectProviderService::getInstance();
 
-                /** @var AbstractModel $instance */
+                /** @var AbstractRecord $instance */
                 $instance = $objectProviderService->create($objectClassname[1]);
                 $instance->find((int) $requestUriPart);
             } else {

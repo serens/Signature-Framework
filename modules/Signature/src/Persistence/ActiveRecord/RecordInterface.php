@@ -9,49 +9,47 @@ namespace Signature\Persistence\ActiveRecord;
 use Signature\Persistence\ResultCollectionInterface;
 
 /**
- * Interface ModelInterface
+ * Interface RecordInterface
  * @package Signature\Persistence\ActiveRecord
  */
-interface ModelInterface
+interface RecordInterface
 {
     /**
-     * Checks, if a given set of fields are available on this record model.
+     * Checks, if a given set of fields are available on this record.
      * @param array $fields
      * @return bool
      */
     public function hasFields(array $fields): bool;
 
     /**
-     * Checks, if a given field is available on this record model.
+     * Checks, if a given field is available on this record.
      * @param string $field
      * @return bool
      */
     public function hasField(string $field): bool;
 
     /**
-     * Returns all values of this record model.
+     * Returns all values of this record.
      * @return array
      */
     public function getFieldValues(): array;
 
     /**
      * Sets multiple field values at once.
-     *
-     * After calling this method no more fields can be added to the model.
      * @param array $fieldValues
      * @throws \BadMethodCallException
-     * @return ModelInterface
+     * @return RecordInterface
      */
-    public function setFieldValues(array $fieldValues): ModelInterface;
+    public function setFieldValues(array $fieldValues): RecordInterface;
 
     /**
-     * Returns all values of this record model.
+     * Returns all values of this record.
      * @return array
      */
     public function toArray(): array;
 
     /**
-     * Returns the table name to which this record model belongs to.
+     * Returns the table name to which this record belongs to.
      *
      * By default the full qualified classname is seperated by underscores and the last part of this will be taken as
      * the table name. This method must be overridden, when the standard-behavior is not wished.
@@ -60,7 +58,7 @@ interface ModelInterface
     public function getTableName(): string;
 
     /**
-     * Returns the primary id of this record model.
+     * Returns the primary id of this record.
      * @return int
      */
     public function getID(): int;
@@ -74,7 +72,7 @@ interface ModelInterface
     public function getFieldValue(string $field);
 
     /**
-     * Returns the name of the field which represents the primary key of the record model.
+     * Returns the name of the field which represents the primary key of the record.
      *
      * Override this method when the default value ("ID") is not wished.
      * @return string
@@ -86,41 +84,41 @@ interface ModelInterface
      * @param string $field
      * @param mixed $value
      * @throws Exception\InvalidFieldException
-     * @return ModelInterface
+     * @return RecordInterface
      */
-    public function setFieldValue(string $field, $value): ModelInterface;
+    public function setFieldValue(string $field, $value): RecordInterface;
 
     /**
-     * Creates a new row of this model.
+     * Creates a new row of this record.
      *
-     * A new row is only created, if this model does not have a primary key id set.
-     * @return ModelInterface
+     * A new row is only created, if this record does not have a primary key id set.
+     * @return RecordInterface
      */
-    public function create(): ModelInterface;
+    public function create(): RecordInterface;
 
     /**
-     * Saves the current state of this model.
+     * Saves the current state of this record.
      * @throws Exception\InvalidRecordException
-     * @return ModelInterface
+     * @return RecordInterface
      */
-    public function save(): ModelInterface;
+    public function save(): RecordInterface;
 
     /**
-     * Deletes the row of this model.
+     * Deletes the row of this record.
      * @throws Exception\InvalidRecordException
      * @return void
      */
     public function delete();
 
     /**
-     * Loads data into this model by fetching a row from the database using the primary key.
+     * Loads data into this record by fetching a row from the database using the primary key.
      * @param int $id
      * @return bool True, if the record could be loaded.
      */
     public function find(int $id): bool;
 
     /**
-     * Loads data into this model by fetching a row identified by $field.
+     * Loads data into this record by fetching a row identified by $field.
      * @param string $field
      * @param string $value
      * @return ResultCollectionInterface

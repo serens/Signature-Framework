@@ -192,7 +192,7 @@ class ResultCollection implements \Signature\Persistence\ResultCollectionInterfa
     /**
      * Converts the items in this collection to models.
      * @param string $modelClassname
-     * @throws \InvalidArgumentException If argument $modelClassname does not implement ModelInterface.
+     * @throws \InvalidArgumentException If argument $modelClassname does not implement RecordInterface.
      * @return ResultCollectionInterface
      */
     public function convertToModels(string $modelClassname): ResultCollectionInterface
@@ -204,17 +204,18 @@ class ResultCollection implements \Signature\Persistence\ResultCollectionInterfa
         $objectProviderService = \Signature\Object\ObjectProviderService::getInstance();
 
         foreach ($this->collection as $key => $item) {
-            /** @var \Signature\Persistence\ActiveRecord\AbstractModel $model */
-            $model = $objectProviderService->create($modelClassname);
+            /** @var \Signature\Persistence\ActiveRecord\AbstractRecord $record */
+            $record = $objectProviderService->create($modelClassname);
 
-            if (!$model instanceof \Signature\Persistence\ActiveRecord\ModelInterface) {
+            if (!$record instanceof \Signature\Persistence\ActiveRecord\RecordInterface) {
                 throw new \InvalidArgumentException(sprintf(
-                    'Provided classname "%s" does not implement \Signature\Persistence\ActiveRecord\ModelInterface.',
-                    $modelClassname
+                    'Provided classname "%s" does not implement "%s".',
+                    $modelClassname,
+                    \Signature\Persistence\ActiveRecord\RecordInterface::class
                 ));
             }
 
-            $this->collection[$key] = $model->setFieldValues($item);
+            $this->collection[$key] = $record->setFieldValues($item);
         }
 
         $this->convertedToModels = true;

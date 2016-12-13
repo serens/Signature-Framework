@@ -17,6 +17,6 @@ class InvalidRecordException extends \RuntimeException
      */
     public function __construct()
     {
-        parent::__construct('This model is not yet loaded and thus cannot be deleted or updated.');
+        parent::__construct('This record is not yet loaded and thus cannot be deleted or updated.');
     }
 }
