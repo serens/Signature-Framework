@@ -170,9 +170,9 @@ abstract class AbstractModel implements ModelInterface
      * Returns the value of the given field.
      * @param string $field
      * @throws Exception\InvalidFieldException
-     * @return string
+     * @return string|null
      */
-    public function getFieldValue(string $field): string
+    public function getFieldValue(string $field)
     {
         if ($this->hasField($field)) {
             return $this->fieldValues[$field];

@@ -69,9 +69,9 @@ interface ModelInterface
      * Returns the value of the given field.
      * @param string $field
      * @throws Exception\InvalidFieldException
-     * @return string
+     * @return string|null
      */
-    public function getFieldValue(string $field): string;
+    public function getFieldValue(string $field);
 
     /**
      * Returns the name of the field which represents the primary key of the record model.
