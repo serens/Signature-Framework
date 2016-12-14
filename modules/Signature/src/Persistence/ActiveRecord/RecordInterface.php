@@ -115,7 +115,14 @@ interface RecordInterface
      * @param int $id
      * @return bool True, if the record could be loaded.
      */
-    public function find(int $id): bool;
+    public function load(int $id): bool;
+
+    /**
+     * Finds a record by the given id.
+     * @param int $id
+     * @return RecordInterface|null
+     */
+    static public function find(int $id);
 
     /**
      * Loads data into this record by fetching a row identified by $field.
@@ -123,7 +130,7 @@ interface RecordInterface
      * @param string $value
      * @return ResultCollectionInterface
      */
-    public function findByField(string $field, string $value): ResultCollectionInterface;
+    static public function findByField(string $field, string $value): ResultCollectionInterface;
 
     /**
      * Finds records by a given sql-statement.
@@ -133,11 +140,11 @@ interface RecordInterface
      * @param string $limit
      * @return ResultCollectionInterface
      */
-    public function findByQuery(string $fields = '*', string $where = '', string $orderBy = '', string $limit = ''): ResultCollectionInterface;
+    static public function findByQuery(string $fields = '*', string $where = '', string $orderBy = '', string $limit = ''): ResultCollectionInterface;
 
     /**
      * Loads all rows of the table.
      * @return ResultCollectionInterface
      */
-    public function findAll(): ResultCollectionInterface;
+    static public function findAll(): ResultCollectionInterface;
 }

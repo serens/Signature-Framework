@@ -6,6 +6,7 @@
 
 namespace Signature\Persistence\ActiveRecord;
 
+use Signature\Object\ObjectProviderService;
 use Signature\Persistence\ResultCollectionInterface;
 
 /**
@@ -278,9 +279,9 @@ abstract class AbstractRecord implements RecordInterface
      * @param int $id
      * @return bool True, if the record could be loaded.
      */
-    public function find(int $id): bool
+    public function load(int $id): bool
     {
-        if (($result = $this->findByField($this->getPrimaryKeyName(), $id)) && $result->count()) {
+        if (($result = self::findByField($this->getPrimaryKeyName(), $id)) && $result->count()) {
             $this->setFieldValues($result->getFirst()->getFieldValues());
 
             return true;
@@ -290,20 +291,35 @@ abstract class AbstractRecord implements RecordInterface
     }
 
     /**
+     * Finds a record by the given id.
+     * @param int $id
+     * @return RecordInterface|null
+     * @throws \InvalidArgumentException
+     */
+    static public function find(int $id)
+    {
+        $model = ObjectProviderService::getInstance()->create(static::class);
+
+        return $model->load($id) ? $model : null;
+    }
+
+    /**
      * Loads data into this record by fetching a row identified by $field.
      * @param string $field
      * @param string $value
      * @return ResultCollectionInterface
      */
-    public function findByField(string $field, string $value): ResultCollectionInterface
+    static public function findByField(string $field, string $value): ResultCollectionInterface
     {
+        $persistenceService = ObjectProviderService::getInstance()->getService('PersistenceService');
+
         $where = sprintf(
             '%s = %s',
-            $this->persistenceService->backquote($field),
-            $this->persistenceService->quote($value)
+            $persistenceService->backquote($field),
+            $persistenceService->quote($value)
         );
 
-        return $this->findByQuery('*', $where);
+        return self::findByQuery('*', $where);
     }
 
     /**
@@ -314,7 +330,7 @@ abstract class AbstractRecord implements RecordInterface
      * @param string $limit
      * @return ResultCollectionInterface
      */
-    public function findByQuery(string $fields = '*', string $where = '', string $orderBy = '', string $limit = ''): ResultCollectionInterface
+    static public function findByQuery(string $fields = '*', string $where = '', string $orderBy = '', string $limit = ''): ResultCollectionInterface
     {
         if ('' !== $where) {
             $where = 'WHERE ' . $where;
@@ -328,24 +344,28 @@ abstract class AbstractRecord implements RecordInterface
             $limit = 'LIMIT ' . $limit;
         }
 
-        $result = $this->persistenceService->query(sprintf(
+        $objectProviderService = ObjectProviderService::getInstance();
+        $persistenceService = $objectProviderService->getService('PersistenceService');
+        $model = $objectProviderService->create(static::class);
+
+        $result = $persistenceService->query(sprintf(
             'SELECT %s FROM %s %s %s %s',
             $fields,
-            $this->persistenceService->backquote($this->getTableName()),
+            $persistenceService->backquote($model->getTableName()),
             $where,
             $orderBy,
             $limit
         ));
 
-        return $result->convertToModels(get_class($this));
+        return $result->convertToModels(get_class($model));
     }
 
     /**
      * Loads all rows of the table.
      * @return ResultCollectionInterface
      */
-    public function findAll(): ResultCollectionInterface
+    static public function findAll(): ResultCollectionInterface
     {
-        return $this->findByQuery();
+        return self::findByQuery();
     }
 }
