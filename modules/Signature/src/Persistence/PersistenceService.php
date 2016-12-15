@@ -51,6 +51,16 @@ class PersistenceService extends AbstractInjectableService implements ProviderIn
     }
 
     /**
+     * @param string $queryString
+     * @param array $parameters
+     * @return ResultCollectionInterface
+     */
+    public function execute(string $queryString, array $parameters = []): ResultCollectionInterface
+    {
+        return $this->getProvider()->execute($queryString, $parameters);
+    }
+
+    /**
      * Returns the current configured persistence provider.
      * @return ProviderInterface
      * @throws \UnexpectedValueException

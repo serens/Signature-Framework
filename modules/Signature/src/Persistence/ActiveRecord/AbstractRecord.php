@@ -148,14 +148,13 @@ abstract class AbstractRecord implements RecordInterface
             throw new Exception\InvalidRecordException();
         }
 
-        $query = sprintf(
-            'DELETE FROM %s WHERE %s = %s LIMIT 1',
+        $statement = sprintf(
+            'DELETE FROM %s WHERE %s = :id LIMIT 1',
             $this->persistenceService->backquote($this->getTableName()),
-            $this->persistenceService->backquote($this->getPrimaryKeyName()),
-            $this->persistenceService->quote($this->getID())
+            $this->persistenceService->backquote($this->getPrimaryKeyName())
         );
 
-        $this->persistenceService->query($query);
+        $this->persistenceService->execute($statement, [':id' => $this->getID()]);
     }
 
     /**
@@ -298,6 +297,7 @@ abstract class AbstractRecord implements RecordInterface
      */
     static public function find(int $id)
     {
+        /** @var AbstractRecord $model */
         $model = ObjectProviderService::getInstance()->create(static::class);
 
         return $model->load($id) ? $model : null;

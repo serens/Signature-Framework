@@ -61,6 +61,35 @@ class Pdo implements ProviderInterface
     }
 
     /**
+     * @param string $queryString
+     * @param array $parameters
+     * @return ResultCollectionInterface
+     */
+    public function execute(string $queryString, array $parameters = []): ResultCollectionInterface
+    {
+        $error = false;
+
+        if (false === ($statement = $this->pdo->prepare($queryString))) {
+            $error = true;
+        }
+
+        if (!$statement->execute($parameters)) {
+            $error = true;
+        }
+
+        if ($error) {
+            $lastPdoError = $this->pdo->errorInfo();
+
+            throw new \RuntimeException('The query (' . htmlspecialchars($queryString) . ') contains an error: ' . $lastPdoError[2]);
+        }
+
+        $items = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        $statement->closeCursor();
+
+        return new ResultCollection($items);
+    }
+
+    /**
      * Returns the last generated id.
      * @return int
      */

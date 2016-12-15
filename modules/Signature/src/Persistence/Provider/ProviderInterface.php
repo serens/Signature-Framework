@@ -30,6 +30,14 @@ interface ProviderInterface
     public function query(string $queryString): ResultCollectionInterface;
 
     /**
+     * Executes a SQL-query by using a prepared statement.
+     * @param string $queryString
+     * @param array $parameters
+     * @return ResultCollectionInterface
+     */
+    public function execute(string $queryString, array $parameters = []): ResultCollectionInterface;
+
+    /**
      * Connects to a data source.
      * @throws \InvalidArgumentException
      * @return void
