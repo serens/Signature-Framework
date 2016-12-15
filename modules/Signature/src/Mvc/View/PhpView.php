@@ -236,15 +236,19 @@ class PhpView implements ViewInterface
     /**
      * Includes a partial template within the currently rendered main template.
      * @param string $partialFilename
-     * @return void
+     * @return string
      */
-    public function renderPartial(string $partialFilename)
+    public function renderPartial(string $partialFilename): string
     {
         if (file_exists($partialFilename)) {
-            include $partialFilename;
-        } else {
-            echo 'Partial template [' . $partialFilename . '] cannot be loaded.';
+            return
+                (new PhpView())
+                    ->setTemplate($partialFilename)
+                    ->setViewData($this->getViewData())
+                    ->render();
         }
+
+        return 'Partial template [' . $partialFilename . '] cannot be loaded.';
     }
 
     /**

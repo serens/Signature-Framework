@@ -77,7 +77,7 @@ interface ViewInterface
     /**
      * Includes a partial template within the currently rendered main template.
      * @param string $partialFilename
-     * @return void
+     * @return string
      */
-    public function renderPartial(string $partialFilename);
+    public function renderPartial(string $partialFilename): string;
 }
