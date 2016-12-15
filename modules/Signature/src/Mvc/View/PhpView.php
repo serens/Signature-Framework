@@ -141,13 +141,12 @@ class PhpView implements ViewInterface
                 }
 
                 if ($this->getLayout()) {
-                    $layoutView = new PhpView();
-                    $layoutView
-                        ->setTemplate($this->getLayout())
-                        ->setViewData($this->getViewData())
-                        ->setViewData('content', $content);
-
-                    return $layoutView->render();
+                    return
+                        (new PhpView())
+                            ->setTemplate($this->getLayout())
+                            ->setViewData($this->getViewData())
+                            ->setViewData('content', $content)
+                            ->render();
                 } else {
                     return $content;
                 }
