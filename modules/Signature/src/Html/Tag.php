@@ -126,7 +126,7 @@ class Tag implements TagInterface
         $attributes = '';
 
         foreach ($this->attributes as $name => $value) {
-            $attributes .= sprintf('%s="%s" ', $name, htmlspecialchars($value));
+            $attributes .= sprintf('%s="%s" ', $name, htmlspecialchars($value, ENT_QUOTES, 'utf-8', false));
         }
 
         if ('' !== $this->content || $this->forceUseClosingTag) {
