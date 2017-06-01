@@ -8,7 +8,7 @@ namespace Signature\Configuration;
 
 /**
  * Trait ConfiguationServiceTrait
- * @package Signature\Persistence
+ * @package Signature\Configuration
  */
 trait ConfigurationServiceTrait
 {

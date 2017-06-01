@@ -295,7 +295,7 @@ abstract class AbstractRecord implements RecordInterface
      * @return RecordInterface|null
      * @throws \InvalidArgumentException
      */
-    static public function find(int $id)
+    public static function find(int $id)
     {
         /** @var AbstractRecord $model */
         $model = ObjectProviderService::getInstance()->create(static::class);
@@ -309,7 +309,7 @@ abstract class AbstractRecord implements RecordInterface
      * @param string $value
      * @return ResultCollectionInterface
      */
-    static public function findByField(string $field, string $value): ResultCollectionInterface
+    public static function findByField(string $field, string $value): ResultCollectionInterface
     {
         $persistenceService = ObjectProviderService::getInstance()->getService('PersistenceService');
 
@@ -330,7 +330,7 @@ abstract class AbstractRecord implements RecordInterface
      * @param string $limit
      * @return ResultCollectionInterface
      */
-    static public function findByQuery(string $fields = '*', string $where = '', string $orderBy = '', string $limit = ''): ResultCollectionInterface
+    public static function findByQuery(string $fields = '*', string $where = '', string $orderBy = '', string $limit = ''): ResultCollectionInterface
     {
         if ('' !== $where) {
             $where = 'WHERE ' . $where;
@@ -364,7 +364,7 @@ abstract class AbstractRecord implements RecordInterface
      * Loads all rows of the table.
      * @return ResultCollectionInterface
      */
-    static public function findAll(): ResultCollectionInterface
+    public static function findAll(): ResultCollectionInterface
     {
         return self::findByQuery();
     }
