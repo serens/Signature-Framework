@@ -197,7 +197,7 @@ class UriMatcher extends AbstractMatcher
                 $objectProviderService = ObjectProviderService::getInstance();
 
                 /** @var AbstractRecord $instance */
-                $instance = $objectProviderService->create($objectClassname[1]);
+                $instance = $objectProviderService->get($objectClassname[1]);
                 $instance->find((int) $requestUriPart);
             } else {
                 $instance = new $objectClassname[1]($requestUriPart);

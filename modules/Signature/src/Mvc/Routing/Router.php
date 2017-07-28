@@ -63,7 +63,7 @@ class Router
     {
         if (null === $this->matchers) {
             foreach ($this->matcherConfig as $matcherClassname => $matcherConfiguration) {
-                $matcherInstance = $this->objectProviderService->create($matcherClassname);
+                $matcherInstance = $this->objectProviderService->get($matcherClassname);
 
                 if (!$matcherInstance instanceof MatcherInterface) {
                     throw new \UnexpectedValueException(

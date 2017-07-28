@@ -298,7 +298,7 @@ abstract class AbstractRecord implements RecordInterface
     public static function find(int $id)
     {
         /** @var AbstractRecord $model */
-        $model = ObjectProviderService::getInstance()->create(static::class);
+        $model = ObjectProviderService::getInstance()->get(static::class);
 
         return $model->load($id) ? $model : null;
     }
@@ -311,7 +311,7 @@ abstract class AbstractRecord implements RecordInterface
      */
     public static function findByField(string $field, string $value): ResultCollectionInterface
     {
-        $persistenceService = ObjectProviderService::getInstance()->getService('PersistenceService');
+        $persistenceService = ObjectProviderService::getInstance()->get('PersistenceService');
 
         $where = sprintf(
             '%s = %s',
@@ -345,8 +345,8 @@ abstract class AbstractRecord implements RecordInterface
         }
 
         $objectProviderService = ObjectProviderService::getInstance();
-        $persistenceService = $objectProviderService->getService('PersistenceService');
-        $model = $objectProviderService->create(static::class);
+        $persistenceService = $objectProviderService->get('PersistenceService');
+        $model = $objectProviderService->get(static::class);
 
         $result = $persistenceService->query(sprintf(
             'SELECT %s FROM %s %s %s %s',

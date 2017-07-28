@@ -205,7 +205,7 @@ class ResultCollection implements \Signature\Persistence\ResultCollectionInterfa
 
         foreach ($this->collection as $key => $item) {
             /** @var \Signature\Persistence\ActiveRecord\AbstractRecord $record */
-            $record = $objectProviderService->create($modelClassname);
+            $record = $objectProviderService->get($modelClassname);
 
             if (!$record instanceof \Signature\Persistence\ActiveRecord\RecordInterface) {
                 throw new \InvalidArgumentException(sprintf(

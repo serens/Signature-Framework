@@ -6,35 +6,30 @@
 
 namespace Signature\Object;
 
-use Signature\Configuration\ConfigurationService;
-use Signature\Module\ModuleService;
-use Signature\Service\AbstractInjectableService;
-use Signature\Service\InjectableServiceInterface;
+use Signature\Service\AbstractService;
 
 /**
  * Class ObjectProviderService
  * @package Signature\Object
  */
-final class ObjectProviderService extends AbstractInjectableService
+final class ObjectProviderService extends AbstractService implements ContainerInterface
 {
     /**
      * @var ObjectProviderService
      */
-    protected static $instance = null;
+    static protected $instance = null;
 
     /**
      * @var array
      */
-    protected $registeredServices = [
-        'ObjectProviderService' => ObjectProviderService::class,
-        'ModuleService'         => ModuleService::class,
-        'ConfigurationService'  => ConfigurationService::class,
+    protected $registry = [
+        'ObjectProviderService' => self::class
     ];
 
     /**
      * @var array
      */
-    protected $singletonServices = [];
+    protected $singletons = [];
 
     /**
      * Disable the constructor as this class is a singleton.
@@ -57,115 +52,71 @@ final class ObjectProviderService extends AbstractInjectableService
     }
 
     /**
-     * Adds a new service mapping to the service manager.
-     * @param string $serviceIdentifier
-     * @param string $serviceClassname
-     * @return ObjectProviderService
+     * @inheritdoc
      */
-    public function registerService(string $serviceIdentifier, string $serviceClassname): ObjectProviderService
+    public function register(string $identifier, string $classname): ContainerInterface
     {
-        $this->registeredServices[$serviceIdentifier] = $serviceClassname;
+        $this->registry[$identifier] = $classname;
 
         return $this;
     }
 
     /**
-     * Returns the current service mapping.
-     * @return array
-     */
-    public function getRegisteredServices(): array
-    {
-        return $this->registeredServices;
-    }
-
-    /**
-     * Returns an instance of the service named in $serviceIdentifier.
-     * @throws \OutOfBoundsException
-     * @throws \UnexpectedValueException
-     * @param string $serviceIdentifier
-     * @return InjectableServiceInterface
-     */
-    public function getService(string $serviceIdentifier): InjectableServiceInterface
-    {
-        if (array_key_exists($serviceIdentifier, $this->singletonServices)) {
-            return $this->singletonServices[$serviceIdentifier];
-        } else {
-            if (!array_key_exists($serviceIdentifier, $this->registeredServices)) {
-                throw new \OutOfBoundsException(
-                    'A service identified by "' . $serviceIdentifier . '" has not been registered.'
-                );
-            }
-
-            /* @var $seviceObject InjectableServiceInterface */
-            $serviceObject = new $this->registeredServices[$serviceIdentifier];
-
-            if (!$serviceObject instanceof InjectableServiceInterface) {
-                throw new \UnexpectedValueException(
-                    $serviceIdentifier . ' must implement Signature\Service\InjectableServiceInterface.'
-                );
-            }
-
-            $this->injectServices($serviceObject);
-
-            $serviceObject->init();
-
-            if ($serviceObject->threatAsSingleton()) {
-                $this->singletonServices[$serviceIdentifier] = $serviceObject;
-            }
-
-            return $serviceObject;
-        }
-    }
-
-    /**
-     * Injects all registered registeredServices to the given object.
+     * Injects all registered identifiers to the given object.
      * @param object $object
-     * @throws \InvalidArgumentException When provides object is not an object.
+     * @throws \InvalidArgumentException When provided object is not an object.
      * @return void
      */
-    public function injectServices($object)
+    public function injectDependencies($object)
     {
         if (!is_object($object)) {
             throw new \InvalidArgumentException('Given argument $object is not an object.');
         }
 
-        foreach ($this->registeredServices as $serviceIdentifier => $serviceClassname) {
-            if (method_exists($object, $setterMethodname = 'set' . $serviceIdentifier)) {
-                $serviceInstance = ($serviceClassname == get_class($this))
+        foreach ($this->registry as $identifier => $classname) {
+            if (method_exists($object, $setterMethodname = 'set' . $identifier)) {
+                $dependency = ($classname == get_class($this))
                     ? $this
-                    : $this->getService($serviceIdentifier);
+                    : $this->get($identifier);
 
-                $object->$setterMethodname($serviceInstance);
+                $object->$setterMethodname($dependency);
             }
         }
     }
 
     /**
-     * Creates an instance of the given classname.
-     * @throws \RuntimeException If class does not exist.
-     * @param string $className
-     * @return object
+     * @inheritdoc
      */
-    public function create(string $className)
+    public function get(string $identifier)
     {
-        if (!class_exists($className)) {
-            throw new \RuntimeException('Cannot load class "' . $className . '".');
+        if (array_key_exists($identifier, $this->singletons)) {
+            return $this->singletons[$identifier];
         }
 
+        $classname = $this->has($identifier) ? $this->registry[$identifier] : $identifier;
         $arguments = func_get_args();
 
-        array_shift($arguments); // Remove 1st argument $className
+        array_shift($arguments); // Remove 1st argument $identifier
 
-        if (count($arguments)) {
-            $reflectionClass = new \ReflectionClass($className);
-            $object          = $reflectionClass->newInstanceArgs($arguments);
-        } else {
-            $object = new $className();
+        $object = count($arguments)
+            ? (new \ReflectionClass($classname))->newInstanceArgs($arguments)
+            : new $classname();
+
+        // Inject dependencies to new object
+        $this->injectDependencies($object);
+
+        if ($object instanceof SingletonInterface) {
+            $this->singletons[$identifier] = $object;
         }
 
-        // Inject service to new object
-        $this->injectServices($object);
-
         return $object;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function has(string $identifier): bool
+    {
+        return array_key_exists($identifier, $this->registry);
     }
 }

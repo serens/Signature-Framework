@@ -10,7 +10,7 @@ namespace Signature\Module;
  * Class ModuleService
  * @package Signature\Module
  */
-class ModuleService extends \Signature\Service\AbstractInjectableService
+class ModuleService extends \Signature\Service\AbstractService
 {
     /**
      * @var array

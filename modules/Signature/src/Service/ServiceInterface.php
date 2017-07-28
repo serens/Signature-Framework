@@ -6,18 +6,14 @@
 
 namespace Signature\Service;
 
+use \Signature\Object\SingletonInterface;
+
 /**
  * Interface InjectableServiceInterface
  * @package Signature\Service
  */
-interface InjectableServiceInterface
+interface ServiceInterface extends SingletonInterface
 {
-    /**
-     * Return true, if this Service should only be created once by the Service Locator.
-     * @return bool
-     */
-    public function threatAsSingleton(): bool;
-
     /**
      * Will be called from the Object Provider to initialize this service.
      * @return void

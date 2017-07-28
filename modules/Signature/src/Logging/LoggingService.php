@@ -12,7 +12,7 @@ use \Signature\Logging\Logger\LoggerInterface;
  * Class LoggingService
  * @package Signature\Logging
  */
-class LoggingService extends \Signature\Service\AbstractInjectableService
+class LoggingService extends \Signature\Service\AbstractService
 {
     /**
      * @var array

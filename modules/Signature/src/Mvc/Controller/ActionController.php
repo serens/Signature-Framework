@@ -81,7 +81,7 @@ class ActionController extends AbstractController
      */
     protected function initView()
     {
-        $view = $this->objectProviderService->create($this->resolveViewClassName());
+        $view = $this->objectProviderService->get($this->resolveViewClassName());
 
         if (!$view instanceof ViewInterface) {
             throw new \UnexpectedValueException(

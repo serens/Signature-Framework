@@ -6,7 +6,7 @@
 
 namespace Signature\Module;
 
-use Signature\Module\ModuleInterface;
+use Signature\Configuration\ConfigurationService;
 use Signature\Object\ObjectProviderService;
 
 /**
@@ -51,7 +51,7 @@ final class Loader
     protected $moduleService = null;
 
     /**
-     * @var \Signature\Configuration\ConfigurationService
+     * @var ConfigurationService
      */
     protected $configurationService = null;
 
@@ -62,8 +62,12 @@ final class Loader
     {
         $this->cacheFilename         = self::CACHE_PATHNAME . '/' . self::MODULELIST_CACHE_FILENAME;
         $this->objectProviderService = ObjectProviderService::getInstance();
-        $this->moduleService         = $this->objectProviderService->getService('ModuleService');
-        $this->configurationService  = $this->objectProviderService->getService('ConfigurationService');
+
+        $this->objectProviderService->register('ModuleService', ModuleService::class);
+        $this->objectProviderService->register('ConfigurationService', ConfigurationService::class);
+
+        $this->moduleService        = $this->objectProviderService->get('ModuleService');
+        $this->configurationService = $this->objectProviderService->get('ConfigurationService');
     }
 
     /**
@@ -100,7 +104,7 @@ final class Loader
     {
         foreach ($modules as $moduleName) {
             $moduleClassname = $moduleName . '\\Module';
-            $moduleInstance  = $this->objectProviderService->create($moduleClassname);
+            $moduleInstance  = $this->objectProviderService->get($moduleClassname);
 
             if (!$moduleInstance instanceof ModuleInterface) {
                 throw new \UnexpectedValueException(sprintf(

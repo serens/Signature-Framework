@@ -69,7 +69,7 @@ class Module extends \Signature\Module\AbstractModule
 
         $this
             ->initializeErrorHandling()
-            ->initializeObjectProviderService();
+            ->initializeServices();
 
         return parent::init();
     }
@@ -153,16 +153,16 @@ class Module extends \Signature\Module\AbstractModule
         $matcherConfig = $this->configurationService->getConfigByPath('Signature', 'Mvc.Routing.Matcher');
 
         /** @var Response $response */
-        $response = $this->objectProviderService->create(Response::class);
+        $response = $this->objectProviderService->get(Response::class);
 
         /** @var Dispatcher $dispatcher */
-        $dispatcher = $this->objectProviderService->create(Dispatcher::class);
+        $dispatcher = $this->objectProviderService->get(Dispatcher::class);
 
         /** @var Router $router */
-        $router = $this->objectProviderService->create(Router::class, $matcherConfig);
+        $router = $this->objectProviderService->get(Router::class, $matcherConfig);
 
         /** @var Request $request */
-        $request = $this->objectProviderService->create(Request::class);
+        $request = $this->objectProviderService->get(Request::class);
 
         $request
             ->setRequestUri($_SERVER['REQUEST_URI'])
@@ -187,11 +187,10 @@ class Module extends \Signature\Module\AbstractModule
      * Adds several services to the service provider service.
      * @return ModuleInterface
      */
-    protected function initializeObjectProviderService(): ModuleInterface
+    protected function initializeServices(): ModuleInterface
     {
-        $this->objectProviderService
-            ->registerService('PersistenceService', PersistenceService::class)
-            ->registerService('LoggingService', LoggingService::class);
+        $this->objectProviderService->register('PersistenceService', PersistenceService::class);
+        $this->objectProviderService->register('LoggingService', LoggingService::class);
 
         return $this;
     }
@@ -252,14 +251,14 @@ class Module extends \Signature\Module\AbstractModule
             $this->configurationService->getConfigByPath('Signature', 'Service.Persistence.DefaultProviderClassname');
 
         if (null !== $providerClassname) {
-            $providerInstance = $this->objectProviderService->create($providerClassname);
+            $providerInstance = $this->objectProviderService->get($providerClassname);
 
             /**
              * As this module has been created before the object provider knew about the persistence service,
              * we must retrieve the service manually.
              * @var PersistenceService $persistenceService
              */
-            $persistenceService = $this->objectProviderService->getService('PersistenceService');
+            $persistenceService = $this->objectProviderService->get('PersistenceService');
 
             $persistenceService
                 ->setProvider($providerInstance)

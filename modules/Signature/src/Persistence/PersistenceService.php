@@ -6,14 +6,14 @@
 
 namespace Signature\Persistence;
 
-use Signature\Service\AbstractInjectableService;
+use Signature\Service\AbstractService;
 use Signature\Persistence\Provider\ProviderInterface;
 
 /**
  * Class PersistenceService
  * @package Signature\Persistence
  */
-class PersistenceService extends AbstractInjectableService implements ProviderInterface
+class PersistenceService extends AbstractService implements ProviderInterface
 {
     /**
      * @var \Signature\Persistence\Provider\ProviderInterface

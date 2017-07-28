@@ -302,7 +302,7 @@ class PhpView implements ViewInterface
         }
 
         $objectProviderService  = ObjectProviderService::getInstance();
-        $viewhelperInstance     = $objectProviderService->create($newViewhelperClassname);
+        $viewhelperInstance     = $objectProviderService->get($newViewhelperClassname);
 
         if (!$viewhelperInstance instanceof ViewHelperInterface) {
             throw new \UnexpectedValueException(sprintf(

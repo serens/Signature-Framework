@@ -36,7 +36,7 @@ class Dispatcher
         $dispatchIterationCount = 0;
 
         while (!$request->isDispatched()) {
-            $controller = $this->objectProviderService->create($request->getControllerName());
+            $controller = $this->objectProviderService->get($request->getControllerName());
 
             if (!$controller instanceof ControllerInterface) {
                 throw new \UnexpectedValueException(sprintf(

@@ -10,7 +10,7 @@ namespace Signature\Configuration;
  * Class ConfigurationService
  * @package Signature\Configuration
  */
-class ConfigurationService extends \Signature\Service\AbstractInjectableService implements ConfigurationServiceInterface
+class ConfigurationService extends \Signature\Service\AbstractService implements ConfigurationServiceInterface
 {
     /**
      * @var string
