@@ -7,6 +7,7 @@
 namespace Signature\Object;
 
 use Signature\Service\AbstractService;
+use Signature\Service\ServiceInterface;
 
 /**
  * Class ObjectProviderService
@@ -104,6 +105,10 @@ final class ObjectProviderService extends AbstractService implements ContainerIn
 
         // Inject dependencies to new object
         $this->injectDependencies($object);
+
+        if ($object instanceof ServiceInterface) {
+            $object->init();
+        }
 
         if ($object instanceof SingletonInterface) {
             $this->singletons[$identifier] = $object;
