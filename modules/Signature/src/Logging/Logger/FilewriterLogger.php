@@ -13,11 +13,6 @@ namespace Signature\Logging\Logger;
 class FilewriterLogger extends AbstractLogger
 {
     /**
-     * @var string
-     */
-    private $logFile = null;
-
-    /**
      * @var resource
      */
     private $fileResource = null;
@@ -30,8 +25,6 @@ class FilewriterLogger extends AbstractLogger
      */
     public function __construct(string $logFile, string $mode = 'a')
     {
-        $this->logFile = $logFile;
-
         if (!$this->fileResource = fopen($logFile, $mode, false)) {
             throw new \RuntimeException(sprintf(
                 'File "%s" to write log-messages to could not be opened.',
