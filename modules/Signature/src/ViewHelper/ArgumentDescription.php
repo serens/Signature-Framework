@@ -28,6 +28,11 @@ class ArgumentDescription
     protected $isRequired = false;
 
     /**
+     * @var string[]
+     */
+    protected $scalarTypes = ['string', 'integer', 'boolean', 'double', 'array', 'object'];
+
+    /**
      * Creates an argument description.
      * @param bool $isRequired
      * @param string $type
@@ -35,18 +40,20 @@ class ArgumentDescription
      */
     public function __construct(bool $isRequired = false, string $type = 'string', string $default = '')
     {
-        $type = trim(strtolower((string) $type));
+        $sanitizedType = trim(strtolower($type));
 
-        if ('float' === $type) {
-            $type = 'double';
-        } elseif ('int' === $type) {
-            $type = 'integer';
-        } elseif ('bool' === $type) {
-            $type = 'boolean';
+        if ('float' === $sanitizedType) {
+            $sanitizedType = 'double';
+        } elseif ('int' === $sanitizedType) {
+            $sanitizedType = 'integer';
+        } elseif ('bool' === $sanitizedType) {
+            $sanitizedType = 'boolean';
+        } else {
+            $sanitizedType = trim($type);
         }
 
         $this->isRequired = $isRequired;
-        $this->type       = strtolower($type);
+        $this->type       = $sanitizedType;
         $this->default    = $default;
     }
 
@@ -80,6 +87,6 @@ class ArgumentDescription
      */
     public function mustBeScalarType(): bool
     {
-        return in_array($this->type, ['string', 'integer', 'boolean', 'double', 'array']);
+        return in_array($this->type, $this->scalarTypes);
     }
 }
