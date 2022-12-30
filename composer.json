@@ -1,0 +1,17 @@
+{
+    "name": "serens/signature",
+    "type": "library",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Sven Erens",
+            "email": "sven.erens@gmx.de"
+        }
+    ],
+    "require": {
+        "php": ">=7.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9"
+    }
+}
