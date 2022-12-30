@@ -33,8 +33,12 @@ Clone from `git://github.com/serens/Signature-Framework.git` into your document 
                     Module.php
                 /tpl
             /Signature
+        /tests
+        .gitignore
         .htaccess
+        composer.json
         index.php
+        phpunit.xml
         README.md
 
 Step 2: Set up a virtual host
