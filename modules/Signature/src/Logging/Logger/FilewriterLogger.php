@@ -47,7 +47,7 @@ class FilewriterLogger extends AbstractLogger
         $message = sprintf(
             '%s (%s): %s',
             date('Y-m-d, H:i:s'),
-            $this->priority2String($this->getLogFilter()),
+            $this->priority2String($priority),
             $message
         );
 
