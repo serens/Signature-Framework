@@ -3,28 +3,41 @@
 namespace Signature\Logging;
 
 use PHPUnit\Framework\TestCase;
-use Signature\Logging\Logger\ErrorlogLogger;
+use Signature\Logging\Logger\NullLogger;
 use Signature\Logging\Logger\LoggerInterface;
 
-class LoggerServiceTest extends TestCase
+class LoggerTest extends TestCase
 {
-    /** @var ErrorlogLogger */
+    /** @var NullLogger */
     private $logger;
 
     protected function setUp(): void
     {
-        $this->logger = new ErrorlogLogger();
+        $this->logger = new NullLogger();
+    }
+
+    public function testChainability()
+    {
+        $this->assertInstanceOf(
+            LoggerInterface::class,
+            $this->logger->setLogFilter(LoggerInterface::PRIORITY_ERROR)
+        );
+
+        $this->assertInstanceOf(
+            LoggerInterface::class,
+            $this->logger->log("Log message", LoggerInterface::PRIORITY_ERROR)
+        );
     }
 
     public function testLoggingWithInvalidPriority()
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->logger->log('Message', 0);
+        $this->logger->log('Some ignored message', 0);
     }
 
     public function testSettingAndGettingLogFilter()
     {
-        $this->assertInstanceOf(LoggerInterface::class, $this->logger->setLogFilter(LoggerInterface::PRIORITY_ERROR));
+        $this->logger->setLogFilter(LoggerInterface::PRIORITY_ERROR);
         $this->assertEquals(LoggerInterface::PRIORITY_ERROR, $this->logger->getLogFilter());
     }
 

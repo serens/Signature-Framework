@@ -5,6 +5,7 @@ namespace Signature\Logging;
 use PHPUnit\Framework\TestCase;
 use Signature\Logging\Logger\ErrorlogLogger;
 use Signature\Logging\Logger\FilewriterLogger;
+use Signature\Logging\Logger\NullLogger;
 
 class LoggingServiceTest extends TestCase
 {
@@ -20,7 +21,7 @@ class LoggingServiceTest extends TestCase
     {
         $this->assertInstanceOf(
             LoggingService::class,
-            $this->service->registerLogger(new ErrorlogLogger())
+            $this->service->registerLogger(new NullLogger())
         );
 
         $this->assertInstanceOf(
